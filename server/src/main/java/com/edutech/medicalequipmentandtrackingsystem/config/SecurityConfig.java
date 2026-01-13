@@ -2,8 +2,7 @@ package com.edutech.medicalequipmentandtrackingsystem.config;
  
 import com.edutech.medicalequipmentandtrackingsystem.jwt.JwtRequestFilter;
 import com.edutech.medicalequipmentandtrackingsystem.service.UserService;
- 
- 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
