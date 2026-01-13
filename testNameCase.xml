@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+
+    <!-- ===================================================== -->
+    <!-- BACKEND : MedicalEquipmentAndTrackingSystemApplicationTests.java -->
+    <!-- ===================================================== -->
+
+    <property
+        name="testRegisterUser"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should register a new user successfully"
+    />
+
+    <property
+        name="testLoginUser"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should login user with valid credentials"
+    />
+
+    <property
+        name="testLoginWithWrongUsernameOrPassword"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should fail login with invalid credentials"
+    />
+
+    <property
+        name="testCreateHospital"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should create hospital when role is HOSPITAL"
+    />
+
+    <property
+        name="testAddEquipment"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should add equipment to hospital"
+    />
+
+    <property
+        name="testScheduleMaintenance"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should schedule equipment maintenance"
+    />
+
+    <property
+        name="testPlaceOrder"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should place equipment order"
+    />
+
+    <property
+        name="testGetAllMaintenance"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should fetch all maintenance records for technician"
+    />
+
+    <property
+        name="testUpdateMaintenance"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should update maintenance status by technician"
+    />
+
+    <property
+        name="testGetAllOrders"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should fetch all orders for supplier"
+    />
+
+    <property
+        name="testUpdateOrderStatus"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should update order status by supplier"
+    />
+
+    <property
+        name="testTechnicianAndSupplierShouldNotAccessHospitalApi"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should restrict technician and supplier from hospital APIs"
+    />
+
+    <property
+        name="testHospitalAndSupplierShouldNotAccessTechnicianApi"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should restrict hospital and supplier from technician APIs"
+    />
+
+    <property
+        name="testHospitalAndTechnicianShouldNotAccessSupplierApi"
+        value="MedicalEquipmentAndTrackingSystemApplicationTests should restrict hospital and technician from supplier APIs"
+    />
+
+    <!-- ===================================================== -->
+    <!-- FRONTEND : Angular Component & Service Specs -->
+    <!-- ===================================================== -->
+
+    <!-- CreatehospitalComponent.spec.ts -->
+
+    <property
+        name="CreatehospitalComponent_form_init"
+        value="CreatehospitalComponent should initialize itemForm with required fields"
+    />
+
+    <property
+        name="CreatehospitalComponent_name_required"
+        value="CreatehospitalComponent should mark name field as invalid if empty"
+    />
+
+    <property
+        name="CreatehospitalComponent_location_required"
+        value="CreatehospitalComponent should mark location field as invalid if empty"
+    />
+
+    <!-- HttpService.spec.ts -->
+
+    <property
+        name="HttpService_updateOrderStatus"
+        value="HttpService should update order status"
+    />
+
+    <property
+        name="HttpService_addEquipment"
+        value="HttpService should add equipment"
+    />
+
+    <property
+        name="HttpService_getOrders"
+        value="HttpService should fetch supplier orders"
+    />
+
+    <property
+        name="HttpService_getMaintenance"
+        value="HttpService should fetch maintenance list"
+    />
+
+    <property
+        name="HttpService_getHospital"
+        value="HttpService should fetch hospitals"
+    />
+
+    <property
+        name="HttpService_updateMaintenance"
+        value="HttpService should update maintenance"
+    />
+
+    <property
+        name="HttpService_orderEquipment"
+        value="HttpService should place equipment order"
+    />
+
+    <property
+        name="HttpService_scheduleMaintenance"
+        value="HttpService should schedule maintenance"
+    />
+
+    <property
+        name="HttpService_createHospital"
+        value="HttpService should create hospital"
+    />
+
+    <!-- LoginComponent.spec.ts -->
+
+    <property
+        name="LoginComponent_invalid_empty"
+        value="LoginComponent should mark login form invalid when empty"
+    />
+
+    <property
+        name="LoginComponent_invalid_partial"
+        value="LoginComponent should mark login form invalid when partially filled"
+    />
+
+    <property
+        name="LoginComponent_valid"
+        value="LoginComponent should validate login form when all fields are filled"
+    />
+
+    <!-- MaintenanceComponent.spec.ts -->
+
+    <property
+        name="MaintenanceComponent_form_init"
+        value="MaintenanceComponent should initialize itemForm with required fields"
+    />
+
+    <property
+        name="MaintenanceComponent_scheduledDate_required"
+        value="MaintenanceComponent should mark scheduledDate as required"
+    />
+
+    <property
+        name="MaintenanceComponent_completedDate_required"
+        value="MaintenanceComponent should mark completedDate as required"
+    />
+
+    <property
+        name="MaintenanceComponent_description_required"
+        value="MaintenanceComponent should mark description as required"
+    />
+
+    <property
+        name="MaintenanceComponent_status_required"
+        value="MaintenanceComponent should mark status as required"
+    />
+
+    <!-- RegistrationComponent.spec.ts -->
+
+    <property
+        name="RegistrationComponent_invalid_empty"
+        value="RegistrationComponent should mark registration form invalid when empty"
+    />
+
+    <property
+        name="RegistrationComponent_invalid_email"
+        value="RegistrationComponent should mark email field invalid for incorrect email format"
+    />
+
+    <property
+        name="RegistrationComponent_valid"
+        value="RegistrationComponent should validate registration form when all fields are filled correctly"
+    />
+
+    <!-- ScheduleMaintenanceComponent.spec.ts -->
+
+    <property
+        name="ScheduleMaintenanceComponent_form_init"
+        value="ScheduleMaintenanceComponent should initialize itemForm with required fields"
+    />
+
+    <property
+        name="ScheduleMaintenanceComponent_scheduledDate_required"
+        value="ScheduleMaintenanceComponent should mark scheduledDate as required"
+    />
+
+    <property
+        name="ScheduleMaintenanceComponent_completedDate_required"
+        value="ScheduleMaintenanceComponent should mark completedDate as required"
+    />
+
+    <property
+        name="ScheduleMaintenanceComponent_description_required"
+        value="ScheduleMaintenanceComponent should mark description as required"
+    />
+
+    <property
+        name="ScheduleMaintenanceComponent_status_required"
+        value="ScheduleMaintenanceComponent should mark status as required"
+    />
+
+</properties>
