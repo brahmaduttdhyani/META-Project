@@ -3,7 +3,6 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators }
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
-
 @Component({
   selector: 'app-requestequipment',
   templateUrl: './requestequipment.component.html',

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
 
-
 @Component({
   selector: 'app-createhospital',
   templateUrl: './createhospital.component.html',

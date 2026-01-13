@@ -1,6 +1,5 @@
 package com.edutech.medicalequipmentandtrackingsystem.entitiy;
 
-
 import javax.persistence.*;
 
 @Entity

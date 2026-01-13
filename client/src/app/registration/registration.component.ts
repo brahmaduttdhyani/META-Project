@@ -24,7 +24,6 @@ passwordStrength: string = '';
   4) At least one special character i.e. ['@', '$', '.', '#', '!', '%', '*', '?', '&', '^']\n
   5) The total length must be minimum of 8 \n`;
  
- 
   strengthColors: { [key: string]: string } = {
     'Password is Required.':'red',
     'Weak': 'red',
