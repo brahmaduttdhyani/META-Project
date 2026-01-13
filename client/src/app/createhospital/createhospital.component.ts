@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./createhospital.component.scss']
 })
 export class CreatehospitalComponent implements OnInit {
-
+  ////hii////
   itemForm!: FormGroup; 
   equipmentForm!: FormGroup; 
   formModel:any={status:null}; 
