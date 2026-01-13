@@ -154,6 +154,5 @@ itemForm: FormGroup;
       return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' };
     }
   }
-
 }
 
