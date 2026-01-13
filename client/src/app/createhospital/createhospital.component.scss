@@ -1,0 +1,54 @@
+button {
+  border: none;
+  color: #fff;
+  background-image: linear-gradient(30deg, #5655b6, #4ce3f7);
+  border-radius: 20px;
+  background-size: 100% auto;
+  font-family: inherit;
+  font-size: 17px;
+  padding: 0.6em 1.5em;
+}
+
+button:hover {
+  background-position: right center;
+  background-size: 200% auto;
+  -webkit-animation: pulse 2s infinite;
+  animation: pulse512 1.5s infinite;
+}
+h2 {
+  padding: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+#headerr {
+  color: teal;
+}
+.card-header fw-bold {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgba(60, 176, 225, 0.915);
+}
+@keyframes pulse512 {
+  0% {
+    box-shadow: 0 0 0 0 #05bada66;
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+  }
+}
+
+.input-group {
+  width: auto 0;
+}
+#errorSeach {
+  background-color: white;
+  color: red;
+  font-weight: 500;
+}
+#s,
+#c {
+  border-radius: 10px;
+}

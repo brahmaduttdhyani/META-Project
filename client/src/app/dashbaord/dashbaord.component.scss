@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700;800;900;1000&display=swap");
+h1 {
+  color: teal;
+  padding-top: 10px;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Nunito", sans-serif;
+  overflow: hidden;
+}
+
+body {
+  background-color: rgb(158, 216, 253);
+  padding: 0px 50px;
+}
+
+.container {
+  padding: 50px 0px;
+  height: 80vh;
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.parent {
+  height: 400px;
+  width: 300px;
+  padding: 20px;
+  perspective: 1000px;
+}
+
+.card {
+  padding-top: 100px;
+  // background-image: url("../../assets/doodle.jpg");
+  transform-style: preserve-3d;
+  background-position: center center;
+  width: 100%;
+  transition: all 0.5s ease-in-out;
+  border-radius: 10px;
+}
+
+.card:hover {
+  background-position: 80% 20%;
+  transform: rotate3d(0.5, 1, 0, 45deg);
+}
+
+.content-box {
+  height: 100%;
+  width: 100%;
+  background-color: beige;
+
+  border-radius: 0px 0px 10px 10px;
+  box-shadow: rgba(197, 214, 235, 0.925) 0px 20px 50px -25px;
+  transition: all 0.5s ease-in-out;
+  padding: 50px 25px 25px 25px;
+  transform-style: preserve-3d;
+}
+
+.card-title {
+  color: rgb(8, 0, 0);
+  font-size: 25px;
+  font-weight: 900;
+  transition: all 0.5s ease-in-out;
+  transform: translate3d(0px, 0px, 20px);
+}
+
+.card-title:hover {
+  transform: translate3d(0px, 0px, 50px);
+}
+
+.card-content {
+  padding-top: 15px;
+  font-size: 12px;
+  color: rgb(17, 8, 69);
+  transition: all 0.5s ease-in-out;
+  transform: translate3d(0px, 0px, 20px);
+}
+
+.card-content:hover {
+  transform: translate3d(0px, 0px, 50px);
+}
+
+.see-more {
+  display: block;
+  font-weight: 900;
+  font-size: 20px;
+  text-transform: uppercase;
+  color: rgb(124, 165, 42);
+  padding-top: 15px;
+  transition: all 0.5s ease-in-out;
+  transform: translate3d(0px, 0px, 20px);
+}
+
+.see-more:hover {
+  transform: translate3d(0px, 0px, 50px);
+}
+
+.date-box {
+  position: absolute;
+  top: 75px;
+  left: 25px;
+  height: 60px;
+  width: 60px;
+  background-color: black;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: bisque;
+  transform: translate3d(0px, 0px, 50px);
+}
+
+.date-box span {
+  display: block;
+  text-align: center;
+}
+
+.date-box .month {
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.date-box .date {
+  font-size: 10px;
+  font-weight: 900;
+  color: rgb(135, 149, 160);
+}
+
+.card2 {
+  filter: hue-rotate(150deg);
+}
+
+.card3 {
+  filter: hue-rotate(300deg);
+}
+html {
+  background-color: #0c98d0;
+}

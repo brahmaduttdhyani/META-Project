@@ -14,7 +14,7 @@ export class RegistrationComponent implements OnInit
 
 {
 
-passwordStrength: string = '';
+  passwordStrength: string = '';
   passwordMessage:string='';
   emailReg:RegExp=/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-z]{2,}$/;
  
@@ -23,6 +23,7 @@ passwordStrength: string = '';
   3) At least one Numeric digit i.e. [0-9]\n
   4) At least one special character i.e. ['@', '$', '.', '#', '!', '%', '*', '?', '&', '^']\n
   5) The total length must be minimum of 8 \n`;
+ 
  
   strengthColors: { [key: string]: string } = {
     'Password is Required.':'red',

@@ -133,7 +133,6 @@ export class MaintenanceComponent implements OnInit {
     } else {
       return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' };
     }
-  }
-  
+  } 
 }
 
