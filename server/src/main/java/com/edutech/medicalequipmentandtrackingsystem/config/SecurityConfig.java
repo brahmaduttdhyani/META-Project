@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.edutech.medicalequipmentandtrackingsystem.jwt.JwtRequestFilter;
 
-
+/// brahma added 
 public class SecurityConfig {
     
 }
