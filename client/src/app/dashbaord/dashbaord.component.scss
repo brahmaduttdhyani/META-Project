@@ -1,141 +1,240 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700;800;900;1000&display=swap");
-h1 {
-  color: teal;
-  padding-top: 10px;
-}
+// @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700;800;900;1000&display=swap");
+// h1 {
+//   color: teal;
+//   padding-top: 10px;
+// }
+// * {
+//   box-sizing: border-box;
+//   margin: 0;
+//   padding: 0;
+//   font-family: "Nunito", sans-serif;
+//   overflow: hidden;
+// }
+
+// body {
+//   background-color: rgb(158, 216, 253);
+//   padding: 0px 50px;
+// }
+
+// .container {
+//   padding: 50px 0px;
+//   height: 80vh;
+//   display: flex;
+//   gap: 50px;
+//   justify-content: center;
+//   align-items: center;
+//   flex-wrap: wrap;
+// }
+
+// .parent {
+//   height: 400px;
+//   width: 300px;
+//   padding: 20px;
+//   perspective: 1000px;
+// }
+
+// .card {
+//   padding-top: 100px;
+//   // background-image: url("../../assets/doodle.jpg");
+//   transform-style: preserve-3d;
+//   background-position: center center;
+//   width: 100%;
+//   transition: all 0.5s ease-in-out;
+//   border-radius: 10px;
+// }
+
+// .card:hover {
+//   background-position: 80% 20%;
+//   transform: rotate3d(0.5, 1, 0, 45deg);
+// }
+
+// .content-box {
+//   height: 100%;
+//   width: 100%;
+//   background-color: beige;
+
+//   border-radius: 0px 0px 10px 10px;
+//   box-shadow: rgba(197, 214, 235, 0.925) 0px 20px 50px -25px;
+//   transition: all 0.5s ease-in-out;
+//   padding: 50px 25px 25px 25px;
+//   transform-style: preserve-3d;
+// }
+
+// .card-title {
+//   color: rgb(8, 0, 0);
+//   font-size: 25px;
+//   font-weight: 900;
+//   transition: all 0.5s ease-in-out;
+//   transform: translate3d(0px, 0px, 20px);
+// }
+
+// .card-title:hover {
+//   transform: translate3d(0px, 0px, 50px);
+// }
+
+// .card-content {
+//   padding-top: 15px;
+//   font-size: 12px;
+//   color: rgb(17, 8, 69);
+//   transition: all 0.5s ease-in-out;
+//   transform: translate3d(0px, 0px, 20px);
+// }
+
+// .card-content:hover {
+//   transform: translate3d(0px, 0px, 50px);
+// }
+
+// .see-more {
+//   display: block;
+//   font-weight: 900;
+//   font-size: 20px;
+//   text-transform: uppercase;
+//   color: rgb(124, 165, 42);
+//   padding-top: 15px;
+//   transition: all 0.5s ease-in-out;
+//   transform: translate3d(0px, 0px, 20px);
+// }
+
+// .see-more:hover {
+//   transform: translate3d(0px, 0px, 50px);
+// }
+
+// .date-box {
+//   position: absolute;
+//   top: 75px;
+//   left: 25px;
+//   height: 60px;
+//   width: 60px;
+//   background-color: black;
+//   border-radius: 10px;
+//   padding: 12px;
+//   box-shadow: bisque;
+//   transform: translate3d(0px, 0px, 50px);
+// }
+
+// .date-box span {
+//   display: block;
+//   text-align: center;
+// }
+
+// .date-box .month {
+//   color: white;
+//   font-size: 12px;
+//   font-weight: 700;
+// }
+
+// .date-box .date {
+//   font-size: 10px;
+//   font-weight: 900;
+//   color: rgb(135, 149, 160);
+// }
+
+// .card2 {
+//   filter: hue-rotate(150deg);
+// }
+
+// .card3 {
+//   filter: hue-rotate(300deg);
+// }
+// html {
+//   background-color: #0c98d0;
+// }
+
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Nunito", sans-serif;
-  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
 }
 
-body {
-  background-color: rgb(158, 216, 253);
-  padding: 0px 50px;
+.dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #EAF4FB, #F9FBFD);
+  padding: 60px 40px;
 }
 
-.container {
-  padding: 50px 0px;
-  height: 80vh;
-  display: flex;
-  gap: 50px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.parent {
-  height: 400px;
-  width: 300px;
-  padding: 20px;
-  perspective: 1000px;
-}
-
-.card {
-  padding-top: 100px;
-  // background-image: url("../../assets/doodle.jpg");
-  transform-style: preserve-3d;
-  background-position: center center;
-  width: 100%;
-  transition: all 0.5s ease-in-out;
-  border-radius: 10px;
-}
-
-.card:hover {
-  background-position: 80% 20%;
-  transform: rotate3d(0.5, 1, 0, 45deg);
-}
-
-.content-box {
-  height: 100%;
-  width: 100%;
-  background-color: beige;
-
-  border-radius: 0px 0px 10px 10px;
-  box-shadow: rgba(197, 214, 235, 0.925) 0px 20px 50px -25px;
-  transition: all 0.5s ease-in-out;
-  padding: 50px 25px 25px 25px;
-  transform-style: preserve-3d;
-}
-
-.card-title {
-  color: rgb(8, 0, 0);
-  font-size: 25px;
-  font-weight: 900;
-  transition: all 0.5s ease-in-out;
-  transform: translate3d(0px, 0px, 20px);
-}
-
-.card-title:hover {
-  transform: translate3d(0px, 0px, 50px);
-}
-
-.card-content {
-  padding-top: 15px;
-  font-size: 12px;
-  color: rgb(17, 8, 69);
-  transition: all 0.5s ease-in-out;
-  transform: translate3d(0px, 0px, 20px);
-}
-
-.card-content:hover {
-  transform: translate3d(0px, 0px, 50px);
-}
-
-.see-more {
-  display: block;
-  font-weight: 900;
-  font-size: 20px;
-  text-transform: uppercase;
-  color: rgb(124, 165, 42);
-  padding-top: 15px;
-  transition: all 0.5s ease-in-out;
-  transform: translate3d(0px, 0px, 20px);
-}
-
-.see-more:hover {
-  transform: translate3d(0px, 0px, 50px);
-}
-
-.date-box {
-  position: absolute;
-  top: 75px;
-  left: 25px;
-  height: 60px;
-  width: 60px;
-  background-color: black;
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow: bisque;
-  transform: translate3d(0px, 0px, 50px);
-}
-
-.date-box span {
-  display: block;
+/* HERO */
+.dashboard-hero {
   text-align: center;
+  margin-bottom: 60px;
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #1B2A38;
+  }
+
+  p {
+    color: #2E86C1;
+    font-weight: 500;
+    margin-top: 6px;
+  }
 }
 
-.date-box .month {
-  color: white;
-  font-size: 12px;
-  font-weight: 700;
+/* GRID */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+  max-width: 1100px;
+  margin: auto;
 }
 
-.date-box .date {
-  font-size: 10px;
-  font-weight: 900;
-  color: rgb(135, 149, 160);
+/* CARD */
+.feature-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.15);
+  }it statu
+
+  img {
+    height: 140px;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #1B2A38;
+  }
+
+  p {
+    font-size: 14px;
+    color: #6c7a89;
+    margin-bottom: 20px;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: 600;
+    color: inherit;
+  }
 }
 
-.card2 {
-  filter: hue-rotate(150deg);
-}
+/* COLOR VARIANTS */
+.blue { background: linear-gradient(180deg, #EAF4FB, #ffffff); }
+.green { background: linear-gradient(180deg, #E9F7EF, #ffffff); }
+.orange { background: linear-gradient(180deg, #FFF3E0, #ffffff); }
+.purple { background: linear-gradient(180deg, #F3E5F5, #ffffff); }
+.red { background: linear-gradient(180deg, #FDECEA, #ffffff); }
 
-.card3 {
-  filter: hue-rotate(300deg);
-}
-html {
-  background-color: #0c98d0;
+/* MOBILE */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 40px 20px;
+  }
+
+  .dashboard-hero h1 {
+    font-size: 28px;
+  }
 }
