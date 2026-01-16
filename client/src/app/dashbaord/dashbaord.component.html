@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
   <div class="row text-center">
     <div *ngIf="roleType == 'HOSPITAL'">
       <body>
@@ -80,7 +80,6 @@
   </div>
   
   
-  <!-- if the role is technician -->
   <div *ngIf="roleType == 'TECHNICIAN'">
     <body style="background-color: black">
       <h1>Welcome {{username}}(TECHNICIAN)</h1>
@@ -101,4 +100,65 @@
       </div>
     </body>
   </div>
-</html>
+</html> -->
+
+
+
+
+<section class="dashboard">
+
+  <!-- HERO -->
+  <div class="dashboard-hero">
+    <h1>Welcome {{ username }}</h1>
+    <p *ngIf="roleType === 'HOSPITAL'">Admin Dashboard</p>
+    <p *ngIf="roleType === 'SUPPLIER'">Supplier Dashboard</p>
+    <p *ngIf="roleType === 'TECHNICIAN'">Technician Dashboard</p>
+  </div>
+
+  <!-- HOSPITAL -->
+  <div class="dashboard-grid" *ngIf="roleType === 'HOSPITAL'">
+
+    <div class="feature-card blue">
+      <img src="assets/images/medical-login.png" />
+      <h3>Create Hospital</h3>
+      <p>Add and manage hospitals easily.</p>
+      <a routerLink="/createhospital">Get Started →</a>
+    </div>
+
+    <div class="feature-card green">
+      <img src="assets/images/dashboard.png" />
+      <h3>Request Equipment</h3>
+      <p>Order new medical equipment.</p>
+      <a routerLink="/requestequipment">Request →</a>
+    </div>
+
+    <div class="feature-card orange">
+      <img src="assets/images/dashboard1.png" />
+      <h3>Schedule Maintenance</h3>
+      <p>Fix & track equipment issues.</p>
+      <a routerLink="/schedule-maintenance">Schedule →</a>
+    </div>
+
+  </div>
+
+  <!-- SUPPLIER -->
+  <div class="dashboard-grid" *ngIf="roleType === 'SUPPLIER'">
+    <div class="feature-card purple">
+      <img src="assets/images/medical-login3.png" />
+      <h3>Order Reports</h3>
+      <p>View and manage orders.</p>
+      <a routerLink="/orders">View Reports →</a>
+    </div>
+  </div>
+
+  <!-- TECHNICIAN -->
+  <div class="dashboard-grid" *ngIf="roleType === 'TECHNICIAN'">
+    <div class="feature-card red">
+      <img src="assets/images/medical-login.png" />
+      <h3>Maintenance Reports</h3>
+      <p>Track service & maintenance.</p>
+      <a routerLink="/maintenance">View →</a>
+    </div>
+  </div>
+
+</section>
