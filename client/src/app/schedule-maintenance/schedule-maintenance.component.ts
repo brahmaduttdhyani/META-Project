@@ -149,7 +149,7 @@ export class ScheduleMaintenanceComponent implements OnInit {
   maintenanceList: any = [];
   getMaintenance() {
     this.maintenanceList = [];
-    this.httpService.getMaintenance().subscribe(
+    this.httpService.getScheduleMaintenance().subscribe(
       (data: any) => {
         this.maintenanceList = data;
         console.log(data);
@@ -172,5 +172,4 @@ export class ScheduleMaintenanceComponent implements OnInit {
       return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' }; // or any default style you want
     }
   }
-  
 }
