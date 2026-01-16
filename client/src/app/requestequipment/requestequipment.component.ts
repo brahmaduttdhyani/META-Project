@@ -119,7 +119,7 @@ itemForm: FormGroup;
 
   getOrders() {
     this.orderList = [];
-    this.httpService.getorders().subscribe(
+    this.httpService.getorderEquipment().subscribe(
       (data: any) => {
         this.orderList = data;
         console.log(data);
