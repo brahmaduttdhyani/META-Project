@@ -50,7 +50,7 @@ public class RegisterAndLoginController {
         final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
         final String token = jwtUtil.generateToken(userDetails.getUsername());
  
-        User user = userService.getUserByUsername(loginRequest.getUsername());
+        User user = userService.getUserByIdentifier(loginRequest.getUsername());
  
         return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getEmail(), user.getRole()));
     }
