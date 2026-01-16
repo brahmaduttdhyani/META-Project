@@ -33,12 +33,18 @@ public class UserService implements UserDetailsService{
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public User getUserByIdentifier(String identifier){
+        User byUsername=userRepository.findByUsername(identifier);
+        if(byUsername != null) return byUsername;
+        return userRepository.findByEmail(identifier);
+    }
  
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String identifier) {
+        User user = getUserByIdentifier(identifier);
         if (user == null) {
-            throw new UsernameNotFoundException(username + "is not found");
+            throw new UsernameNotFoundException(identifier + "is not found");
         }
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
