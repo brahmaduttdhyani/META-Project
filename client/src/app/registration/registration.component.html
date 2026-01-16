@@ -1,135 +1,124 @@
+<section class="login-page">
+  <div class="container">
+    <div class="login-card row g-0">
 
-<section class="background-radial-gradient overflow-hidden">
-  <div class="container px-1 py-1 px-md-5 text-center text-lg-start my-5">
-    <div class="row gx-lg-5 align-items-center mb-5">
-      <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
-        <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
-          <b>MediService</b><br />
-          <h3>
-            <span style="color: hsl(218, 81%, 75%)">Your Health Our Priority</span>
-          </h3>
-        </h1>
-      </div>
+      <!-- LEFT SIDE : REGISTRATION FORM -->
+      <div class="col-lg-6 col-md-12 login-left">
+        <div class="login-form">
 
-      <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
-        <div class="card bg-glass">
-          <div class="card-body px-4 py-5 px-md-5">
-            <form class="mb-3 mt-md-4" [formGroup]="itemForm" (ngSubmit)="onRegister()">
-              <div class="row">
-                <h5>Please Enter Your Details Here</h5>
-                <div class="col-md-6 mb-4"></div>
-              </div>
-
-              <!-- Username -->
-              <div class="form-outline mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" name="username" formControlName="username" />
-                <div
-                  *ngIf="itemForm.get('username')?.invalid && (itemForm.get('username')?.dirty || itemForm.get('username')?.touched)"
-                  class="ng-dirty"
-                >
-                  <span class="text-danger fw-bold">*Please Enter Username.</span>
-                </div>
-              </div>
-
-              <!-- Email -->
-              <div class="form-outline mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" formControlName="email" />
-                <div
-                  *ngIf="itemForm.get('email')?.invalid && (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)"
-                  class="ng-dirty"
-                >
-                  <div *ngIf="itemForm.get('email')?.hasError('required')" class="text-danger fw-bold">
-                    *Please Enter Email Id
-                  </div>
-                  <div *ngIf="itemForm.get('email')?.hasError('invalidEmailFormat')" class="text-danger fw-bold">
-                    *Invalid Email Id
-                  </div>
-                </div>
-              </div>
-
-              <!-- Password -->
-              <div class="form-outline mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" formControlName="password" (input)="checkPasswordStrength()" />
-                <div *ngIf="itemForm.get('password')?.dirty || itemForm.get('password')?.touched" class="ng-dirty">
-                  <div [style.color]="strengthColors[passwordStrength]" class="fw-bold">
-                    {{ passwordStrength }}
-                  </div>
-                  <div class="text-danger">{{ passwordMessage }}</div>
-                  <div
-                    *ngIf="itemForm.get('password')?.hasError('required') && itemForm.get('password')?.touched"
-                    class="text-danger fw-bold"
-                  >
-                    *Password is Required.
-                  </div>
-                </div>
-              </div>
-
-              <!-- Confirm Password (separate control; does not affect itemForm validity) -->
-              <div class="form-outline mb-3">
-                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" [formControl]="confirmPasswordCtrl" name="confirmPassword" />
-                <div
-                  *ngIf="
-                    confirmPasswordCtrl.dirty &&
-                    confirmPasswordCtrl.value &&
-                    confirmPasswordCtrl.value !== itemForm.get('password')?.value
-                  "
-                  class="text-danger fw-bold"
-                >
-                  Password do not match.
-                </div>
-                <div
-                  *ngIf="
-                    confirmPasswordCtrl.dirty &&
-                    confirmPasswordCtrl.value &&
-                    confirmPasswordCtrl.value === itemForm.get('password')?.value
-                  "
-                  class="text-success fw-bold"
-                >
-                  Password Matched
-                </div>
-              </div>
-
-              <!-- Role -->
-              <div class="form-outline mb-4">
-                <label for="role" class="form-label">Role</label>
-                <select name="role" formControlName="role">
-                  <option value="" disabled>Choose Role</option>
-                  <option value="HOSPITAL">HOSPITAL</option>
-                  <option value="TECHNICIAN">TECHNICIAN</option>
-                  <option value="SUPPLIER">SUPPLIER</option>
-                </select>
-                <div
-                  *ngIf="itemForm.get('role')?.invalid && (itemForm.get('role')?.dirty || itemForm.get('role')?.touched)"
-                  class="ng-dirty"
-                >
-                  <span class="text-danger fw-bold">*Please choose role.</span>
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn-primary btn-block mb-4" [disabled]="itemForm.invalid">
-                Submit
-              </button>
-            </form>
-
-            <div>
-              <p class="mb-0 text-center">
-                <a [routerLink]="['/login']" class="text-primary fw-bold">Go to Login</a>
-              </p>
-            </div>
-
-            <div *ngIf="showMessage" class="text text-success fw-bold" role="text">
-              {{ responseMessage }}
-            </div>
-            <div *ngIf="showError" class="text text-success fw-bold" role="text">
-              {{ responseMessage }}
-            </div>
+          <div class="login-header">
+            <span class="icon">🩺</span>
+            <h3>Register</h3>
           </div>
+
+          <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
+
+            <!-- Username -->
+            <div class="form-group mb-3">
+              <label>Username</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="username"
+                placeholder="Enter username"
+              />
+              <small class="text-danger"
+                *ngIf="itemForm.get('username')?.touched && itemForm.get('username')?.invalid">
+                Username is required
+              </small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group mb-3">
+              <label>Email Address</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="Enter email"
+              />
+              <small class="text-danger"
+                *ngIf="itemForm.get('email')?.touched && itemForm.get('email')?.invalid">
+                Enter a valid email
+              </small>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group mb-3">
+              <label>Password</label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="Enter password"
+                (input)="checkPasswordStrength()"
+              />
+              <small class="fw-bold"
+                [style.color]="strengthColors[passwordStrength]">
+                {{ passwordStrength }}
+              </small>
+              <div class="text-danger">{{ passwordMessage }}</div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group mb-3">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [formControl]="confirmPasswordCtrl"
+                placeholder="Confirm password"
+              />
+              <small class="text-danger"
+                *ngIf="confirmPasswordCtrl.dirty && confirmPasswordCtrl.value !== itemForm.get('password')?.value">
+                Passwords do not match
+              </small>
+              <small class="text-success fw-bold"
+                *ngIf="confirmPasswordCtrl.dirty && confirmPasswordCtrl.value === itemForm.get('password')?.value">
+                Password matched
+              </small>
+            </div>
+
+            <!-- Role -->
+            <div class="form-group mb-4">
+              <label>Role</label>
+              <select class="form-control" formControlName="role">
+                <option value="" disabled>Choose role</option>
+                <option value="HOSPITAL">Hospital</option>
+                <option value="TECHNICIAN">Technician</option>
+                <option value="SUPPLIER">Supplier</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              class="btn login-btn w-100"
+              (click)="onRegister()"
+             >
+              Register
+            </button>
+
+            <p class="register-text mt-3">
+              Already have an account?
+              <a routerLink="/login">Login</a>
+            </p>
+          </form>
+
         </div>
       </div>
+
+      <!-- RIGHT SIDE : ILLUSTRATION -->
+      <div class="col-lg-6 d-none d-lg-flex p-0">
+        <div class="illustration-section">
+          <img
+            src="assets/images/medical-login3.png"
+            class="illustration-img"
+            alt="Medical Illustration"
+          />
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
+
