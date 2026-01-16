@@ -96,6 +96,13 @@ export class HttpService {
     );
   }
 
+  getorderEquipment(): Observable<any> {
+    return this.http.get(
+      this.serverName + `/api/hospital/orders`,
+      this.getRequestOptions()
+    );
+  }
+
   //hospital can schedule meaintenance for particular equipment for particular hospital
   scheduleMaintenance(details: any, equipmentId: any): Observable<any> {
     return this.http.post(
@@ -103,6 +110,13 @@ export class HttpService {
         '/api/hospital/maintenance/schedule?equipmentId=' +
         equipmentId,
       details,
+      this.getRequestOptions()
+    );
+  }
+
+  getScheduleMaintenance(): Observable<any> {
+    return this.http.get(
+      this.serverName + `/api/hospital/maintenances`,
       this.getRequestOptions()
     );
   }

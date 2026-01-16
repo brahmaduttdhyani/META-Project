@@ -199,8 +199,8 @@
             <th>Hospital</th>
           </tr>
         </thead>
-        <tbody *ngFor="let val of orderList">
-          <tr>
+        <tbody>
+          <tr *ngFor="let val of orderList">
             <td>{{ val.id }}</td>
             <td>{{ val.orderDate | date : "dd-MMM-yyyy" }}</td>
             <td>{{ val.quantity }}</td>
