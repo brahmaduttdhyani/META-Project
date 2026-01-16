@@ -227,8 +227,8 @@
             <th>Hospital</th>
           </tr>
         </thead>
-        <tbody *ngFor="let Maintenancef of maintenanceList">
-          <tr>
+        <tbody>
+          <tr *ngFor="let Maintenancef of maintenanceList">
             <td>{{ Maintenancef.id }}</td>
             <td>{{ Maintenancef.scheduledDate | date : "dd-MMM-yyyy" }}</td>
             <td>{{ Maintenancef.completedDate | date : "dd-MMM-yyyy" }}</td>
