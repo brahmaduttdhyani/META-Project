@@ -22,7 +22,7 @@ public class OrderService {
     private EquipmentRepository equipmentRepository;
  
     public Order placeOrder(Long equipmentId, Order order) {
-        // Check if the equipment with the given ID exists
+        // Check if the  equipment with the given ID exists
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new EntityNotFoundException("Equipment not found with ID: " + equipmentId));
  

@@ -3,7 +3,7 @@ package com.edutech.medicalequipmentandtrackingsystem.entitiy;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "equipments") // do not change table name
+@Table(name = "equipments") // do not c hange table name
 public class Equipment {
 
     @Id

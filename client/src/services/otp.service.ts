@@ -7,7 +7,6 @@ import { environment } from '../environments/environment';
 })
 
 export class OtpService {
-
   private baseUrl = environment.apiUrl + '/api/otp'; 
   constructor(private http: HttpClient) {}
 
