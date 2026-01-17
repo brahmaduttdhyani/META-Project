@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
+import { OtpService } from '../../services/otp.service';
 
 @Component({
   selector: 'app-registration',
@@ -13,6 +14,9 @@ export class RegistrationComponent implements OnInit {
 
   passwordStrength: string = '';
   passwordMessage: string = '';
+  showOtpSection = false;
+  emailVerified = false;
+  isSubmitting = false;
 
   // Custom email validator (matches typical unit test expectations)
   emailValidator(control: AbstractControl): ValidationErrors | null {
@@ -53,7 +57,8 @@ export class RegistrationComponent implements OnInit {
   constructor(
     public router: Router,
     private bookService: HttpService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private otpService:OtpService
   ) {
     // Strong password: at least one lower, upper, digit, one special char, 8-20 chars, no spaces
     const passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@.$#!%*?&^])[^\\s]{8,20}$';
@@ -63,7 +68,8 @@ export class RegistrationComponent implements OnInit {
       username: [this.formModel.username, [Validators.required]],
       email: [this.formModel.email, [Validators.required, this.emailValidator.bind(this)]],
       password: [this.formModel.password, [Validators.required, Validators.pattern(passwordPattern)]],
-      role: [this.formModel.role, Validators.required]
+      role: [this.formModel.role, Validators.required],
+      otp:['']
     });
   }
 
@@ -83,7 +89,12 @@ export class RegistrationComponent implements OnInit {
       return;
     }
 
+    if(this.isSubmitting)return;
+    this.isSubmitting=true;
     if (this.itemForm.valid) {
+      const snapshot=this.itemForm.getRawValue();
+      const snapUsername=snapshot.username;
+      const snapRole=snapshot.role;
       this.bookService.registerUser({ ...this.itemForm.value }).subscribe(
         (response: any) => {
           this.showMessage = true;
@@ -92,10 +103,10 @@ export class RegistrationComponent implements OnInit {
           if (response == null) {
             this.responseMessage = 'User Already Exist';
           } else {
-            if (this.itemForm.get('role')?.value === 'HOSPITAL') {
-              this.responseMessage = `Welcome ${this.itemForm.get('username')?.value} to our page!!. You are an Admin now`;
+            if (snapRole === 'HOSPITAL') {
+              this.responseMessage = `Welcome ${snapUsername} to our page!!. You are an Admin now`;
             } else {
-              this.responseMessage = `Welcome ${this.itemForm.get('username')?.value} to our page!!. You are an ${this.itemForm.get('role')?.value} now`;
+              this.responseMessage = `Welcome ${snapUsername} to our page!!. You are an ${snapRole} now`;
             }
             this.itemForm.reset();
             this.confirmPasswordCtrl.reset();
@@ -104,8 +115,12 @@ export class RegistrationComponent implements OnInit {
         (error: any) => {
           this.showError = true;
           this.showMessage = false;
-          this.responseMessage = 'An error occurred while registering.';
-        }
+          if(error?.status == 409){
+            this.responseMessage=error?.error?.message || 'User already exists';
+          }else{
+            this.responseMessage = 'An error occurred while registering.';
+        } 
+      }    
       );
     } else {
       this.itemForm.markAllAsTouched();
@@ -131,4 +146,33 @@ export class RegistrationComponent implements OnInit {
       this.passwordMessage = '';
     }
   }
+  onVerifyEmail(): void {
+  const email = this.itemForm.get('email')?.value;
+
+  if (!email) {
+    alert('Please enter email');
+    return;
+  }
+  this.otpService.sendOtp(email).subscribe({
+    next: () => {
+      this.showOtpSection = true;
+      alert('OTP sent to your email');
+    },
+    error: () => alert('Failed to send OTP')
+  });
+}
+verifyOtp(): void {
+  const email = this.itemForm.get('email')?.value;
+  const otp = this.itemForm.get('otp')?.value;
+
+  this.otpService.verifyOtp(email, otp.trim()).subscribe({
+    next: () => {
+      this.emailVerified = true;
+      this.showOtpSection = false;
+      // this.itemForm.get('email')?.disable(); // optional UX improvement
+      alert('Email verified successfully');
+    },
+    error: () => alert('Invalid OTP')
+  });
+}
 }

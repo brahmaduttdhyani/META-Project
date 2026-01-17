@@ -29,7 +29,7 @@
             </div>
 
             <!-- Email -->
-            <div class="form-group mb-3">
+            <!-- <div class="form-group mb-3">
               <label>Email Address</label>
               <input
                 type="email"
@@ -41,7 +41,47 @@
                 *ngIf="itemForm.get('email')?.touched && itemForm.get('email')?.invalid">
                 Enter a valid email
               </small>
+            </div> -->
+
+            <div class="form-group mb-3">
+            <label>Email address</label>
+            <input
+                type="email"
+                formControlName="email"
+                placeholder="Enter email"
+                [disabled]="emailVerified"
+              />
+            
+              <!-- Verify Email Button -->
+            <button
+                type="button"
+                class="btn login-btn w-100"
+                *ngIf="!showOtpSection"
+                (click)="onVerifyEmail()"
+                [disabled]="itemForm.get('email')?.invalid"
+            >
+                Verify Email
+            </button>
             </div>
+            
+            <!-- OTP SECTION -->
+            <div class="form-group mb-3" *ngIf="showOtpSection && !emailVerified">
+            <label>Enter OTP</label>
+            <input
+                type="text"
+                placeholder="Enter OTP"
+                formControlName="otp"
+                name="otp"
+              />
+
+              <button type="button" class="btn login-btn w-100" (click)="verifyOtp()">
+                Verify OTP
+            </button>
+            </div>
+
+            <p class="success-msg" *ngIf="emailVerified">
+              ✅ Email verified successfully
+            </p>
 
             <!-- Password -->
             <div class="form-group mb-3">
@@ -97,6 +137,10 @@
              >
               Register
             </button>
+            
+            <!-- Status messages -->
+            <div *ngIf="showError" class="alert alert-danger mt-2">{{ responseMessage }}</div>
+            <div *ngIf="showMessage" class="alert alert-success mt-2">{{ responseMessage }}</div>
 
             <p class="register-text mt-3">
               Already have an account?

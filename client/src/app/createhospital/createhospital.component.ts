@@ -118,8 +118,8 @@ export class CreatehospitalComponent implements OnInit {
       const searchTerm = this.modalSearchQuery.toLowerCase().trim(); // Convert search query to lowercase and the trim it
       this.filteredHospitalList = this.hospitalList.filter(
         (hosp: Hospital) =>
-          hosp.name.toLowerCase().trim() === searchTerm ||
-          hosp.location.toLowerCase().trim() === searchTerm ||
+          hosp.name.toLowerCase().trim().includes(searchTerm) ||
+          hosp.location.toLowerCase().trim().includes(searchTerm) ||
           hosp.id == searchTerm
       );
       console.log(this.filteredHospitalList);

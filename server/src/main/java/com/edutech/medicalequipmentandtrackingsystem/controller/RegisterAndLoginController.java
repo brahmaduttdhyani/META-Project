@@ -33,6 +33,10 @@ public class RegisterAndLoginController {
  
     @PostMapping("/api/user/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
+        String duplicateMessage = userService.chechDuplicate(user);
+        if(duplicateMessage != null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,duplicateMessage);
+        }
         User registeredUser = userService.registerUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
