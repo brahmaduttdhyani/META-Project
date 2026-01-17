@@ -1,3 +1,4 @@
+
 <div class="modal-body">
   <div class="input-group mb-3">
     <!-- Search -->
@@ -9,13 +10,7 @@
       id="search-input"
       (keyup.enter)="filterHospital()"
     />
-    <button
-      class="btn btn-primary"
-      type="button"
-      (click)="filterHospital()"
-    >Search</button>
-      <!-- Search -->
-  <!-- </input> -->
+    <button class="btn btn-primary" type="button" (click)="filterHospital()">Search</button>
     <br />
     <button class="btn btn-secondary" type="button" (click)="closeIt()">
       Clear
@@ -59,7 +54,6 @@
   </div>
 </div>
 
-<!-- <div class="container-fluid" style="background-image: url(''); background-size: cover;"> -->
 <div class="container-fluid">
   <div class="container">
     <div class="row">
@@ -80,21 +74,17 @@
               class="animate__animated animate__fadeIn"
             >
               <div class="mb-3">
-                <label for="name" class="form-label fw-bold"
-                  >Hospital Name</label
-                >
+                <label for="name" class="form-label fw-bold">Hospital Name</label>
                 <input
                   formControlName="name"
                   type="text"
                   class="form-control"
-                  [ngModel]="formModel.name"
                   placeholder="Name of Hospital"
                 />
                 <div
                   *ngIf="
                     itemForm.get('name')?.invalid &&
-                    (itemForm.get('name')?.dirty ||
-                      itemForm.get('name')?.touched)
+                    (itemForm.get('name')?.dirty || itemForm.get('name')?.touched)
                   "
                   class="text-danger"
                 >
@@ -104,42 +94,29 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="location" class="form-label fw-bold"
-                  >Hospital Location</label
-                >
+                <label for="location" class="form-label fw-bold">Hospital Location</label>
                 <input
                   formControlName="location"
                   type="text"
                   class="form-control"
-                  [ngModel]="formModel.location"
                   placeholder="Location of Hospital"
                 />
                 <div
                   *ngIf="
                     itemForm.get('location')?.invalid &&
-                    (itemForm.get('location')?.dirty ||
-                      itemForm.get('location')?.touched)
+                    (itemForm.get('location')?.dirty || itemForm.get('location')?.touched)
                   "
                   class="text-danger"
                 >
                   <span *ngIf="itemForm.controls['location'].errors">
-                    <span class="text-danger fw-bold"
-                      >*Please Enter location</span
-                    >
+                    <span class="text-danger fw-bold">*Please Enter location</span>
                   </span>
                 </div>
               </div>
-              <button
-                class="btn btn-primary btn-lg btn-block"
-                [disabled]="itemForm.invalid"
-              >
+              <button class="btn btn-primary btn-lg btn-block" [disabled]="itemForm.invalid">
                 Submit
               </button>
-              <div
-                *ngIf="showMessage"
-                class="text text-success mt-4"
-                role="alert"
-              >
+              <div *ngIf="showMessage" class="text text-success mt-4" role="alert">
                 {{ responseMessage }}
               </div>
               <div *ngIf="showError" class="text text-danger mt-4" role="alert">
@@ -150,6 +127,7 @@
         </div>
       </div>
     </div>
+
     <div class="row mt-5" *ngIf="showHospitalData">
       <div class="col-md-12">
         <div class="card shadow">
@@ -206,7 +184,8 @@
       <div class="modal-body">
         <form
           [formGroup]="equipmentForm"
-          (ngSubmit)="submitEquipment()"
+          (ngSubmit)="submitEquipment()
+          "
           class="animate__animated animate__fadeIn"
         >
           <div class="mb-3">
@@ -216,14 +195,12 @@
               type="text"
               formControlName="name"
               class="form-control"
-              [ngModel]="formModel.name"
               placeholder="Name of Equipment"
             />
             <div
               *ngIf="
                 equipmentForm.get('name')?.invalid &&
-                (equipmentForm.get('name')?.dirty ||
-                  equipmentForm.get('name')?.touched)
+                (equipmentForm.get('name')?.dirty || equipmentForm.get('name')?.touched)
               "
               class="text-danger"
             >
@@ -233,54 +210,36 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="description" class="form-label fw-bold"
-              >Description</label
-            >
+            <label for="description" class="form-label fw-bold">Description</label>
             <input
               type="text"
               formControlName="description"
               class="form-control"
-              [ngModel]="formModel.description"
               placeholder="Description"
             />
             <div
               *ngIf="
                 equipmentForm.get('description')?.invalid &&
-                (equipmentForm.get('description')?.dirty ||
-                  equipmentForm.get('description')?.touched)
+                (equipmentForm.get('description')?.dirty || equipmentForm.get('description')?.touched)
               "
               class="text-danger"
             >
               <span *ngIf="equipmentForm.controls['description'].errors">
-                <span class="text-danger fw-bold"
-                  >*Please Enter description .</span
-                >
+                <span class="text-danger fw-bold">*Please Enter description .</span>
               </span>
             </div>
           </div>
-          <div
-            *ngIf="showMessage"
-            class="alert alert-success mt-4"
-            role="alert"
-          >
+          <div *ngIf="showMessage" class="alert alert-success mt-4" role="alert">
             {{ responseMessage }}
           </div>
           <div *ngIf="showError" class="alert alert-danger" role="alert">
             {{ errorMessage }}
           </div>
           <div class="modal-footer">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="equipmentForm.invalid"
-            >
+            <button type="submit" class="btn btn-primary" [disabled]="equipmentForm.invalid">
               Save
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
           </div>
