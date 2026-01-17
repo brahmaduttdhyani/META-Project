@@ -36,9 +36,10 @@
               </div>
 
               <!-- Email -->
+               
               <div class="form-outline mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" formControlName="email" placeholder="Enter Your "/>
+                <input type="email" name="email" formControlName="email" placeholder="Enter Your Mail"/>
                 <div
                   *ngIf="itemForm.get('email')?.invalid && (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)"
                   class="ng-dirty"
