@@ -2,7 +2,6 @@ package com.edutech.medicalequipmentandtrackingsystem.config;
  
 import com.edutech.medicalequipmentandtrackingsystem.jwt.JwtRequestFilter;
 import com.edutech.medicalequipmentandtrackingsystem.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +48,7 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.GET,"/api/hospital/equipment").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.GET,"/api/hospital/equipment/**").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.GET,"/api/hospitals").hasAuthority("HOSPITAL")
-
+            // .antMatchers(HttpMethod.GET,"/api/technician/maintenance").hasAnyAuthority("HOSPITAL","TECHNICIAN")
             .antMatchers("/api/supplier/**").hasAuthority("SUPPLIER")
             
             .antMatchers(HttpMethod.GET,"/api/technician/maintenance").hasAuthority("TECHNICIAN")

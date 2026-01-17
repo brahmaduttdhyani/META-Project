@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "maintenances") // do not change table name
+@Table(name = "maintenances") // do not ch ange table name
 public class Maintenance {
     
     @Id

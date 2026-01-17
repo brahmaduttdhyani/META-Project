@@ -5,7 +5,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
+    <ul clas s="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" *ngIf="roleName === 'HOSPITAL'" [routerLink]="['/createhospital']">Create Hospital</a>
       </li>
@@ -46,8 +46,8 @@
 
 </body>
  -->
-<!-- ---------- -->
- <!-- <nav class="navbar navbar-expand-lg">
+
+ <nav class="navbar navbar-expand-lg">
   <a class="navbar-brand" href="#"><b>MediService</b></a>
   <button
     class="navbar-toggler"
@@ -142,76 +142,4 @@
   <div>
     <router-outlet> </router-outlet>
   </div>
-</body> -->
-<!-- ----------- -->
-
-
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="#">MediService</a>
-
-    <!-- Toggler for mobile -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Left group -->
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item" *ngIf="roleName === 'HOSPITAL'">
-          <a class="nav-link" [routerLink]="['/createhospital']" routerLinkActive="active">Create Hospital</a>
-        </li>
-        <li class="nav-item" *ngIf="roleName === 'HOSPITAL'">
-          <a class="nav-link" [routerLink]="['/schedule-maintenance']" routerLinkActive="active">Schedule Maintenance</a>
-        </li>
-        <li class="nav-item" *ngIf="roleName === 'HOSPITAL'">
-          <a class="nav-link" [routerLink]="['/requestequipment']" routerLinkActive="active">Request Equipment</a>
-        </li>
-        <li class="nav-item" *ngIf="roleName === 'TECHNICIAN'">
-          <a class="nav-link" [routerLink]="['/maintenance']" routerLinkActive="active">Maintenance Report</a>
-        </li>
-        <li class="nav-item" *ngIf="roleName === 'SUPPLIER'">
-          <a class="nav-link" [routerLink]="['/orders']" routerLinkActive="active">Order Requests</a>
-        </li>
-      </ul>
-
-      <!-- Middle group (visible when not logged in) -->
-      <ul class="navbar-nav" *ngIf="!IsLoggin">
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/meet-team']" routerLinkActive="active">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/team']" routerLinkActive="active">Meet The Partners</a>
-        </li>
-      </ul>
-
-      <!-- Right aligned actions -->
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item" *ngIf="!IsLoggin">
-          <a class="btn btn-primary me-2" [routerLink]="['/login']">Login</a>
-        </li>
-        <li class="nav-item" *ngIf="!IsLoggin">
-          <a class="btn btn-outline-primary" [routerLink]="['/registration']">Register</a>
-        </li>
-        <li class="nav-item" *ngIf="IsLoggin">
-          <a class="btn btn-danger" (click)="logout()" [routerLink]="['/homepage']">Logout</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<!-- Router outlet -->
-<div class="container py-3">
-  <router-outlet></router-outlet>
-</div>
+</body>

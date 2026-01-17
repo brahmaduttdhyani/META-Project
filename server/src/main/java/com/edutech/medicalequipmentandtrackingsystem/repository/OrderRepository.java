@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> {
 
-    // extend jpa repository and add method if needed
+    // extend j pa repository and add method if needed
     List<Order> findByEquipmentId(Long equipmentId);
 }

@@ -44,6 +44,7 @@ export class RegistrationComponent implements OnInit {
 
   itemForm: FormGroup;
 
+  // Keep UI model but start  empty
   formModel: any = { role: '', email: '', password: '', username: '' };
 
   // Confirm password is handled as a separate control (not part of itemForm)

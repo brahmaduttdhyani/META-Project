@@ -11,7 +11,7 @@ roleType: any;
   username:any;
   constructor(private authService: AuthService) {}
   ngOnInit(): void {
-    this.roleType = this.authService.getRole;  // to get the role of the user
+    this.roleType = this.authService.getRole;  // to get the  role of the user
     this.username = this.authService.getUsername; 
     console.log(this.username)
   }

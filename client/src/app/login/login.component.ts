@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {}
-  //to validate the login 
+  //to valid ate the login 
   onLogin() {
     if (this.itemForm.valid) {
       this.showError = false;
