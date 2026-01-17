@@ -47,7 +47,7 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.GET,"/api/hospital/equipment").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.GET,"/api/hospital/equipment/**").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.GET,"/api/hospitals").hasAuthority("HOSPITAL")
-            // .antMatchers(HttpMethod.GET,"/api/technician/maintenance").hasAnyAuthority("HOSPITAL","TECHNICIAN")
+
             .antMatchers("/api/supplier/**").hasAuthority("SUPPLIER")
             
             .antMatchers(HttpMethod.GET,"/api/technician/maintenance").hasAuthority("TECHNICIAN")

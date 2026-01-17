@@ -3,10 +3,10 @@
   <div class="container px-1 py-1 px-md-5 text-center text-lg-start my-5">
     <div class="row gx-lg-5 align-items-center mb-5">
       <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
-        <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+        <h1 class="my-5 display-5 fw-bold ls-tight" style="color: teal">
           <b>MediService</b><br />
           <h3>
-            <span style="color: hsl(218, 81%, 75%)">Your Health Our Priority</span>
+            <span style="color: rgb(2, 156, 156)">Your Health Our Priority</span>
           </h3>
         </h1>
       </div>
@@ -23,7 +23,7 @@
               <!-- Username -->
               <div class="form-outline mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" name="username" formControlName="username" />
+                <input type="text" name="username" formControlName="username" placeholder="Enter Username"/>
                 <div
                   *ngIf="itemForm.get('username')?.invalid && (itemForm.get('username')?.dirty || itemForm.get('username')?.touched)"
                   class="ng-dirty"
@@ -35,7 +35,7 @@
               <!-- Email -->
               <div class="form-outline mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" formControlName="email" />
+                <input type="email" name="email" formControlName="email" placeholder="Enter Your "/>
                 <div
                   *ngIf="itemForm.get('email')?.invalid && (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)"
                   class="ng-dirty"
@@ -73,7 +73,7 @@
                 <input type="password" [formControl]="confirmPasswordCtrl" name="confirmPassword" />
                 <div
                   *ngIf="
-                    confirmPasswordCtrl.dirty &&
+                    (confirmPasswordCtrl.dirty || confirmPasswordCtrl.touched) &&
                     confirmPasswordCtrl.value &&
                     confirmPasswordCtrl.value !== itemForm.get('password')?.value
                   "
