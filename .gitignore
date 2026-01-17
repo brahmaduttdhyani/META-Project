@@ -1,1 +1,2 @@
-server/target/
+echo "server/target/" >> .gitignore
+``
