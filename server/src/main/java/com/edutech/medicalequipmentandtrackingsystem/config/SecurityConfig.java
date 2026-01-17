@@ -40,6 +40,8 @@ public class SecurityConfig {
             .authorizeRequests()
             .antMatchers("/api/user/login").permitAll()
             .antMatchers("/api/user/register").permitAll()
+            .antMatchers("/api/otp/send").permitAll()
+            .antMatchers("/api/otp/verify").permitAll()
             .antMatchers(HttpMethod.POST,"/api/hospital/create").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.POST,"/api/hospital/equipment").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.POST,"/api/hospital/maintenance/schedule").hasAuthority("HOSPITAL")
