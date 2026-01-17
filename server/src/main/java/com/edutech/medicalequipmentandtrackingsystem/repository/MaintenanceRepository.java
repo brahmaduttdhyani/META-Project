@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface MaintenanceRepository extends JpaRepository<Maintenance,Long> {
-    // extend jpa repository and add custom methods if needed
+    // extend  jpa repository and add custom methods if needed
     List<Hospital> findByEquipmentId(Long equipmentId); 
 }

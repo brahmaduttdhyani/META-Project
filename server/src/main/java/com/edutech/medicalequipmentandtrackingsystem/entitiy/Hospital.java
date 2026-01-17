@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "hospital") // do not change table name
+@Table(name = "hospital") // do not chan ge table name
 public class Hospital {
    
     @Id

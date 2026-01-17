@@ -8,6 +8,6 @@ import com.edutech.medicalequipmentandtrackingsystem.entitiy.Hospital;
 
 @Repository
 public interface HospitalRepository extends JpaRepository<Hospital,Long> {
-    // extends JpaRepositor and add custom methods if needed
+    // extends JpaRe positor and add custom methods if needed
 }
 
