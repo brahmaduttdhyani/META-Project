@@ -13,8 +13,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
 import { DashbaordComponent } from './dashbaord/dashbaord.component';
 
-
-
 import { CreatehospitalComponent } from './createhospital/createhospital.component';
 import { ScheduleMaintenanceComponent } from './schedule-maintenance/schedule-maintenance.component';
 import { RequestequipmentComponent } from './requestequipment/requestequipment.component';

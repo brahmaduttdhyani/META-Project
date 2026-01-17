@@ -9,7 +9,6 @@ import com.edutech.medicalequipmentandtrackingsystem.repository.EquipmentReposit
 import com.edutech.medicalequipmentandtrackingsystem.repository.HospitalRepository;
 
 import javax.persistence.EntityNotFoundException;
-
 import java.sql.SQLException;
 import java.util.List;
 

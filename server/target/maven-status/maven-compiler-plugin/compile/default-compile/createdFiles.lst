@@ -1,7 +1,9 @@
 com/edutech/medicalequipmentandtrackingsystem/service/MaintenanceService.class
+com/edutech/medicalequipmentandtrackingsystem/service/OtpService$OtpData.class
 com/edutech/medicalequipmentandtrackingsystem/service/UserService.class
 com/edutech/medicalequipmentandtrackingsystem/repository/EquipmentRepository.class
 com/edutech/medicalequipmentandtrackingsystem/repository/OrderRepository.class
+com/edutech/medicalequipmentandtrackingsystem/controller/OtpController.class
 com/edutech/medicalequipmentandtrackingsystem/jwt/JwtUtil.class
 com/edutech/medicalequipmentandtrackingsystem/service/OrderService.class
 com/edutech/medicalequipmentandtrackingsystem/entitiy/User.class
@@ -9,5 +11,7 @@ com/edutech/medicalequipmentandtrackingsystem/repository/MaintenanceRepository.c
 com/edutech/medicalequipmentandtrackingsystem/repository/UserRepository.class
 com/edutech/medicalequipmentandtrackingsystem/service/HospitalService.class
 com/edutech/medicalequipmentandtrackingsystem/repository/HospitalRepository.class
+com/edutech/medicalequipmentandtrackingsystem/service/EmailService.class
 com/edutech/medicalequipmentandtrackingsystem/service/EquipmentService.class
 com/edutech/medicalequipmentandtrackingsystem/jwt/JwtRequestFilter.class
+com/edutech/medicalequipmentandtrackingsystem/service/OtpService.class

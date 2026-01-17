@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.edutech.medicalequipmentandtrackingsystem.service.EmailService;
 import com.edutech.medicalequipmentandtrackingsystem.service.OtpService;
- 
+
 @RestController
 @RequestMapping("/api/otp")
 @CrossOrigin(origins = "*")

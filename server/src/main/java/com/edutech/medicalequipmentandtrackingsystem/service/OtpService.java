@@ -35,7 +35,7 @@ public class OtpService {
         return isValid;
     }
  
-    // 🔽 NORMAL INNER CLASS (NOT record)
+    // NORMAL INNER CLASS (NOT record)
     private static class OtpData {
         private final String otp;
         private final Instant expiryTime;

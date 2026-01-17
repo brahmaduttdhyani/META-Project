@@ -20,7 +20,7 @@ public class HospitalService {
     }
  
     public List<Hospital> getAllHospitals() throws SQLException{
-        // return list of hospitals
+        // return  list of hospitals
         return hospitalRepository.findAll();
     }
 }

@@ -27,6 +27,6 @@ public class SupplierController {
     public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestParam String newStatus) {
         Order b=orderService.updateOrderStatus(orderId, newStatus);
         return new  ResponseEntity<>(b,HttpStatus.OK);
-        // update order status and return updated order with status code 200 OK
+        // update order s tatus and return updated order with status code 200 OK
     }  
 }
