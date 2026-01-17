@@ -95,7 +95,7 @@ export class CreatehospitalComponent implements OnInit{
         (hosp: Hospital) =>
           hosp.name.toLowerCase().trim().includes(searchTerm) ||
           hosp.location.toLowerCase().trim().includes(searchTerm) ||
-          ('' + hosp.id).toLowerCase().trim() === searchTerm
+          hosp.id == searchTerm
       );
 
       if (this.filteredHospitalList.length == 0) {

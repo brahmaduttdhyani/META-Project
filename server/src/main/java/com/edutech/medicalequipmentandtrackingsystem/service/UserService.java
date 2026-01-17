@@ -57,12 +57,23 @@ public class UserService implements UserDetailsService{
     private PasswordEncoder passwordEncoder;
  
     public User registerUser(User user) {
-        if (getUserByUsername(user.getUsername()) == null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(user);
-        } else {
+        boolean usernameTaken=userRepository.existsByUsername(user.getUsername());
+        boolean emailTaken=userRepository.existsByEmail(user.getEmail());
+        if(usernameTaken || emailTaken){
             return null;
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public String chechDuplicate(User user){
+        if(userRepository.existsByUsername(user.getUsername())){
+            return "Username already exists";
+        }
+        if(userRepository.existsByEmail(user.getEmail())){
+            return "Email already exists";
+        }
+        return null;
     }
  
     public User getUserByUsername(String username) {
