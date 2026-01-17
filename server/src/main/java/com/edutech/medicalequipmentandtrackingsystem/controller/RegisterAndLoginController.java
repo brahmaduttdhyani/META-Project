@@ -22,15 +22,51 @@ import com.edutech.medicalequipmentandtrackingsystem.service.UserService;
 @RestController
 public class RegisterAndLoginController {
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
  
+    // @Autowired
+    // private JwtUtil jwtUtil;
+ 
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
+ 
+    // @PostMapping("/api/user/register")
+    // public ResponseEntity<User> registerUser(@RequestBody User user) {
+    //     User registeredUser = userService.registerUser(user);
+    //     return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+    // }
+ 
+    // @PostMapping("/api/user/login")
+    // public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequest) {
+    //     try {
+    //         authenticationManager.authenticate(
+    //                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+    //         );
+    //     } catch (AuthenticationException e) {
+    //         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password", e);
+    //     }
+ 
+    //     final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+    //     final String token = jwtUtil.generateToken(userDetails.getUsername());
+ 
+    //     User user = userService.getUserByUsername(loginRequest.getUsername());
+ 
+    //     return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getEmail(), user.getRole()));
+    // }
+   
+        // register user and return the registered user with status code 201 created
+       // login user and return the login response with status code 200 ok
+        // if authentication fails, return status code 401 unauthorized
+
+
+
+        @Autowired
+    private UserService userService;
     @Autowired
     private JwtUtil jwtUtil;
- 
     @Autowired
     private AuthenticationManager authenticationManager;
- 
     @PostMapping("/api/user/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         String duplicateMessage = userService.chechDuplicate(user);
@@ -40,7 +76,6 @@ public class RegisterAndLoginController {
         User registeredUser = userService.registerUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
- 
     @PostMapping("/api/user/login")
     public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
@@ -50,17 +85,10 @@ public class RegisterAndLoginController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password", e);
         }
- 
         final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
         final String token = jwtUtil.generateToken(userDetails.getUsername());
- 
         User user = userService.getUserByIdentifier(loginRequest.getUsername());
- 
         return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getEmail(), user.getRole()));
     }
-   
-        // register user and return the registered user with status code 201 created
-       // login user and return the login response with status code 200 ok
-        // if authentication fails, return status code 401 unauthorized
-    }
+}
 
