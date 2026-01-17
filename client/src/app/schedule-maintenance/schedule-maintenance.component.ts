@@ -172,5 +172,4 @@ export class ScheduleMaintenanceComponent implements OnInit {
       return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' }; // or any default style you want
     }
   }
-  
 }

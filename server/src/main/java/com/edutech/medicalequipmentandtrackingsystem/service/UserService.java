@@ -68,6 +68,12 @@ public class UserService implements UserDetailsService{
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public User getUserByIdentifier(String identifier){
+        User byUsername=userRepository.findByUsername(identifier);
+        if(byUsername != null) return byUsername;
+        return userRepository.findByEmail(identifier);
+    }
  
     // NEW: resolve either username or email for login flows
     public User getUserByIdentifier(String identifier) {

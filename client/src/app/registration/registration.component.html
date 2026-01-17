@@ -1,3 +1,6 @@
+<section class="login-page">
+  <div class="container">
+    <div class="login-card row g-0">
 
 <section class="background-radial-gradient overflow-hidden">
   <div class="container px-1 py-1 px-md-5 text-center text-lg-start my-5">
@@ -94,43 +97,112 @@
                 </div>
               </div>
 
-              <!-- Role -->
-              <div class="form-outline mb-4">
-                <label for="role" class="form-label">Role</label>
-                <select name="role" formControlName="role">
-                  <option value="" disabled>Choose Role</option>
-                  <option value="HOSPITAL">HOSPITAL</option>
-                  <option value="TECHNICIAN">TECHNICIAN</option>
-                  <option value="SUPPLIER">SUPPLIER</option>
-                </select>
-                <div
-                  *ngIf="itemForm.get('role')?.invalid && (itemForm.get('role')?.dirty || itemForm.get('role')?.touched)"
-                  class="ng-dirty"
-                >
-                  <span class="text-danger fw-bold">*Please choose role.</span>
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn-primary btn-block mb-4" [disabled]="itemForm.invalid">
-                Submit
-              </button>
-            </form>
-
-            <div>
-              <p class="mb-0 text-center">
-                <a [routerLink]="['/login']" class="text-primary fw-bold">Go to Login</a>
-              </p>
+            <!-- Username -->
+            <div class="form-group mb-3">
+              <label>Username</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="username"
+                placeholder="Enter username"
+              />
+              <small class="text-danger"
+                *ngIf="itemForm.get('username')?.touched && itemForm.get('username')?.invalid">
+                Username is required
+              </small>
             </div>
 
-            <div *ngIf="showMessage" class="text text-success fw-bold" role="text">
-              {{ responseMessage }}
+            <!-- Email -->
+            <div class="form-group mb-3">
+              <label>Email Address</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="Enter email"
+              />
+              <small class="text-danger"
+                *ngIf="itemForm.get('email')?.touched && itemForm.get('email')?.invalid">
+                Enter a valid email
+              </small>
             </div>
-            <div *ngIf="showError" class="text text-success fw-bold" role="text">
-              {{ responseMessage }}
+
+            <!-- Password -->
+            <div class="form-group mb-3">
+              <label>Password</label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="Enter password"
+                (input)="checkPasswordStrength()"
+              />
+              <small class="fw-bold"
+                [style.color]="strengthColors[passwordStrength]">
+                {{ passwordStrength }}
+              </small>
+              <div class="text-danger">{{ passwordMessage }}</div>
             </div>
-          </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group mb-3">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [formControl]="confirmPasswordCtrl"
+                placeholder="Confirm password"
+              />
+              <small class="text-danger"
+                *ngIf="confirmPasswordCtrl.dirty && confirmPasswordCtrl.value !== itemForm.get('password')?.value">
+                Passwords do not match
+              </small>
+              <small class="text-success fw-bold"
+                *ngIf="confirmPasswordCtrl.dirty && confirmPasswordCtrl.value === itemForm.get('password')?.value">
+                Password matched
+              </small>
+            </div>
+
+            <!-- Role -->
+            <div class="form-group mb-4">
+              <label>Role</label>
+              <select class="form-control" formControlName="role">
+                <option value="" disabled>Choose role</option>
+                <option value="HOSPITAL">Hospital</option>
+                <option value="TECHNICIAN">Technician</option>
+                <option value="SUPPLIER">Supplier</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              class="btn login-btn w-100"
+              (click)="onRegister()"
+             >
+              Register
+            </button>
+
+            <p class="register-text mt-3">
+              Already have an account?
+              <a routerLink="/login">Login</a>
+            </p>
+          </form>
+
         </div>
       </div>
+
+      <!-- RIGHT SIDE : ILLUSTRATION -->
+      <div class="col-lg-6 d-none d-lg-flex p-0">
+        <div class="illustration-section">
+          <img
+            src="assets/images/medical-login3.png"
+            class="illustration-img"
+            alt="Medical Illustration"
+          />
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
+

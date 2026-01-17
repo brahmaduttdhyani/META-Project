@@ -15,6 +15,8 @@ import com.edutech.medicalequipmentandtrackingsystem.service.HospitalService;
 import com.edutech.medicalequipmentandtrackingsystem.service.MaintenanceService;
 import com.edutech.medicalequipmentandtrackingsystem.service.OrderService;
 
+import net.bytebuddy.description.type.RecordComponentList;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -109,6 +111,12 @@ public class HospitalController {
             (@RequestParam Long equipmentId, @RequestBody Maintenance maintenance) throws SQLException {
         Maintenance scheduledMaintenance = maintenanceService.scheduleMaintenance(equipmentId, maintenance);
         return new ResponseEntity<>(scheduledMaintenance, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/api/hospital/maintenances")
+    public ResponseEntity<List<Maintenance>> getAllMaintenance() throws SQLException{
+        List<Maintenance> maintenances=maintenanceService.getAllMaintenance();
+        return new ResponseEntity<>(maintenances,HttpStatus.OK);
     }
  
     @GetMapping("/api/hospital/maintenances")
