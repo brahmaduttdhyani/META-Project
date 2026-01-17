@@ -14,6 +14,42 @@ import java.util.ArrayList;
 @Service
 public class UserService implements UserDetailsService{
 
+    // @Autowired
+    // private UserRepository userRepository;
+ 
+    // @Autowired
+    // private PasswordEncoder passwordEncoder;
+ 
+    // public User registerUser(User user) {
+    //     if(getUserByUsername(user.getUsername()) == null){
+    //         user.setPassword(passwordEncoder.encode(user.getPassword()));
+    //         return userRepository.save(user);
+    //     }else{
+    //         return null;
+    //     }
+       
+    // }
+ 
+    // public User getUserByUsername(String username) {
+    //     return userRepository.findByUsername(username);
+    // }
+ 
+    // @Override
+    // public UserDetails loadUserByUsername(String username) {
+    //     User user = userRepository.findByUsername(username);
+    //     if (user == null) {
+    //         throw new UsernameNotFoundException(username + "is not found");
+    //     }
+    //     return new org.springframework.security.core.userdetails.User(
+    //             user.getUsername(),
+    //             user.getPassword(),
+    //             new ArrayList<>());
+    // }
+
+
+    // -------------
+
+
     @Autowired
     private UserRepository userRepository;
  
@@ -21,25 +57,32 @@ public class UserService implements UserDetailsService{
     private PasswordEncoder passwordEncoder;
  
     public User registerUser(User user) {
-        if(getUserByUsername(user.getUsername()) == null){
+        if (getUserByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
-        }else{
+        } else {
             return null;
         }
-       
     }
  
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
  
+    // NEW: resolve either username or email for login flows
+    public User getUserByIdentifier(String identifier) {
+        User byUsername = userRepository.findByUsername(identifier);
+        if (byUsername != null) return byUsername;
+        return userRepository.findByEmail(identifier);
+    }
+ 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String identifier) {
+        User user = getUserByIdentifier(identifier);
         if (user == null) {
-            throw new UsernameNotFoundException(username + "is not found");
+            throw new UsernameNotFoundException(identifier + " is not found");
         }
+        // Always use the canonical username in the UserDetails
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
