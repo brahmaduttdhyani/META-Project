@@ -1,17 +1,75 @@
 
+/* Make buttons rounded (Login/Register/Logout) */
 .btn {
   border-radius: 20px;
 }
-nav {
-  background-color: teal;
+
+/* Force teal background even though the HTML has bg-light */
+nav.navbar.navbar-light.bg-light.border-bottom {
+  background-color: teal !important;
+  border-bottom: 0; /* optional: remove light border */
 }
-.nav-link {
-  color: white;
+
+/* Brand text */
+nav.navbar .navbar-brand {
+  padding-left: 5px;
+  color: aliceblue !important;
+  font-size: 18px;
+  font-weight: 700; /* bold */
+  text-decoration: none;
+}
+
+/* Nav links (left, middle, right groups) */
+nav.navbar .nav-link {
+  color: #ffffff !important;
   font-size: 16px;
   font-weight: bold;
 }
-.navbar-brand {
-  padding-left: 5px;
-  color: aliceblue;
-  font-size: 18px;
+
+/* Hover/focus states */
+nav.navbar .nav-link:hover,
+nav.navbar .nav-link:focus {
+  color: #e6e6e6 !important;
+}
+
+/* Active route highlighting (requires routerLinkActive="active" in HTML) */
+nav.navbar .nav-link.active {
+  color: #ffffff !important;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Toggler button and icon so it shows up on teal */
+nav.navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Make the hamburger icon white (Bootstrap 5 compatible) */
+nav.navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Optional: adjust button colors for contrast on teal */
+nav.navbar .btn-primary {
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+nav.navbar .btn-outline-primary {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+nav.navbar .btn-outline-primary:hover {
+  color: #0d6efd;
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Optional: container padding inside navbar */
+nav.navbar .container-fluid {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
