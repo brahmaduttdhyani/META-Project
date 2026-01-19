@@ -18,6 +18,7 @@
               <th>Status</th>
               <th>Equipment</th>
               <th>Hospital</th>
+              <th>Accepted By</th>
             </tr>
           </thead>
 
@@ -39,6 +40,7 @@
                 <p>Name:{{ val.equipment.hospital.name }}</p>
                 <p>Location:{{ val.equipment.hospital.location }}</p>
               </td>
+              <td>{{ val.assignedSupplierName || 'Not Assigned' }}</td>
             </tr>
           </tbody>
         </table>
