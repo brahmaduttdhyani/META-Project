@@ -58,7 +58,10 @@ public class SecurityConfig {
             
             .antMatchers(HttpMethod.GET,"/api/supplier/orders").hasAnyAuthority("HOSPITAL","SUPPLIER")
             .antMatchers(HttpMethod.PUT,"/api/supplier/order/update/**").hasAuthority("SUPPLIER")
-                .antMatchers("/api/**").authenticated()
+            
+            .antMatchers(HttpMethod.PUT, "/api/supplier/order/respond/**").hasAuthority("SUPPLIER")
+            
+            .antMatchers("/api/**").authenticated()
             .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

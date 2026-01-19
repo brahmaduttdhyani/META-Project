@@ -3,6 +3,7 @@ package com.edutech.medicalequipmentandtrackingsystem.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.edutech.medicalequipmentandtrackingsystem.entitiy.Order;
@@ -16,17 +17,47 @@ public class SupplierController {
     @Autowired
     private OrderService orderService;
  
-    @GetMapping("/api/supplier/orders")
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> a=orderService.getAllOrders();
-        return new ResponseEntity<>(a,HttpStatus.OK);
-        // get all order and return it status code 200 OK
-    }
+    // @GetMapping("/api/supplier/orders")
+    // public ResponseEntity<List<Order>> getAllOrders() {
+    //     List<Order> a=orderService.getAllOrders();
+    //     return new ResponseEntity<>(a,HttpStatus.OK);
+    //     // get all order and return it status code 200 OK
+    // }
  
+    // @PutMapping("/api/supplier/order/update/{orderId}")
+    // public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestParam String newStatus) {
+    //     Order b=orderService.updateOrderStatus(orderId, newStatus);
+    //     return new  ResponseEntity<>(b,HttpStatus.OK);
+    //     // update order s tatus and return updated order with status code 200 OK
+    // }  
+
+    @PutMapping("/api/supplier/order/respond/{orderId}")
+    public ResponseEntity<?> respondToOrder(
+            @PathVariable Long orderId,
+            @RequestParam String action,
+            Authentication authentication
+    ) {
+        Order updated = orderService.respondToOrder(orderId, action, authentication.getName());
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+
     @PutMapping("/api/supplier/order/update/{orderId}")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestParam String newStatus) {
-        Order b=orderService.updateOrderStatus(orderId, newStatus);
-        return new  ResponseEntity<>(b,HttpStatus.OK);
-        // update order s tatus and return updated order with status code 200 OK
-    }  
+    public ResponseEntity<Order> updateOrderStatus(
+            @PathVariable Long orderId,
+            @RequestParam String newStatus,
+            Authentication authentication
+    ) {
+        Order updated = orderService.updateOrderStatusSecured(orderId, newStatus, authentication.getName());
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/supplier/orders")
+    public ResponseEntity<?> getAllOrders(Authentication authentication) {
+        return new ResponseEntity<>(
+                orderService.getOrdersForSupplier(authentication.getName()),
+                HttpStatus.OK
+        );
+    }
+
 }
