@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
           // Handle error
           this.showError = true;
           this.errorMessage =
-            'An error occurred while logging in. Please try again later.';
+            'The Username or Password you Enter is Incorrect.';
           console.error('Login error:', error);
         }
       );
