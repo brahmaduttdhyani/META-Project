@@ -36,16 +36,21 @@ export class LoginComponent implements OnInit {
       this.httpService.Login(this.itemForm.value).subscribe(
         (data: any) => {
           if (data.userNo != 0) {
-            // localStorage.setItem('role', data.role);
             this.authService.SetRole(data.role);
             this.authService.SetUsername(data.username);
             this.authService.saveToken(data.token);
+
+            // ✅ IMPORTANT: store userId for edit permission
+            const payload = JSON.parse(atob(data.token.split('.')[1]));
+            localStorage.setItem('userId', String(payload.userId));
+
             this.router.navigateByUrl('/dashboard');
 
             setTimeout(() => {
               window.location.reload();
             }, 1000);
-          } else {
+          }
+           else {
             this.showError = true;
             this.errorMessage = 'Wrong User or Password';
           }

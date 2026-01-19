@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-between mt-4">
+  <h2 class="mb-1 text-center">Maintenance Status</h2>
+</div>
+
+<div class="row mt-3 container mt-4 mx-5">
+  <div class="card">
+    <div class="card-header">Maintenance Information</div>
+
+    <div class="card-body">
+      <div *ngIf="showError" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Maintenance ID</th>
+              <th>Scheduled Date</th>
+              <th>Deadline</th>
+              <th>Status</th>
+              <th>Equipment</th>
+              <th>Hospital</th>
+              <th>Technician</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let Maintenancef of maintenanceList">
+              <td>{{ Maintenancef.id }}</td>
+              <td>{{ Maintenancef.scheduledDate | date : "dd-MMM-yyyy" }}</td>
+              <td>{{ Maintenancef.completedDate | date : "dd-MMM-yyyy" }}</td>
+
+              <td [ngStyle]="getStatusStyle(Maintenancef.status)">
+                <strong>{{ Maintenancef.status }}</strong>
+              </td>
+
+              <td>
+                <p>Id:{{ Maintenancef.equipment.id }}</p>
+                <p>Name:{{ Maintenancef.equipment.name }}</p>
+                <p>Description:{{ Maintenancef.equipment.description }}</p>
+              </td>
+
+              <td>
+                <p>Id:{{ Maintenancef.equipment.hospital.id }}</p>
+                <p>Name:{{ Maintenancef.equipment.hospital.name }}</p>
+                <p>Location:{{ Maintenancef.equipment.hospital.location }}</p>
+              </td>
+              <td>{{ Maintenancef.assignedTechnicianName || 'Yet to Accept' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

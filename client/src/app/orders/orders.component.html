@@ -20,7 +20,7 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody *ngFor="let val of orderList">
+        <!-- <tbody *ngFor="let val of orderList">
           <tr>
             <td>{{ val.id }}</td>
             <td>{{ val.orderDate | date : "dd-MMM-yyyy" }}</td>
@@ -48,6 +48,76 @@
               </button>
             </td>
             <br />
+          </tr>
+        </tbody> -->
+
+
+        <tbody>
+          <tr *ngFor="let val of orderList" [hidden]="isOrderRejected(val.id)">
+            <td>{{ val.id }}</td>
+            <td>{{ val.orderDate | date : "dd-MMM-yyyy" }}</td>
+            <td>{{ val.quantity }}</td>
+            <td [ngStyle]="getStatusStyle(val.status)">{{ val.status }}</td>
+
+            <td>
+              <p>Id: {{ val.equipment.id }}</p>
+              <p>Name: {{ val.equipment.name }}</p>
+              <p>Description: {{ val.equipment.description }}</p>
+            </td>
+
+            <td>
+              <p>Id: {{ val.equipment.hospital.id }}</p>
+              <p>Name: {{ val.equipment.hospital.name }}</p>
+              <p>Location: {{ val.equipment.hospital.location }}</p>
+            </td>
+
+            <!-- ✅ Request status -->
+            <!-- <td>
+              <strong>{{ val.requestStatus || 'PENDING' }}</strong>
+              <div *ngIf="(val.requestStatus || '').toUpperCase() === 'ACCEPTED'" class="text-muted">
+                by {{ val.assignedSupplierName || '-' }}
+              </div>
+            </td> -->
+
+            <!-- ✅ Action column -->
+            <td>
+              <!-- 1) PENDING => Accept + Reject -->
+              <div *ngIf="(val.requestStatus || 'PENDING') === 'PENDING'">
+                <button class="btn btn-success btn-sm me-2" (click)="acceptOrder(val.id)">
+                  Accept
+                </button>
+
+                <button class="btn btn-danger btn-sm" (click)="rejectOrderLocally(val.id)">
+                  Reject
+                </button>
+              </div>
+
+              <!-- 2) ACCEPTED by me => Update Status -->
+              <div *ngIf="canEditOrder(val)">
+                <button
+                  data-bs-toggle="modal"
+                  (click)="edit(val)"
+                  data-bs-target="#driverModal"
+                  class="btn btn-warning btn-sm"
+                  [disabled]="val.status === 'Delivered'"
+                >
+                  Update Status
+                </button>
+              </div>
+
+              <!-- 3) ACCEPTED by others => show message -->
+              <div
+                *ngIf="(val.requestStatus || '').toUpperCase() === 'ACCEPTED' && !canEditOrder(val) && val.status !== 'Delivered'"
+                class="text-muted"
+              >
+                Assigned to {{ val.assignedSupplierName || 'Supplier' }}
+              </div>
+
+              <!-- 4) Delivered => Completed -->
+              <div *ngIf="val.status === 'Delivered'" class="text-success fw-bold">
+                Completed
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
