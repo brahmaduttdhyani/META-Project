@@ -40,11 +40,11 @@ public class UserService implements UserDetailsService{
     }
  
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).orElseThrow();
     }
 
     public User getUserByIdentifier(String identifier){
-        User byUsername=userRepository.findByUsername(identifier);
+        User byUsername=userRepository.findByUsername(identifier).orElseThrow();
         if(byUsername != null) return byUsername;
         return userRepository.findByEmail(identifier);
     }

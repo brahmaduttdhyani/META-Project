@@ -53,9 +53,15 @@ public class SecurityConfig {
             
             .antMatchers(HttpMethod.GET,"/api/technician/maintenance").hasAuthority("TECHNICIAN")
             .antMatchers(HttpMethod.PUT,"/api/technician/maintenance/update/**").hasAuthority("TECHNICIAN")
+            
+            .antMatchers(HttpMethod.PUT, "/api/technician/maintenance/respond/*").hasAuthority("TECHNICIAN")
+            
             .antMatchers(HttpMethod.GET,"/api/supplier/orders").hasAnyAuthority("HOSPITAL","SUPPLIER")
             .antMatchers(HttpMethod.PUT,"/api/supplier/order/update/**").hasAuthority("SUPPLIER")
-                .antMatchers("/api/**").authenticated()
+            
+            .antMatchers(HttpMethod.PUT, "/api/supplier/order/respond/**").hasAuthority("SUPPLIER")
+            
+            .antMatchers("/api/**").authenticated()
             .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

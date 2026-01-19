@@ -15,30 +15,85 @@
             <th>Scheduled Date</th>
             <th>Completion Date</th>
             <th>Status</th>
+            <!-- <th>Request</th> -->
+            <th>Accepted By</th>
             <th>Equipment</th>
             <th>Hospital</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let maintenance of maintenanceList">
-            <td>{{ maintenance.id }}</td>
-            <td>{{ maintenance.scheduledDate | date : "dd/MM/yyyy" }}</td>
-            <td>{{ maintenance.completedDate | date : "dd/MM/yyyy" }}</td>
-            <td [ngStyle]="getStatusStyle(maintenance.status)">
-              {{ maintenance.status }}
-            </td>
-            <td>
-              <p>Id: {{ maintenance.equipment.id }}</p>
-              <p>Name: {{ maintenance.equipment.name }}</p>
-              <p>Description: {{ maintenance.equipment.description }}</p>
-            </td>
-            <td>
-              <p>Id: {{ maintenance.equipment.hospital.id }}</p>
-              <p>Name: {{ maintenance.equipment.hospital.name }}</p>
-              <p>Location: {{ maintenance.equipment.hospital.location }}</p>
-            </td>
-            <td>
+  <tr
+    *ngFor="let maintenance of maintenanceList"
+    [hidden]="isRejected(maintenance.id)"
+  >
+    <td>{{ maintenance.id }}</td>
+    <td>{{ maintenance.scheduledDate | date : "dd/MM/yyyy" }}</td>
+    <td>{{ maintenance.completedDate | date : "dd/MM/yyyy" }}</td>
+
+    <td [ngStyle]="getStatusStyle(maintenance.status)">
+      {{ maintenance.status }}
+    </td>
+
+    <!-- <td>
+      <strong>{{ maintenance.requestStatus || "PENDING" }}</strong>
+    </td> -->
+
+    <td>
+      {{ maintenance.assignedTechnicianName || '-' }}
+    </td>
+
+    <td>
+      <p>Id: {{ maintenance.equipment.id }}</p>
+      <p>Name: {{ maintenance.equipment.name }}</p>
+      <p>Description: {{ maintenance.equipment.description }}</p>
+    </td>
+
+    <td>
+      <p>Id: {{ maintenance.equipment.hospital.id }}</p>
+      <p>Name: {{ maintenance.equipment.hospital.name }}</p>
+      <p>Location: {{ maintenance.equipment.hospital.location }}</p>
+    </td>
+
+    <!-- ✅ Action column -->
+    <td>
+      <!-- 1) PENDING => Accept + Reject only -->
+      <div *ngIf="(maintenance.requestStatus || 'PENDING') === 'PENDING'">
+        <button
+          class="btn btn-success btn-sm me-2"
+          (click)="accept(maintenance.id)"
+        >
+          Accept
+        </button>
+
+        <button
+          class="btn btn-danger btn-sm"
+          (click)="rejectLocally(maintenance.id)"
+        >
+          Reject
+        </button>
+      </div>
+
+      <!-- 2) ACCEPTED by me => Edit only -->
+      <div *ngIf="canEdit(maintenance)">
+        <button
+          data-bs-toggle="modal"
+          (click)="edit(maintenance)"
+          data-bs-target="#driverModal"
+          class="btn btn-warning btn-sm"
+        >
+          Edit
+        </button>
+      </div>
+
+       <!-- SERVICED => Completed -->
+      <div *ngIf="maintenance.status === 'Serviced'" class="text-success fw-bold">
+        Completed
+      </div>
+    </td>
+  
+
+            <!-- <td>
               <button
                 data-bs-toggle="modal"
                 (click)="edit(maintenance)"
@@ -48,7 +103,7 @@
               >
                 Edit
               </button>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>

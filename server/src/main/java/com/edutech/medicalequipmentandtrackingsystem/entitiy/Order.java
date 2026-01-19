@@ -16,7 +16,31 @@ public class Order {
     @ManyToOne 
     @JoinColumn(name = "equipment_id") 
     private Equipment equipment;
-    
+
+    // For accepting and rejecting Order
+    private String requestStatus; // PENDING, ACCEPTED
+    private Long assignedSupplierId;
+    private String assignedSupplierName;    
+    public String getRequestStatus() {
+        return requestStatus;
+    }
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
+    }
+    public Long getAssignedSupplierId() {
+        return assignedSupplierId;
+    }
+    public void setAssignedSupplierId(Long assignedSupplierId) {
+        this.assignedSupplierId = assignedSupplierId;
+    }
+    public String getAssignedSupplierName() {
+        return assignedSupplierName;
+    }
+    public void setAssignedSupplierName(String assignedSupplierName) {
+        this.assignedSupplierName = assignedSupplierName;
+    }
+
+
     public Long getId() {
         return id;
     }

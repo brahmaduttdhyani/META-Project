@@ -1,0 +1,55 @@
+<div class="container mt-4 mx-5">
+  <div class="card">
+    <div class="card-header">Orders Information</div>
+
+    <div class="card-body">
+
+      <div *ngIf="showError" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <div class="table-responsive" *ngIf="orderList?.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Order Date</th>
+              <th>Quantity</th>
+              <th>Status</th>
+              <th>Equipment</th>
+              <th>Hospital</th>
+              <th>Accepted By</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let val of orderList">
+              <td>{{ val.id }}</td>
+              <td>{{ val.orderDate | date : "dd-MMM-yyyy" }}</td>
+              <td>{{ val.quantity }}</td>
+              <td [ngStyle]="getStatusStyle(val.status)">{{ val.status }}</td>
+
+              <td>
+                <p>Id:{{ val.equipment.id }}</p>
+                <p>Name:{{ val.equipment.name }}</p>
+                <p>Description:{{ val.equipment.description }}</p>
+              </td>
+
+              <td>
+                <p>Id:{{ val.equipment.hospital.id }}</p>
+                <p>Name:{{ val.equipment.hospital.name }}</p>
+                <p>Location:{{ val.equipment.hospital.location }}</p>
+              </td>
+              <td>{{ val.assignedSupplierName || 'Not Assigned' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="orderList?.length === 0 && !showError" class="alert alert-info" role="alert">
+        No orders found.
+      </div>
+
+    </div>
+  </div>
+</div>

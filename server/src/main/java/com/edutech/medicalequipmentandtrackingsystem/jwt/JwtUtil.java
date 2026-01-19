@@ -51,13 +51,15 @@ public class JwtUtil {
     public String generateToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration * 1000);
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow();
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", username);
 
         // Assign role based on user type
         claims.put("role", user.getRole());
+
+        claims.put("userId", user.getId());
 
         return Jwts.builder()
                 .setClaims(claims)
