@@ -1,2 +1,4 @@
 
-server/target/
+# Build outputs
+**/target/
+*.class
