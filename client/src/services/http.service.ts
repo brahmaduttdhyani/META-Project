@@ -87,6 +87,16 @@ export class HttpService {
       this.getRequestOptions()
     );
   }
+
+  //For request
+  respondMaintenance(maintenanceId: number, action: string) {
+  return this.http.put(
+    `${this.serverName}/api/technician/maintenance/respond/${maintenanceId}?action=${action}`,
+    {},
+    this.getRequestOptions() // ✅ TOKEN SENT
+  );
+}
+
   //hospital can order equipments for particular hospital
   orderEquipment(details: any, equipmentId: any): Observable<any> {
     return this.http.post(

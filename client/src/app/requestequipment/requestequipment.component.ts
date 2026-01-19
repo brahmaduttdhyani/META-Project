@@ -61,13 +61,15 @@ itemForm: FormGroup;
   //checks if date is in right pattern and selectedDate should be previous to today
   dateValidator(control: AbstractControl): ValidationErrors | null {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-    const selectedDate = new Date(control.value);
-    const currentDate = new Date();
+    const selectedDate = new Date(control.value).getDate();
+    const currentDate = new Date().getDate();
 
-    if (!datePattern.test(control.value) || selectedDate < currentDate) {
+    if (!datePattern.test(control.value)) {
       return { invalidDate: true };
     }
-
+    if(selectedDate!=currentDate){
+      return { invalidDate: true};
+    }
     return null;
   }
   onSubmit() {
