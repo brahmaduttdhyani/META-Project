@@ -88,6 +88,16 @@ export class HttpService {
       this.getRequestOptions()
     );
   }
+
+  //For request technician
+  respondMaintenance(maintenanceId: number, action: string) {
+  return this.http.put(
+    `${this.serverName}/api/technician/maintenance/respond/${maintenanceId}?action=${action}`,
+    {},
+    this.getRequestOptions() // ✅ TOKEN SENT
+  );
+}
+
   //hospital can order equipments for particular hospital
   orderEquipment(details: any, equipmentId: any): Observable<any> {
     return this.http.post(
@@ -103,6 +113,16 @@ export class HttpService {
       this.getRequestOptions()
     );
   }
+
+  // For Accepting and Rejecting Orders
+  respondOrder(orderId: number, action: string) {
+  return this.http.put(
+    `${this.serverName}/api/supplier/order/respond/${orderId}?action=${action}`,
+    {},
+    this.getRequestOptions()
+  );
+}
+
 
   //hospital can schedule meaintenance for particular equipment for particular hospital
   scheduleMaintenance(details: any, equipmentId: any): Observable<any> {

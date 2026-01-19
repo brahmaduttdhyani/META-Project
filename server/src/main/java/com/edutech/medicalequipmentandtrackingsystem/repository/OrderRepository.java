@@ -13,4 +13,8 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     // extend j pa repository and add method if needed
     List<Order> findByEquipmentId(Long equipmentId);
+
+    List<Order> findByRequestStatusIgnoreCase(String requestStatus);
+
+    List<Order> findByAssignedSupplierId(Long assignedSupplierId);
 }

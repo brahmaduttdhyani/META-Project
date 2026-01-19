@@ -1,0 +1,146 @@
+/* Page wrapper spacing */
+:host {
+  display: block;
+  padding-bottom: 24px;
+}
+
+/* Title */
+h2 {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 70px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3371ff, #00c2ff);
+}
+
+/* Card styling */
+.card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+}
+
+/* Header strip */
+.card-header {
+  background: linear-gradient(135deg, #0d6efd, #00b2ff);
+  color: #fff;
+  font-weight: 700;
+  padding: 14px 18px;
+  border-bottom: 0;
+  letter-spacing: 0.2px;
+}
+
+/* Body padding */
+.card-body {
+  padding: 18px;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Table wrapper */
+.table-responsive {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Table base */
+.table {
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Header row */
+.table thead th {
+  background: #f6f8ff;
+  color: #0b1b3a;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Rows */
+.table tbody tr {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  background: #fff;
+}
+
+.table tbody tr:hover {
+  background: #fbfcff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* Cells */
+.table tbody td {
+  padding: 14px;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  color: #1f2a44;
+  font-size: 14px;
+}
+
+/* Nested <p> inside cells */
+.table tbody td p {
+  margin: 0 0 4px 0;
+  color: #334155;
+  font-size: 13px;
+}
+
+.table tbody td p:last-child {
+  margin-bottom: 0;
+}
+
+/* Status cell stronger look */
+td[ngstyle] strong,
+#status strong {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(51, 113, 255, 0.12);
+  border: 1px solid rgba(51, 113, 255, 0.18);
+  line-height: 1;
+}
+
+/* Make status pill colors adapt a bit (your ngStyle sets color) */
+#status {
+  white-space: nowrap;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .row.container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: 12px;
+  }
+}

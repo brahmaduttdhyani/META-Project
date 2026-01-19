@@ -13,4 +13,8 @@ import java.util.List;
 public interface MaintenanceRepository extends JpaRepository<Maintenance,Long> {
     // extend  jpa repository and add custom methods if needed
     List<Hospital> findByEquipmentId(Long equipmentId); 
+
+    // For only the technician to see
+    List<Maintenance> findByRequestStatusIgnoreCase(String requestStatus);
+    List<Maintenance> findByAssignedTechnicianId(Long technicianId);
 }
