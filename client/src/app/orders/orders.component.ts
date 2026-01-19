@@ -16,6 +16,9 @@ export class OrdersComponent implements OnInit{
   responseMessage: any;
   orderList: any = [];
   statusModel: any = { newStatus: null };
+
+  currentSupplierId: number = 0;
+
   constructor(
     public router: Router,
     public httpService: HttpService,
@@ -28,9 +31,21 @@ export class OrdersComponent implements OnInit{
       this.router.navigateByUrl('dashboard');
     }
   }
+  // ngOnInit(): void {
+    
+  //   this.loadRejectedOrders();
+    
+  //   this.getOrders();
+    
+  // }
+
   ngOnInit(): void {
-    this.getOrders();
-  }
+  const rawId = localStorage.getItem('userId');
+  this.currentSupplierId = rawId ? parseInt(rawId, 10) : 0;
+
+  this.loadRejectedOrders();
+  this.getOrders();
+}
 
   getOrders() {
     this.orderList = [];
@@ -82,6 +97,61 @@ export class OrdersComponent implements OnInit{
       return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' };
     }
   }
+
+
+rejectedOrderIds: number[] = [];
+
+private rejectedOrderKey(): string {
+  const uname = (localStorage.getItem('username') || 'unknown').toLowerCase();
+  return `rejectedOrders_${uname}`;
+}
+
+loadRejectedOrders() {
+  const raw = localStorage.getItem(this.rejectedOrderKey());
+  this.rejectedOrderIds = raw ? JSON.parse(raw) : [];
+}
+
+isOrderRejected(id: number): boolean {
+  return this.rejectedOrderIds.includes(id);
+}
+
+rejectOrderLocally(id: number) {
+  if (!this.rejectedOrderIds.includes(id)) {
+    this.rejectedOrderIds.push(id);
+    localStorage.setItem(this.rejectedOrderKey(), JSON.stringify(this.rejectedOrderIds));
+  }
+}
+
+acceptOrder(orderId: number) {
+  this.showError = false;
+  this.showMessage = false;
+
+  // clear local reject if any
+  this.rejectedOrderIds = this.rejectedOrderIds.filter(x => x !== orderId);
+  localStorage.setItem(this.rejectedOrderKey(), JSON.stringify(this.rejectedOrderIds));
+
+  this.httpService.respondOrder(orderId, 'ACCEPT').subscribe(
+    () => {
+      this.showMessage = true;
+      this.responseMessage = 'Order accepted';
+      this.getOrders();
+    },
+    (err) => {
+      this.showError = true;
+      this.errorMessage = err?.error?.message || 'Failed to accept order';
+    }
+  );
+}
+
+
+canEditOrder(order: any): boolean {
+  const req = (order.requestStatus || '').toString().trim().toUpperCase();
+  const assigned = order.assignedSupplierId == null ? 0 : Number(order.assignedSupplierId);
+  return req === 'ACCEPTED' && assigned === this.currentSupplierId && order.status !== 'Delivered';
+}
+
+
+
 }
  
  

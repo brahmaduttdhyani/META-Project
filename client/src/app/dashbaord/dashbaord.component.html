@@ -1,109 +1,3 @@
-<!-- <html>
-  <div class="row text-center">
-    <div *ngIf="roleType == 'HOSPITAL'">
-      <body>
-        <h1>Welcome {{username}}(Admin)</h1>
-        <div class="container">
-          <div class="parent">
-            <div class="card">
-              <div class="content-box">
-                <h1 class="card-title">Create New Hospital</h1>
-                <p class="card-content">
-                  Let's build a better world together. Let's add a new hospital
-                </p>
-                <a class="see-more" routerLink="/createhospital">See More</a>
-              </div>
-              <div class="date-box">
-                <span class="month">Medi</span>
-                <span class="date">Service</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="parent card2">
-            <div class="card">
-              <div class="content-box">
-                <h1 class="card-title">Request Equipment</h1>
-                <p class="card-content">
-                  Buckle Up! We are growing so lets get some new equipments!
-                </p>
-                <a class="see-more" routerLink="/requestequipment">See More</a>
-              </div>
-              <div class="date-box">
-                <span class="month">Medi</span>
-                <span class="date">Service</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="parent card3">
-            <div class="card">
-              <div class="content-box">
-                <h1 class="card-title">Schedule Maintenance</h1>
-                <p class="card-content">
-                  Fix the Disfunctioning Equipment by Scheduling its Maintenace
-                </p>
-                <a class="see-more" routerLink="/schedule-maintenance"
-                  >See More</a
-                >
-              </div>
-              <div class="date-box">
-                <span class="month">Medi</span>
-                <span class="date">Service</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </body>
-    </div>
-
-    <div *ngIf="roleType == 'SUPPLIER'">
-      <body>
-        <h1>Welcome {{username}}(SUPPLIER)</h1>
-        <div class="container">
-          <div class="parent card2">
-            <div class="card">
-              <div class="content-box">
-                <h1 class="card-title">Order Report</h1>
-                <p class="card-content">Generate Order Report</p>
-                <a class="see-more" routerLink="/orders">See More</a>
-              </div>
-              <div class="date-box">
-                <span class="month">Medi</span>
-                <span class="date">Service</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </body>
-    </div>
-  </div>
-  
-  
-  <div *ngIf="roleType == 'TECHNICIAN'">
-    <body style="background-color: black">
-      <h1>Welcome {{username}}(TECHNICIAN)</h1>
-      <div class="container">
-        <div class="parent card2">
-          <div class="card">
-            <div class="content-box">
-              <h1 class="card-title">Maintenance Report</h1>
-              <p class="card-content">Generate Maintenance Report</p>
-              <a class="see-more" routerLink="/maintenance">See More</a>
-            </div>
-            <div class="date-box">
-              <span class="month">Medi</span>
-              <span class="date">Service</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </body>
-  </div>
-</html> -->
-
-
-
 
 <section class="dashboard">
 
@@ -138,6 +32,22 @@
       <p>Fix & track equipment issues.</p>
       <a routerLink="/schedule-maintenance">Schedule →</a>
     </div>
+
+    <div class="feature-card red">
+      <img src="assets/images/dashboard1.png" />
+      <h3>Maintenance Status</h3>
+      <p>View scheduled maintenance updates.</p>
+      <a routerLink="/maintenance-status">View →</a>
+    </div>
+
+    <div class="feature-card teal">
+      <img src="assets/images/dashboard.png" />
+      <h3>Order Status</h3>
+      <p>View equipment order status updates.</p>
+      <a routerLink="/order-status">View →</a>
+    </div>
+
+
 
   </div>
 
