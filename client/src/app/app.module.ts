@@ -18,6 +18,8 @@ import { ScheduleMaintenanceComponent } from './schedule-maintenance/schedule-ma
 import { RequestequipmentComponent } from './requestequipment/requestequipment.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { OrdersComponent } from './orders/orders.component';
+import { MaintenanceStatusComponent } from './maintenance-status/maintenance-status.component';
+import { OrderStatusComponent } from './order-status/order-status.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { OrdersComponent } from './orders/orders.component';
       ScheduleMaintenanceComponent,
       RequestequipmentComponent,
       MaintenanceComponent,
-      OrdersComponent
+      MaintenanceStatusComponent,
+      OrdersComponent,
+      OrderStatusComponent
   ],
   imports: [
     BrowserModule,

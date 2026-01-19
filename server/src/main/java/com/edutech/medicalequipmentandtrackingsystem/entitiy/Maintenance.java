@@ -17,6 +17,29 @@ public class Maintenance {
     @ManyToOne 
     @JoinColumn(name = "equipment_id") 
     private Equipment equipment;
+
+
+    // For showing the assigned TECHNICIAN
+    private String assignedTechnicianName;
+
+    public String getAssignedTechnicianName() {
+        return assignedTechnicianName;
+    }
+    public void setAssignedTechnicianName(String assignedTechnicianName) {
+        this.assignedTechnicianName = assignedTechnicianName;
+    } 
+
+    // NEW: request flow fields
+    private String requestStatus; // PENDING, ACCEPTED, REJECTED
+
+    private Long assignedTechnicianId; // userId of TECHNICIAN who accepted
+
+    // getters/setters
+    public String getRequestStatus() { return requestStatus; }
+    public void setRequestStatus(String requestStatus) { this.requestStatus = requestStatus; }
+
+    public Long getAssignedTechnicianId() { return assignedTechnicianId; }
+    public void setAssignedTechnicianId(Long assignedTechnicianId) { this.assignedTechnicianId = assignedTechnicianId; }
     
     public Long getId() {
         return id;
