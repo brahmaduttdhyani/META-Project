@@ -1,19 +1,77 @@
+// /* NAVBAR BASE */
+// .custom-navbar {
+//   background: #239687;
+//   padding: 14px 24px;
 
-.btn {
-  border-radius: 20px;
-}
-nav {
-  background-color: teal;
+//   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+// }
+
+// /* BRAND */
+// .navbar-brand {
+//   font-size: 20px;
+//   color: #1f2b6c;
+// }
+
+// /* LINKS */
+// .nav-link {
+//   font-size: 14px;
+//   font-weight: 500;
+//   color: #f9fbff;
+//   transition: all 0.3s ease;
+// }
+
+// /* PILL STYLE */
+// .pill {
+//   padding: 8px 16px;
+//   border-radius: 999px;
+// }
+
+// /* ACTIVE / HOVER */
+// .nav-link:hover,
+// .nav-link.active {
+//   background: #e8f0ff;
+//   color: #2563eb;
+// }
+
+// /* MUTED LINKS (About, Partners) */
+// .muted {
+//   color: #ffffff;
+// }
+
+// /* BUTTON TWEAK */
+// .btn-primary {
+//   background: #2563eb;
+//   border: none;
+// }
+
+// .btn-outline-primary {
+//   border-color: #2563eb;
+//   color: #2563eb;
+// }
+
+// .btn-outline-primary:hover {
+//   background: #2563eb;
+//   color: white;
+// }
+
+
+
+.custom-navbar {
+  background: #bfe2fc;
+  padding: 14px 24px;
 }
 
-//new
-.nav-link {
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-}
 .navbar-brand {
-  padding-left: 5px;
-  color: aliceblue;
-  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #4183a9;
+}
+
+.nav-link {
+  color: #288ba3;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }

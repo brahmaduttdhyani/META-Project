@@ -42,9 +42,9 @@ export class LoginComponent implements OnInit {
             this.authService.saveToken(data.token);
             this.router.navigateByUrl('/dashboard');
 
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 1000);
           } else {
             this.showError = true;
             this.errorMessage = 'Wrong User or Password';
