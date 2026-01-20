@@ -1,120 +1,125 @@
+
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
+
+interface Hospital {
+  id: number;
+  name: string;
+  location?: string;
+}
+interface Equipment {
+  id: number;
+  name: string;
+  description?: string;
+  hospital?: Hospital;
+}
+interface Order {
+  id: number;
+  orderDate: string | Date;
+  quantity: number;
+  status: string;
+  equipment: Equipment;
+}
+
 @Component({
   selector: 'app-requestequipment',
   templateUrl: './requestequipment.component.html',
-  styleUrls: ['./requestequipment.component.scss']
+  styleUrls: ['./requestequipment.component.scss'],
 })
-export class RequestequipmentComponent implements OnInit{
+export class RequestequipmentComponent implements OnInit {
+  itemForm: FormGroup;
 
-itemForm: FormGroup;
-  formModel: any = { status: null };
-  showError: boolean = false;
-  errorMessage: any;
-  hospitalList: any = [];
-  assignModel: any = {};
-  orderList: any = [];
-  showMessage: any;
-  responseMessage: any;
-  equipmentList: any = [];
-  isClick: boolean = false;
-  //creates a form group with following fields
+  hospitalList: Hospital[] = [];
+  equipmentList: Equipment[] = [];
+  orderList: Order[] = [];
+
+  // UI state
+  showError = false;
+  errorMessage: string | null = null;
+  showMessage = false;
+  responseMessage: string | null = null;
+  isClick = false; // show/hide the whole orders section
+
+  todayLabel = ''; // for date hint
+
+  // Expanded card ids
+  private expanded = new Set<number>();
+
   constructor(
     public router: Router,
     public httpService: HttpService,
     private formBuilder: FormBuilder,
     private authService: AuthService
   ) {
+    const today = new Date();
+    this.todayLabel = today.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    });
+
     this.itemForm = this.formBuilder.group({
-      orderDate: [
-        this.formModel.scheduledDate,
-        [Validators.required, this.dateValidator],
-      ],
-      quantity: [this.formModel.description, [Validators.required]],
-      status: [this.formModel.status, [Validators.required]],
-      equipmentId: [this.formModel.equipmentId, [Validators.required]],
-      hospitalId: [this.formModel.equipmentId, [Validators.required]],
+      orderDate: ['', [Validators.required, this.dateValidator]],
+      quantity: [null, [Validators.required, Validators.min(1)]],
+      status: ['', [Validators.required]],
+      equipmentId: ['', [Validators.required, this.requiredSelect]],
+      hospitalId: ['', [Validators.required, this.requiredSelect]],
     });
   }
+
   ngOnInit(): void {
     this.getHospital();
     this.getOrders();
   }
+
+  /* -------------------- Validators -------------------- */
+
+  requiredSelect = (control: AbstractControl): ValidationErrors | null => {
+    const v = control.value;
+    if (v === null || v === undefined || v === '' || v === 'null') {
+      return { required: true };
+    }
+    return null;
+  };
+
+  dateValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return { invalidDate: true };
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(value)) return { invalidDate: true };
+    const picked = new Date(value);
+    if (Number.isNaN(picked.getTime())) return { invalidDate: true };
+
+    const today = new Date();
+    const sameDay =
+      picked.getFullYear() === today.getFullYear() &&
+      picked.getMonth() === today.getMonth() &&
+      picked.getDate() === today.getDate();
+
+    return sameDay ? null : { notToday: true };
+  }
+
+  /* -------------------- Data Loads -------------------- */
+
   getHospital() {
     this.hospitalList = [];
     this.httpService.getHospital().subscribe(
-      (data: any) => {
-        this.hospitalList = data;
-        console.log(this.hospitalList);
+      (data: Hospital[]) => {
+        this.hospitalList = data ?? [];
       },
       (error) => {
-        // Handle error
         this.showError = true;
         this.errorMessage = 'An error occurred. Please try again later.';
-        console.error('Login error:', error);
-      }
-    );
-  }
-  //checks if date is in right pattern and selectedDate should be previous to today
-  dateValidator(control: AbstractControl): ValidationErrors | null {
-    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-    const selectedDate = new Date(control.value).getDate();
-    const currentDate = new Date().getDate();
-
-    if (!datePattern.test(control.value)) {
-      return { invalidDate: true };
-    }
-    if(selectedDate!=currentDate){
-      return { invalidDate: true};
-    }
-    return null;
-  }
-  onSubmit() {
-    if (this.itemForm.valid) {
-      if (this.itemForm.valid) {
-        this.showError = false;
-        //order equipment will take all the form value and only the value of eq id from the form
-        this.httpService
-          .orderEquipment(this.itemForm.value, this.itemForm.value.equipmentId)
-          .subscribe(
-            (data: any) => {
-              //resets the form once the order is placed
-              this.itemForm.reset();
-              this.showMessage = true;
-              //displays msg on clicking submit btn
-              this.responseMessage = 'Ordered Successfully';
-              //will display the orders
-              this.getOrders();
-            },
-            (error) => {
-              // Handle error
-              this.showError = true;
-              this.errorMessage =
-                'An error occurred while requesting. Please try again later.';
-            }
-          );
-      } else {
-        this.itemForm.markAllAsTouched();
-      }
-    } else {
-      this.itemForm.markAllAsTouched();
-    }
-  }
-  onHospitalSelect($event: any) {
-    let id = $event.target.value;
-    this.equipmentList = [];
-    this.httpService.getEquipmentById(id).subscribe(
-      (data: any) => {
-        this.equipmentList = data;
-        console.log(this.equipmentList);
-      },
-      (error) => {
-        // Handle error
-        this.showError = true;
-        this.errorMessage = 'An error occurred. Please try again later.';
+        console.error('getHospital error:', error);
       }
     );
   }
@@ -122,39 +127,124 @@ itemForm: FormGroup;
   getOrders() {
     this.orderList = [];
     this.httpService.getorderEquipment().subscribe(
-      (data: any) => {
-        this.orderList = data;
-        console.log(data);
+      (data: Order[]) => {
+        this.orderList = data ?? [];
+        // Optional: collapse all on refresh
+        this.expanded.clear();
       },
       (error) => {
-        // Handle error
         this.showError = true;
         this.errorMessage =
-          'An error occurred while logging in. Please try again later.';
-        console.error('Login error:', error);
+          'An error occurred while fetching orders. Please try again later.';
+        console.error('getOrders error:', error);
+      }
+    );
+  }
+
+  onHospitalSelect($event: Event) {
+    const select = $event.target as HTMLSelectElement;
+    const id = parseInt(select.value, 10);
+    if (!Number.isFinite(id)) {
+      this.equipmentList = [];
+      return;
+    }
+
+    this.equipmentList = [];
+    this.httpService.getEquipmentById(id).subscribe(
+      (data: Equipment[]) => {
+        this.equipmentList = data ?? [];
+      },
+      (error) => {
+        this.showError = true;
+        this.errorMessage = 'An error occurred. Please try again later.';
+        console.error('getEquipmentById error:', error);
+      }
+    );
+  }
+
+  /* -------------------- Actions -------------------- */
+
+  onSubmit() {
+    if (this.itemForm.invalid) {
+      this.itemForm.markAllAsTouched();
+      return;
+    }
+
+    this.showError = false;
+    this.showMessage = false;
+
+    const payload = {
+      ...this.itemForm.value,
+      equipmentId: Number(this.itemForm.value.equipmentId),
+      hospitalId: Number(this.itemForm.value.hospitalId),
+      quantity: Number(this.itemForm.value.quantity),
+    };
+
+    this.httpService.orderEquipment(payload, payload.equipmentId).subscribe(
+      () => {
+        this.itemForm.reset();
+        this.itemForm.patchValue({ equipmentId: '', hospitalId: '', status: '' });
+
+        this.showMessage = true;
+        this.responseMessage = 'Ordered Successfully';
+        this.getOrders();
+      },
+      (error) => {
+        this.showError = true;
+        this.errorMessage =
+          'An error occurred while requesting. Please try again later.';
+        console.error('orderEquipment error:', error);
       }
     );
   }
 
   showStatus() {
     this.showMessage = false;
-    if (this.isClick == false) {
-      this.isClick = true;
-      // this.router.navigate(['/requestequipment'], { fragment: 'div2' });
+    this.isClick = !this.isClick;
+  }
+
+  /* -------------------- Expand/Collapse helpers -------------------- */
+
+  toggleExpand(id: number) {
+    if (this.expanded.has(id)) {
+      this.expanded.delete(id);
     } else {
-      this.isClick = false;
-      // this.router.navigate(['/requestequipment']);
+      this.expanded.add(id);
     }
   }
 
-  getStatusStyle(status: string) {
-    if (status === 'Delivered') {
-      return { color: 'green', 'font-weight': 'bold', 'font-size': '20px' };
-    } else if (status === 'In Transit') {
-      return { color: '#FFC300 ', 'font-weight': 'bold', 'font-size': '20px' };
-    } else {
-      return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' };
-    }
+  isExpanded(id: number): boolean {
+    return this.expanded.has(id);
+  }
+
+  // For CSS height animation, measure approximate expanded height (can be tuned)
+  getCardExpandHeight(_val: Order): number {
+    // ~ blocks + actions
+    return 320; // px; adjust if your content grows
+  }
+
+  /* -------------------- UI Helpers -------------------- */
+
+  trackByOrderId(_index: number, item: Order) {
+    return item?.id;
+  }
+
+  statusClass(status: string) {
+    const key = (status || '').toLowerCase();
+    if (key.includes('deliver')) return 'status-delivered';
+    if (key.includes('transit')) return 'status-transit';
+    return 'status-initiated';
+  }
+
+  /* -------------------- Button actions inside expanded area -------------------- */
+
+  onDetails(order: Order) {
+    // You can navigate or open a side panel; using console for now.
+    console.log('Details clicked for order:', order);
+  }
+
+  onTrack(order: Order) {
+    // Hook this to your tracking flow (route or modal)
+    console.log('Track clicked for order:', order);
   }
 }
-
