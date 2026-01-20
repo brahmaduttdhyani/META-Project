@@ -201,9 +201,9 @@
               <span class="dot dot-eq"></span> Equipment
             </div>
             <div class="info-content">
-              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.id }}</span></div>
-              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.name }}</span></div>
-              <div class="info-row"><span class="key">Description:</span> <span class="val">{{ m.equipment?.description }}</span></div>
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment.name }}</span></div>
+              <div class="info-row"><span class="key">Description:</span> <span class="val">{{ m.equipment.description }}</span></div>
             </div>
           </div>
 
@@ -212,12 +212,22 @@
               <span class="dot dot-hosp"></span> Hospital
             </div>
             <div class="info-content">
-              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.hospital?.id }}</span></div>
-              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.hospital?.name }}</span></div>
-              <div class="info-row"><span class="key">Location:</span> <span class="val">{{ m.equipment?.hospital?.location }}</span></div>
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment.hospital?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment.hospital?.name }}</span></div>
+              <div class="info-row"><span class="key">Location:</span> <span class="val">{{ m.equipment.hospital?.location }}</span></div>
             </div>
           </div>
-
+    <!-- Cancel Button at Bottom -->
+<div class="sched-actions-bottom">
+  <button
+    class="btn btn-ghost"
+    type="button"
+    *ngIf="m.status !== 'In Progress'"
+    (click)="onCancelMaintenance(m.id)"
+  >
+    ❌ Cancel
+  </button>
+</div>
           
         </article>
 

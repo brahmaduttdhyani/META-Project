@@ -142,6 +142,25 @@ export class HttpService {
     );
   }
 
+  // ADD: hospital cancels their own order before it goes in transit
+cancelOrder(orderId: number): Observable<any> {
+  return this.http.put(
+    `${this.serverName}/api/hospital/order/cancel/${orderId}`,
+    {},
+    this.getRequestOptions()
+  );
+}
+
+cancelMaintenance(maintenanceId: number): Observable<any> {
+  return this.http.put(
+    `${this.serverName}/api/hospital/maintenance/cancel/${maintenanceId}`,
+    {},
+    this.getRequestOptions()
+  );
+}
+
+ 
+
   //admin can create multiple hospitals by giving name and location
   createHospital(details: any): Observable<any> {
     return this.http.post(

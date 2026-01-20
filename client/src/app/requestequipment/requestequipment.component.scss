@@ -203,3 +203,34 @@
 /* Empty state */
 .empty-state { grid-column: 1 / -1; text-align: center; padding: 1.5rem 0.5rem; color: var(--ink-600); }
 .empty-illustration { font-size: 2rem; margin-bottom: 0.4rem; }
+
+
+
+/* -----------------------------------------------------------
+   OVERRIDE: Keep "Cancel Order" on the same line as "Details"
+   ----------------------------------------------------------- */
+.order-card .expand-handle {
+  display: flex !important;          /* back to one-line row */
+  flex-wrap: nowrap;                  /* prevent wrapping to next line */
+  align-items: center;
+  justify-content: space-between;     /* space between left chip and right actions */
+  width: 100%;
+}
+
+.order-card .expand-handle .chip {
+  margin-right: 0.5rem;               /* small gap before actions (optional) */
+}
+
+.order-card .expand-handle .order-actions {
+  margin-left: auto;                  /* push actions to the far right */
+  margin-top: 0 !important;           /* ensure it's on the same line */
+  display: flex; 
+  align-items: center;
+}
+
+/* Optional: if the button still wraps on very narrow cards, allow it to shrink */
+.order-card .expand-handle .order-actions .btn {
+  white-space: nowrap;
+}
+
+
