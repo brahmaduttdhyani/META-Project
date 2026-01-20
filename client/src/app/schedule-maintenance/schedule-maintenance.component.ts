@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -6,9 +7,28 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
-import { AuthService } from '../../services/auth.service';
+
+interface Hospital {
+  id: number;
+  name: string;
+  location?: string;
+}
+interface Equipment {
+  id: number;
+  name: string;
+  description?: string;
+  hospital?: Hospital;
+}
+interface Maintenance {
+  id: number;
+  scheduledDate: string | Date;
+  completedDate: string | Date; // deadline
+  status: string;               // 'Initiated' | 'In Progress' | 'Serviced' ...
+  description?: string;
+  equipment: Equipment;
+  assignedTechnicianName?: string;
+}
 
 @Component({
   selector: 'app-schedule-maintenance',
@@ -18,158 +38,233 @@ import { AuthService } from '../../services/auth.service';
 export class ScheduleMaintenanceComponent implements OnInit {
   itemForm: FormGroup;
 
-  formModel: any = { status: null };
-  showError: boolean = false;
-  errorMessage: any;
-  hospitalList: any = [];
-  assignModel: any = {};
-  statusModel: any = {};
-  showMessage: any;
-  responseMessage: any;
-  equipmentList: any = [];
-  isClick: boolean = false;
+  showError = false;
+  errorMessage: string | null = null;
+  showMessage = false;
+  responseMessage: string | null = null;
+
+  hospitalList: Hospital[] = [];
+  equipmentList: Equipment[] = [];
+  maintenanceList: Maintenance[] = [];
+
+  isClick = false; // show status/cards
+  private shaking = new Set<number>(); // ids currently shaking
+
   constructor(
-    public router: Router,
-    public httpService: HttpService,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private httpService: HttpService
   ) {
-    // Assigning the Value in the the Itemform 
     this.itemForm = this.formBuilder.group({
-      scheduledDate: [
-        this.formModel.scheduledDate,
-        [Validators.required, this.dateValidator, this.dateValidator2],
-      ],
-      completedDate: [
-        this.formModel.completedDate,
-        [Validators.required, this.dateValidator, this.dateValidator2],
-      ],
-      description: [this.formModel.description, [Validators.required]],
-      status: [this.formModel.status, [Validators.required]],
-      equipmentId: [this.formModel.equipmentId, [Validators.required]],
-      hospitalId: [this.formModel.hospitalId, [Validators.required]],
+      scheduledDate: ['', [Validators.required, this.datePattern, this.futureDate]],
+      completedDate: ['', [Validators.required, this.datePattern, this.futureDate]],
+      description: ['', [Validators.required]],
+      status: ['', [Validators.required]],
+      equipmentId: ['', [Validators.required, this.requiredSelect]],
+      hospitalId: ['', [Validators.required, this.requiredSelect]],
     });
   }
+
   ngOnInit(): void {
     this.getHospital();
     this.getMaintenance();
   }
-  //Date Validation to check weather format is followed
-  dateValidator(control: AbstractControl): ValidationErrors | null {
-    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
-    if (!datePattern.test(control.value)) {
-      return { invalidDate: true };
-    }
-    return null;
+  /* -------------------- Validators -------------------- */
+
+  // dropdown must have non-empty value
+  requiredSelect = (control: AbstractControl): ValidationErrors | null => {
+    const v = control.value;
+    return (v === null || v === undefined || v === '' || v === 'null') ? { required: true } : null;
+  };
+
+  // yyyy-mm-dd
+  datePattern(control: AbstractControl): ValidationErrors | null {
+    const val = control.value;
+    if (!val) return { invalidDate: true };
+    const re = /^\d{4}-\d{2}-\d{2}$/;
+    return re.test(val) ? null : { invalidDate: true };
   }
-  dateValidator2(control: AbstractControl): ValidationErrors | null {
-    const currentDate = new Date();
-    const selectedDate = new Date(control.value);
-    if (selectedDate < currentDate) {
-      return { invalidDate: true };
-    }
-    return null;
+
+  // must be >= today (ignore time)
+  futureDate(control: AbstractControl): ValidationErrors | null {
+    const v = control.value;
+    if (!v) return { invalidDate: true };
+    const picked = new Date(v);
+    if (Number.isNaN(picked.getTime())) return { invalidDate: true };
+    const today = new Date();
+    // zero time for accurate date-only compare
+    picked.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    return picked >= today ? null : { invalidDate: true };
   }
- //Get all the list of Hospitals
+
+  /* -------------------- Data -------------------- */
+
   getHospital() {
     this.hospitalList = [];
     this.httpService.getHospital().subscribe(
-      (data: any) => {
-        this.hospitalList = data;
-        console.log(this.hospitalList);
+      (data: Hospital[]) => {
+        this.hospitalList = data ?? [];
       },
       (error) => {
         this.showError = true;
-        this.errorMessage =
-          'An error occurred while logging in. Please try again later.';
-        console.error('Login error:', error);
+        this.errorMessage = 'An error occurred. Please try again later.';
+        console.error('getHospital error:', error);
       }
     );
   }
-  //check for validations and submit the data
-  onSubmit() {
-    
-      if (this.itemForm.valid) {
-        this.showError = false;
 
-        this.httpService
-          .scheduleMaintenance(
-            this.itemForm.value,
-            this.itemForm.value.equipmentId
-          )
-          .subscribe(
-            (data: any) => {
-              this.itemForm.reset();
-              this.showMessage = true;
-              this.responseMessage = 'Save Successfully';
-              this.getMaintenance();
-            },
-            (error) => {
-              this.showError = true;
-              this.errorMessage =
-                'An error occurred. Please try again later.';
-              console.error('Login error:', error);
-            }
-          );
-      } else {
-        this.itemForm.markAllAsTouched();
-      }
-    
-  }
-
-  //to see the status of the assign schedule maintainance
-  showSatus() {
-    this.showMessage = false;
-    if (this.isClick == false) {
-      this.isClick = true;
-    } else {
-      this.isClick = false;
+  onHospitalSelect(evt: Event) {
+    const select = evt.target as HTMLSelectElement;
+    const id = parseInt(select.value, 10);
+    if (!Number.isFinite(id)) {
+      this.equipmentList = [];
+      return;
     }
-  }
-   
-  //used to fetch the hospitals from the databse
-  onHospitalSelect($event: any) {
-    let id = $event.target.value;
     this.equipmentList = [];
     this.httpService.getEquipmentById(id).subscribe(
-      (data: any) => {
-        this.equipmentList = data;
+      (data: Equipment[]) => {
+        this.equipmentList = data ?? [];
       },
       (error) => {
-        // Handle error
         this.showError = true;
-        this.errorMessage =
-          'An error occurred. Please try again later.';
-        console.error('error:', error);
+        this.errorMessage = 'An error occurred. Please try again later.';
+        console.error('getEquipmentById error:', error);
       }
     );
   }
-  ShowError: any = false;
-  maintenanceList: any = [];
+
   getMaintenance() {
     this.maintenanceList = [];
     this.httpService.getScheduleMaintenance().subscribe(
-      (data: any) => {
-        this.maintenanceList = data;
-        console.log(data);
+      (data: Maintenance[]) => {
+        const list = (data ?? []).slice();
+        this.maintenanceList = this.sortMaintenance(list); // serviced at end
       },
       (error) => {
-        // Handle error
-        this.ShowError = true;
-        this.errorMessage = 'An error has Occured.Try again';
-        console.error('Login error:', error);
+        this.showError = true;
+        this.errorMessage = 'An error has Occured. Try again';
+        console.error('getScheduleMaintenance error:', error);
       }
     );
   }
-  //to style the stauts of the maintianance 
-  getStatusStyle(status: string) {
-    if (status === 'Serviced') {
-      return { color: 'green', 'font-weight': 'bold', 'font-size': '20px' };
-    } else if (status === 'In Progress') {
-      return { color: '#FFC300 ', 'font-weight': 'bold', 'font-size': '20px' };
-    } else {
-      return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' }; // or any default style you want
+
+  /* -------------------- Submit -------------------- */
+
+  onSubmit() {
+    if (this.itemForm.invalid) {
+      this.itemForm.markAllAsTouched();
+      return;
     }
+
+    this.showError = false;
+    this.showMessage = false;
+
+    const payload = {
+      ...this.itemForm.value,
+      equipmentId: Number(this.itemForm.value.equipmentId),
+      hospitalId: Number(this.itemForm.value.hospitalId),
+    };
+
+    this.httpService.scheduleMaintenance(payload, payload.equipmentId).subscribe(
+      () => {
+        this.itemForm.reset();
+        this.itemForm.patchValue({ equipmentId: '', hospitalId: '', status: '' });
+        this.showMessage = true;
+        this.responseMessage = 'Saved Successfully';
+        this.getMaintenance();
+      },
+      (error) => {
+        this.showError = true;
+        this.errorMessage = 'An error occurred. Please try again later.';
+        console.error('scheduleMaintenance error:', error);
+      }
+    );
+  }
+
+  showSatus() {
+    this.showMessage = false;
+    this.isClick = !this.isClick;
+  }
+
+  /* -------------------- Sorting -------------------- */
+
+  /** Ensure 'Serviced' items are last, others by scheduledDate asc, then id */
+  private sortMaintenance(list: Maintenance[]): Maintenance[] {
+    const rank = (s = '') => {
+      const v = s.toLowerCase();
+      if (v.includes('serviced') || v.includes('completed')) return 2; // last
+      if (v.includes('progress')) return 1; // middle
+      return 0; // first (initiated/pending/scheduled)
+    };
+
+    return list.sort((a, b) => {
+      const ra = rank(a.status);
+      const rb = rank(b.status);
+      if (ra !== rb) return ra - rb;
+
+      const da = new Date(a.scheduledDate).getTime();
+      const db = new Date(b.scheduledDate).getTime();
+      if (!Number.isNaN(da) && !Number.isNaN(db) && da !== db) return da - db;
+
+      return (a.id ?? 0) - (b.id ?? 0);
+    });
+  }
+
+  /* -------------------- Shake animation helpers -------------------- */
+
+  shakeCard(id: number) {
+    if (this.shaking.has(id)) {
+      // restart animation on rapid taps
+      this.shaking.delete(id);
+      setTimeout(() => this.shaking.add(id), 0);
+    } else {
+      this.shaking.add(id);
+    }
+  }
+
+  onAnimationEnd(id: number, ev: AnimationEvent) {
+    if (ev.animationName !== 'shakeCard') return;
+    this.shaking.delete(id);
+  }
+
+  isShaking(id: number): boolean {
+    return this.shaking.has(id);
+  }
+
+  /* -------------------- UI helpers -------------------- */
+
+  trackByMaintId(_i: number, item: Maintenance) {
+    return item?.id;
+  }
+
+  isServiced(status: string | undefined | null): boolean {
+    const s = (status || '').toLowerCase();
+    return s.includes('serviced') || s.includes('completed');
+  }
+
+  statusClass(status: string) {
+    const s = (status || '').toLowerCase();
+    if (s.includes('serviced') || s.includes('completed')) return 'status-serviced';
+    if (s.includes('progress')) return 'status-progress';
+    return 'status-pending';
+  }
+
+  cardToneClass(index: number): string {
+    // Cycle tones to subtly differentiate cards (shadow hue)
+    const tone = (index % 3) + 1; // 1..3
+    return `tone-${tone}`;
+  }
+
+  /* -------------------- Buttons (demo handlers) -------------------- */
+
+  onDetails(m: Maintenance) {
+    console.log('Schedule details clicked:', m);
+    // TODO: open details drawer/modal
+  }
+
+  onTrack(m: Maintenance) {
+    console.log('Track schedule clicked:', m);
+    // TODO: open track timeline/modal
   }
 }
