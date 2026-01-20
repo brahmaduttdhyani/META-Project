@@ -26,8 +26,8 @@ public class MaintenanceService {
     private UserRepository userRepository;
  
  
-    public List<Maintenance> getAllMaintenance() {
-        return maintenanceRepository.findAll();
+    public List<Maintenance> getAllMaintenance(String username) {
+        return maintenanceRepository.findByEquipment_Hospital_CreatedBy(username);
     }
 
     //OLD
@@ -75,7 +75,18 @@ public class MaintenanceService {
 
 
     // NEW
-
+    
+    public Maintenance cancelMaintenance(Long maintenanceId) {
+    Maintenance m = maintenanceRepository.findById(maintenanceId)
+        .orElseThrow(() -> new RuntimeException("Maintenance not found"));
+ 
+    if ("In Progress".equalsIgnoreCase(m.getStatus())) {
+        throw new RuntimeException("Cannot cancel maintenance once it is In Progress");
+    }
+ 
+    m.setStatus("Cancelled");
+    return maintenanceRepository.save(m);
+}
 
 
     public Maintenance respondToMaintenance(Long maintenanceId, String action, String username) {

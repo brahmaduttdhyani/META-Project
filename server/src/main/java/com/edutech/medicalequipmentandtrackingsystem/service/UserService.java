@@ -44,9 +44,7 @@ public class UserService implements UserDetailsService{
     }
 
     public User getUserByIdentifier(String identifier){
-        User byUsername=userRepository.findByUsername(identifier).orElseThrow();
-        if(byUsername != null) return byUsername;
-        return userRepository.findByEmail(identifier);
+      return userRepository.findByUsername(identifier).or(()-> userRepository.findByEmail(identifier)).orElse(null);
     }
  
     @Override

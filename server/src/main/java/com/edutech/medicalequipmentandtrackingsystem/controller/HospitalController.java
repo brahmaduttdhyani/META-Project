@@ -3,6 +3,7 @@ package com.edutech.medicalequipmentandtrackingsystem.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.edutech.medicalequipmentandtrackingsystem.entitiy.Equipment;
@@ -35,17 +36,9 @@ public class HospitalController {
     @Autowired
     private HospitalService hospitalService;
  
-    @PostMapping("/api/hospital/create")
-    public ResponseEntity<Hospital> createHospital(@RequestBody Hospital hospital) {
-        Hospital createdHospital = hospitalService.createHospital(hospital);
-        return new ResponseEntity<>(createdHospital, HttpStatus.CREATED);
-    }
+    
  
-    @GetMapping("/api/hospitals")
-    public ResponseEntity<List<Hospital>> getAllHospitals() throws SQLException {
-        List<Hospital> hospitals = hospitalService.getAllHospitals();
-        return new ResponseEntity<>(hospitals, HttpStatus.OK);
-    }
+
 
     //assigns equipment to the hosp
     @PostMapping("/api/hospital/equipment")
@@ -69,8 +62,8 @@ public class HospitalController {
     }
 
     @GetMapping("/api/hospital/maintenances")
-    public ResponseEntity<List<Maintenance>> getAllMaintenance() throws SQLException{
-        List<Maintenance> maintenances=maintenanceService.getAllMaintenance();
+    public ResponseEntity<List<Maintenance>> getAllMaintenance(Authentication authentication) throws SQLException{
+        List<Maintenance> maintenances=maintenanceService.getAllMaintenance(authentication.getName());
         return new ResponseEntity<>(maintenances,HttpStatus.OK);
     }
  
@@ -81,8 +74,35 @@ public class HospitalController {
     }
     
     @GetMapping("/api/hospital/orders")
-    public ResponseEntity<List<Order>> getAllOrders() throws SQLException{
-        List<Order> orders=orderService.getAllOrders();
+    public ResponseEntity<List<Order>> getAllOrders(Authentication authentication) throws SQLException{
+        List<Order> orders=orderService.getAllOrders(authentication.getName());
         return new ResponseEntity<>(orders,HttpStatus.OK);
     }
+
+    @PutMapping("/api/hospital/maintenance/cancel/{maintenanceId}")
+public ResponseEntity<Maintenance> cancelMaintenance(@PathVariable Long maintenanceId) {
+    Maintenance cancelled = maintenanceService.cancelMaintenance(maintenanceId);
+    return new ResponseEntity<>(cancelled, HttpStatus.OK);
+}
+    
+    @PostMapping("/api/hospital/create")
+public ResponseEntity<Hospital> createHospital(@RequestBody Hospital hospital, Authentication authentication) {
+    Hospital createdHospital = hospitalService.createHospital(hospital, authentication.getName());
+    return new ResponseEntity<>(createdHospital, HttpStatus.CREATED);
+}
+
+
+
+@GetMapping("/api/hospitals")
+public ResponseEntity<List<Hospital>> getAllHospitals(Authentication authentication) {
+    List<Hospital> hospitals = hospitalService.getHospitalsByCreator(authentication.getName());
+    return new ResponseEntity<>(hospitals, HttpStatus.OK);
+}
+
+@PutMapping("/api/hospital/order/cancel/{orderId}")
+public ResponseEntity<Order> cancelOrder(@PathVariable Long orderId) {
+    Order cancelled = orderService.cancelOrder(orderId);
+    return new ResponseEntity<>(cancelled, HttpStatus.OK);
+}
+
     }
