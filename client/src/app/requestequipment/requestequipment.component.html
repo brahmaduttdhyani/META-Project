@@ -179,6 +179,16 @@
               <span class="chev" [class.up]="isExpanded(val.id)">▾</span>
               <span class="label">{{ isExpanded(val.id) ? 'Hide details' : 'Details' }}</span>
             </span>
+            <div class="order-actions">
+<button
+                class="btn btn-ghost btn-sm"
+                type="button"
+                *ngIf="isCancelable(val.status)"
+                (click)="onCancel(val)"
+>
+<span class="btn-icon">🛑</span> Cancel Order
+</button>
+</div>
           </div>
 
           <!-- EXPANDED CONTENT (revealed on click) -->
@@ -190,14 +200,24 @@
           >
             <div class="expand-inner">
               <div class="info-block">
+                <!-- <div class="order-actions">
+<button
+                class="btn btn-ghost btn-sm"
+                type="button"
+                *ngIf="isCancelable(val.status)"
+                (click)="onCancel(val)"
+>
+<span class="btn-icon">🛑</span> Cancel Order
+</button>
+</div> -->
                 <div class="info-title">
                   <span class="dot dot-eq"></span> Equipment
                 </div>
                 <div class="info-content">
-                  <div class="info-row"><span class="key">Id:</span> <span class="val">{{ val.equipment?.id }}</span></div>
-                  <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment?.name }}</span></div>
+                  <div class="info-row"><span class="key">Id:</span> <span class="val">{{ val.equipment.id }}</span></div>
+                  <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment.name }}</span></div>
                   <div class="info-row">
-                    <span class="key">Description:</span> <span class="val">{{ val.equipment?.description }}</span>
+                    <span class="key">Description:</span> <span class="val">{{ val.equipment.description }}</span>
                   </div>
                 </div>
               </div>
@@ -208,13 +228,13 @@
                 </div>
                 <div class="info-content">
                   <div class="info-row">
-                    <span class="key">Id:</span> <span class="val">{{ val.equipment?.hospital?.id }}</span>
+                    <span class="key">Id:</span> <span class="val">{{ val.equipment.hospital?.id }}</span>
                   </div>
                   <div class="info-row">
-                    <span class="key">Name:</span> <span class="val">{{ val.equipment?.hospital?.name }}</span>
+                    <span class="key">Name:</span> <span class="val">{{ val.equipment.hospital?.name }}</span>
                   </div>
                   <div class="info-row">
-                    <span class="key">Location:</span> <span class="val">{{ val.equipment?.hospital?.location }}</span>
+                    <span class="key">Location:</span> <span class="val">{{ val.equipment.hospital?.location }}</span>
                   </div>
                 </div>
               </div>

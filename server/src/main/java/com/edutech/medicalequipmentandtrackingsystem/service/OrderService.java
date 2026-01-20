@@ -44,8 +44,8 @@ public class OrderService {
         return orderRepository.save(order);
     }
  
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public List<Order> getAllOrders(String username) {
+        return orderRepository.findByEquipment_Hospital_CreatedBy(username);
     }
  
     // public Order updateOrderStatus(Long orderId, String newStatus) {
@@ -128,5 +128,23 @@ public List<Order> getOrdersForSupplier(String username) {
     pending.addAll(mine);
     return pending;
 }
+
+// ADD
+public Order cancelOrder(Long orderId) {
+    Order existing = orderRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+ 
+    String status = (existing.getStatus() == null) ? "" : existing.getStatus().toLowerCase();
+ 
+    // Block cancellation once in transit / delivered / already cancelled
+    if (status.contains("transit") || status.contains("deliver") || status.contains("cancel")) {
+        throw new RuntimeException("Order cannot be cancelled at this stage.");
+    }
+ 
+    existing.setStatus("Cancelled");
+    // requestStatus can remain as is; business rule can adjust if needed
+    return orderRepository.save(existing);
+}
+
 
 }

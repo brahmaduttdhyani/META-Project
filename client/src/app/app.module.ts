@@ -13,6 +13,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
 import { DashbaordComponent } from './dashbaord/dashbaord.component';
 
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { FooterComponent } from './footer/footer.component';
+
 import { CreatehospitalComponent } from './createhospital/createhospital.component';
 import { ScheduleMaintenanceComponent } from './schedule-maintenance/schedule-maintenance.component';
 import { RequestequipmentComponent } from './requestequipment/requestequipment.component';
@@ -28,7 +31,8 @@ import { OrderStatusComponent } from './order-status/order-status.component';
       RegistrationComponent,
       DashbaordComponent,
   
-    
+      LandingPageComponent,
+      FooterComponent,
       CreatehospitalComponent,
       ScheduleMaintenanceComponent,
       RequestequipmentComponent,

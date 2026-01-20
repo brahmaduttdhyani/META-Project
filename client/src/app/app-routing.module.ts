@@ -15,8 +15,10 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { OrdersComponent } from './orders/orders.component';
 import { MaintenanceStatusComponent } from './maintenance-status/maintenance-status.component';
 import { OrderStatusComponent } from './order-status/order-status.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 const routes: Routes = [
+  { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'dashboard', component: DashbaordComponent },
@@ -27,9 +29,11 @@ const routes: Routes = [
   { path: 'maintenance', component: MaintenanceComponent },  
   { path: 'orders', component: OrdersComponent },  
   { path: 'order-status', component: OrderStatusComponent },
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 
-  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
+  // { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: '' },
+
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
