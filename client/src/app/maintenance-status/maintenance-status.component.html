@@ -1,57 +1,108 @@
-<div class="d-flex justify-content-between mt-4">
-  <h2 class="mb-1 text-center">Maintenance Status</h2>
+
+<div class="d-flex justify-content-between align-items-center mt-4 page-header">
+  <h2 class="mb-1 text-center page-title">Maintenance Status</h2>
 </div>
 
-<div class="row mt-3 container mt-4 mx-5">
-  <div class="card">
-    <div class="card-header">Maintenance Information</div>
-
+<div class="container mt-4">
+  <div class="card soft-card fade-in">
+    <div class="card-header fw-bold">Maintenance Information</div>
     <div class="card-body">
-      <div *ngIf="showError" class="alert alert-danger">
+      <div *ngIf="showError" class="alert alert-danger" role="alert">
         {{ errorMessage }}
       </div>
 
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Maintenance ID</th>
-              <th>Scheduled Date</th>
-              <th>Deadline</th>
-              <th>Status</th>
-              <th>Equipment</th>
-              <th>Hospital</th>
-              <th>Technician</th>
-            </tr>
-          </thead>
+      <div class="maint-grid">
+        <article
+          class="maint-card fade-in-up"
+          *ngFor="let m of maintenanceList; let i = index; trackBy: trackByMaintId"
+          [ngClass]="[
+            cardToneClass(i),
+            isServiced(m.status) ? 'is-serviced' : '',
+            isToggled(m.id) ? 'is-toggled' : ''
+          ]"
+          [attr.aria-disabled]="isServiced(m.status) ? 'true' : null"
+          [attr.tabindex]="isServiced(m.status) ? -1 : 0"
+          role="group"
+          aria-label="Maintenance card"
+          (pointerdown)="onPointerToggle(m, $event)"
+        >
+          <!-- Touch-only smooth toggle (no click/hover) -->
 
-          <tbody>
-            <tr *ngFor="let Maintenancef of maintenanceList">
-              <td>{{ Maintenancef.id }}</td>
-              <td>{{ Maintenancef.scheduledDate | date : "dd-MMM-yyyy" }}</td>
-              <td>{{ Maintenancef.completedDate | date : "dd-MMM-yyyy" }}</td>
+          <div class="card-accent"></div>
 
-              <td [ngStyle]="getStatusStyle(Maintenancef.status)">
-                <strong>{{ Maintenancef.status }}</strong>
-              </td>
+          <!-- Corner ribbon (Serviced) -->
+          <div class="corner-ribbon" *ngIf="isServiced(m.status)" aria-hidden="true">
+            <span class="ribbon-chip">
+              <span class="ribbon-icon">✔</span>
+              Serviced
+            </span>
+          </div>
 
-              <td>
-                <p>Id:{{ Maintenancef.equipment.id }}</p>
-                <p>Name:{{ Maintenancef.equipment.name }}</p>
-                <p>Description:{{ Maintenancef.equipment.description }}</p>
-              </td>
+          <!-- Header -->
+          <div class="maint-card-header d-flex align-items-center justify-content-between">
+            <div class="maint-id">#{{ m.id }}</div>
+            <span class="status-chip" [ngClass]="statusClass(m.status)">{{ m.status }}</span>
+          </div>
 
-              <td>
-                <p>Id:{{ Maintenancef.equipment.hospital.id }}</p>
-                <p>Name:{{ Maintenancef.equipment.hospital.name }}</p>
-                <p>Location:{{ Maintenancef.equipment.hospital.location }}</p>
-              </td>
-              <td>{{ Maintenancef.assignedTechnicianName || 'Yet to Accept' }}</td>
-            </tr>
-          </tbody>
-        </table>
+          <!-- Meta -->
+          <div class="maint-meta">
+            <div class="meta-item">
+              <span class="meta-label">Scheduled</span>
+              <span class="meta-value">{{ m.scheduledDate | date:'dd-MMM-yyyy' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Deadline</span>
+              <span class="meta-value">{{ m.completedDate | date:'dd-MMM-yyyy' }}</span>
+            </div>
+          </div>
+
+          <!-- Equipment -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-eq"></span> Equipment
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.name }}</span></div>
+              <div class="info-row">
+                <span class="key">Description:</span> <span class="val">{{ m.equipment?.description }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hospital -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-hosp"></span> Hospital
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.hospital?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.hospital?.name }}</span></div>
+              <div class="info-row"><span class="key">Location:</span> <span class="val">{{ m.equipment?.hospital?.location }}</span></div>
+            </div>
+          </div>
+
+          <!-- Technician -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-tech"></span> Technician
+            </div>
+            <div class="info-content">
+              <div class="info-row">
+                <span class="key">Assigned:</span>
+                <span class="val">{{ m.assignedTechnicianName || 'Yet to Accept' }}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Empty -->
+        <div class="empty-state" *ngIf="!maintenanceList || maintenanceList.length === 0">
+          <div class="empty-illustration">🗂️</div>
+          <p class="empty-text">No maintenance records to show.</p>
+        </div>
       </div>
-
     </div>
   </div>
 </div>
+``

@@ -1,154 +1,205 @@
-button {
-  border: none;
-  color: #fff;
-  background-image: linear-gradient(30deg, #5655b6, #4ce3f7);
-  border-radius: 20px;
-  background-size: 100% auto;
-  font-family: inherit;
-  font-size: 17px;
-  padding: 0.6em 1.5em;
+
+/* Theme tokens */
+:root {
+  --teal-800: #0c5f59;
+  --teal-700: #0f766e;
+  --teal-600: #12877f;
+  --teal-500: #14b8a6;
+  --teal-300: #5eead4;
+  --ink-800: #1f2a37;
+  --ink-700: #243447;
+  --ink-600: #2f3b4b;
+  --surface: #ffffff;
+  --soft-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
-.mb-0 {
+
+/* Page */
+.page-title {
   padding-left: 100px;
-  color: teal;
+  color: var(--teal-700);
+}
+.page-header .btn-icon {
+  margin-right: 6px;
 }
 
-button:hover {
-  background-position: right center;
-  background-size: 200% auto;
-  -webkit-animation: pulse 2s infinite;
-  animation: pulse512 1.5s infinite;
+/* Soft Card */
+.soft-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--soft-shadow);
+}
+.card-header.fw-bold {
+  background: linear-gradient(90deg, #e6fffb, #f4fffd);
+  color: var(--ink-700);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-@keyframes pulse512 {
-  0% {
-    box-shadow: 0 0 0 0 #05bada66;
-  }
-
-  70% {
-    box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
-  }
+/* Forms */
+.form-control {
+  border-radius: 12px;
 }
 
-body {
-  background: #fafafa url(https://jackrugile.com/images/misc/noise-diagonal.png);
-  color: #691717;
-  font: 100%/30px "Helvetica Neue", helvetica, arial, sans-serif;
-  text-shadow: 0 1px 0 #fff;
-}
-
-strong {
-  font-weight: bold;
-}
-
-em {
-  font-style: italic;
-}
-
-table {
-  background: #f5f5f5;
-  border-collapse: separate;
-  box-shadow: inset 0 1px 0 #fff;
-  font-size: 15px;
-  line-height: 34px;
-  margin: 50px auto;
-  text-align: left;
-  width: 100%;
-}
-
-th {
-  background: url(https://jackrugile.com/images/misc/noise-diagonal.png),
-    linear-gradient(#777, #444);
-  border-left: 1px solid #555;
-  border-right: 1px solid #777;
-  border-top: 1px solid #555;
-  border-bottom: 1px solid #333;
-  box-shadow: inset 0 1px 0 #999;
-  color: #fff;
-  font-weight: bold;
-  padding: 10px 15px;
-  position: relative;
-  text-shadow: 0 1px 0 #000;
-  text-align: center;
-}
-
-th:after {
-  background: linear-gradient(
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.08)
-  );
-  content: "";
-  display: block;
-  height: 25%;
-  left: 0;
-  margin: 1px 0 0 0;
-  position: absolute;
-  top: 25%;
-  width: 100%;
-}
-
-th:first-child {
-  border-left: 1px solid #777;
-  box-shadow: inset 1px 1px 0 #999;
-}
-
-th:last-child {
-  box-shadow: inset -1px 1px 0 #999;
-}
-
-td {
-  border-right: 1px solid #fff;
-  border-left: 1px solid #e8e8e8;
-  border-top: 1px solid #fff;
-  border-bottom: 1px solid #e8e8e8;
-  padding: 10px 15px;
-  position: relative;
-  transition: all 300ms;
-}
+/* Buttons */
 .btn {
-  background-color: rgb(5, 8, 45);
-  color: white;
+  border: none;
+  border-radius: 14px;
+  font-family: inherit;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-size 0.25s ease;
+}
+.btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+  border-radius: 10px;
+}
+.btn-gradient {
+  color: #fff;
+  background-image: linear-gradient(30deg, #0f766e, #5eead4);
+  background-size: 100% auto;
+  padding: 0.65rem 1.2rem;
+  box-shadow: 0 8px 18px rgba(20, 184, 166, 0.35);
+
+  &:hover {
+    background-position: right center;
+    background-size: 200% auto;
+    animation: pulseRing 1.2s ease-out;
+    transform: translateY(-1px);
+  }
+  &:disabled { filter: grayscale(0.2); opacity: 0.8; cursor: not-allowed; }
+}
+.btn-ghost {
+  background: rgba(20, 184, 166, 0.08);
+  color: var(--teal-700);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  padding: 0.6rem 1rem;
+
+  &:hover { background: rgba(20, 184, 166, 0.14); transform: translateY(-1px); }
 }
 
-td:first-child {
-  box-shadow: inset 1px 0 0 #fff;
+/* Pulse ring */
+@keyframes pulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.45); }
+  70% { box-shadow: 0 0 0 8px rgba(20, 184, 166, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
 }
 
-td:last-child {
-  border-right: 1px solid #e8e8e8;
-  box-shadow: inset -1px 0 0 #fff;
+/* Fade-ins */
+.fade-in { animation: fadeIn 0.5s ease both; }
+.fade-in-up { animation: fadeInUp 0.6s ease both; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: translateY(0) } }
+
+/* Orders Grid */
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+
+  @media (min-width: 576px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 1200px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-tr {
-  background: url(https://jackrugile.com/images/misc/noise-diagonal.png);
+.order-card {
+  position: relative;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--soft-shadow);
+  border: 1px solid rgba(20, 184, 166, 0.12);
+  padding: 1rem 1.1rem 0.8rem 1.1rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+  outline: none;
+
+  &:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(20, 184, 166, 0.18); }
+  &:focus-visible { border-color: var(--teal-500); box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25); }
+}
+.card-accent {
+  position: absolute; left: 0; top: 0; height: 4px; width: 100%;
+  background: linear-gradient(90deg, var(--teal-600), var(--teal-300));
+}
+.order-card-header { margin-top: 0.25rem; margin-bottom: 0.5rem; }
+.order-id {
+  display: inline-block; font-size: 0.9rem; color: var(--teal-700);
+  background: #e6fffb; padding: 0.25rem 0.6rem; border-radius: 999px; font-weight: 700;
+}
+.status-chip {
+  padding: 0.25rem 0.6rem; border-radius: 999px; font-weight: 700; font-size: 0.8rem; border: 1px solid transparent;
+  &.status-delivered { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+  &.status-transit   { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+  &.status-initiated { color: #1e40af; background: #eff6ff; border-color: #bfdbfe; }
 }
 
-tr:nth-child(odd) td {
-  background: #f1f1f1 url(https://jackrugile.com/images/misc/noise-diagonal.png);
+.order-meta {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 0.25rem;
+}
+.meta-item {
+  background: #f8fffe; border: 1px dashed rgba(20, 184, 166, 0.25);
+  border-radius: 12px; padding: 0.5rem 0.75rem;
+}
+.meta-label { display: block; font-size: 0.75rem; color: var(--ink-600); }
+.meta-value { font-weight: 700; color: var(--ink-800); }
+
+/* Expand handle chip */
+.expand-handle {
+  display: flex; justify-content: flex-start; margin: 0.35rem 0 0.2rem 0;
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 999px;
+    background: rgba(20, 184, 166, 0.08); color: var(--teal-700);
+    border: 1px solid rgba(20, 184, 166, 0.2);
+    font-weight: 600; user-select: none; cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    &:hover { background: rgba(20, 184, 166, 0.14); transform: translateY(-1px); }
+    .chev { display: inline-block; transition: transform 0.2s ease; }
+    .chev.up { transform: rotate(180deg); }
+  }
 }
 
-tr:last-of-type td {
-  box-shadow: inset 0 -1px 0 #fff;
+/* Expandable section (height animation using CSS var) */
+.expand-wrapper {
+  overflow: hidden;
+  height: 0;
+  transition: height 250ms ease;
+  &.open { height: var(--expand-height, 0px); }
+}
+.expand-inner {
+  padding: 0.6rem 0 0.2rem 0;
 }
 
-tr:last-of-type td:first-child {
-  box-shadow: inset 1px -1px 0 #fff;
+/* Info blocks */
+.info-block {
+  background: #ffffff;
+  border: 1px solid rgba(20, 184, 166, 0.15);
+  border-radius: 14px;
+  padding: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+.info-title {
+  font-weight: 700; color: var(--ink-700); margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 6px;
+}
+.dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block;
+  &.dot-eq { background: var(--teal-500); }
+  &.dot-hosp { background: #2563eb; }
+}
+.info-content .info-row { display: flex; gap: 6px; font-size: 0.95rem; }
+.info-content .key { min-width: 90px; color: var(--ink-600); }
+.info-content .val { color: var(--ink-800); font-weight: 600; }
+
+/* Card actions */
+.order-actions {
+  margin-top: 0.6rem;
+  display: flex; gap: 0.5rem; justify-content: flex-end;
 }
 
-tr:last-of-type td:last-child {
-  box-shadow: inset -1px -1px 0 #fff;
-}
+/* Alerts */
+.alert-success { background-color: #e6fffb; border-color: rgba(20, 184, 166, 0.35); color: var(--teal-700); }
+.alert-danger  { background-color: #fff1f1; border-color: #ffb4b4; color: #9b1c1c; }
 
-tbody:hover td {
-  color: black;
-  text-shadow: 0 0 3px #aaa;
-}
-
-tbody:hover tr:hover td {
-  color: #444;
-  text-shadow: 0 1px 0 #fff;
-}
+/* Empty state */
+.empty-state { grid-column: 1 / -1; text-align: center; padding: 1.5rem 0.5rem; color: var(--ink-600); }
+.empty-illustration { font-size: 2rem; margin-bottom: 0.4rem; }
