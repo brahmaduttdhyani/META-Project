@@ -1,55 +1,107 @@
+
 <div class="container mt-4 mx-5">
-  <div class="card">
+  <div class="card soft-card fade-in">
     <div class="card-header">Orders Information</div>
 
     <div class="card-body">
-
+      <!-- Error alert -->
       <div *ngIf="showError" class="alert alert-danger" role="alert">
         {{ errorMessage }}
       </div>
 
-      <div class="table-responsive" *ngIf="orderList?.length > 0">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Order Date</th>
-              <th>Quantity</th>
-              <th>Status</th>
-              <th>Equipment</th>
-              <th>Hospital</th>
-              <th>Accepted By</th>
-            </tr>
-          </thead>
+      <!-- Cards grid -->
+      <div class="order-grid" *ngIf="orderList.length > 0">
+        <article
+          class="order-card fade-in-up"
+          *ngFor="let val of orderList; let i = index; trackBy: trackByOrderId"
+          [ngClass]="[
+            cardToneClass(i),
+            isDelivered(val.status) ? 'is-delivered' : '',
+            isShaking(val.id) ? 'is-shaking' : ''
+          ]"
+          (click)="shakeCard(val.id)"
+          (touchstart)="shakeCard(val.id)"
+          (animationend)="onAnimationEnd(val.id, $event)"
+          tabindex="0"
+          aria-label="Order card"
+        >
+          <div class="card-accent"></div>
 
-          <tbody>
-            <tr *ngFor="let val of orderList">
-              <td>{{ val.id }}</td>
-              <td>{{ val.orderDate | date : "dd-MMM-yyyy" }}</td>
-              <td>{{ val.quantity }}</td>
-              <td [ngStyle]="getStatusStyle(val.status)">{{ val.status }}</td>
+          <!-- Corner ribbon (contained) for Delivered -->
+          <div class="corner-ribbon" *ngIf="isDelivered(val.status)" aria-hidden="true">
+            <span class="ribbon-chip">
+              <span class="ribbon-icon">✔</span>
+              Delivered
+            </span>
+          </div>
 
-              <td>
-                <p>Id:{{ val.equipment.id }}</p>
-                <p>Name:{{ val.equipment.name }}</p>
-                <p>Description:{{ val.equipment.description }}</p>
-              </td>
+          <!-- Header -->
+          <div class="order-card-header d-flex align-items-center justify-content-between">
+            <div class="order-id">#{{ val.id }}</div>
+            <span class="status-chip" [ngClass]="statusClass(val.status)">{{ val.status }}</span>
+          </div>
 
-              <td>
-                <p>Id:{{ val.equipment.hospital.id }}</p>
-                <p>Name:{{ val.equipment.hospital.name }}</p>
-                <p>Location:{{ val.equipment.hospital.location }}</p>
-              </td>
-              <td>{{ val.assignedSupplierName || 'Not Assigned' }}</td>
-            </tr>
-          </tbody>
-        </table>
+          <!-- Meta -->
+          <div class="order-meta">
+            <div class="meta-item">
+              <span class="meta-label">Order Date</span>
+              <span class="meta-value">{{ val.orderDate | date: 'dd-MMM-yyyy' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Quantity</span>
+              <span class="meta-value">{{ val.quantity }}</span>
+            </div>
+          </div>
+
+          <!-- Equipment -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-eq"></span> Equipment
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ val.equipment?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment?.name }}</span></div>
+              <div class="info-row">
+                <span class="key">Description:</span> <span class="val">{{ val.equipment?.description }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hospital -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-hosp"></span> Hospital
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ val.equipment?.hospital?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment?.hospital?.name }}</span></div>
+              <div class="info-row"><span class="key">Location:</span> <span class="val">{{ val.equipment?.hospital?.location }}</span></div>
+            </div>
+          </div>
+
+          <!-- Accepted by -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-acc"></span> Accepted By
+            </div>
+            <div class="info-content">
+              <div class="info-row">
+                <span class="key">Supplier:</span>
+                <span class="val">{{ val.assignedSupplierName || 'Not Assigned' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          
+        </article>
       </div>
 
-      <div *ngIf="orderList?.length === 0 && !showError" class="alert alert-info" role="alert">
+      <!-- Empty -->
+      <div *ngIf="orderList.length === 0 && !showError" class="alert alert-info" role="alert">
         No orders found.
       </div>
-
     </div>
   </div>
 </div>
+``

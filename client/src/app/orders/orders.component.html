@@ -1,130 +1,181 @@
-<div class="d-flex justify-content-between mt-4">
-  <h2 class="mb-0">Manage Orders</h2>
+
+<div class="d-flex justify-content-between align-items-center mt-4 page-header">
+  <h2 class="mb-0 page-title">Manage Orders</h2>
 </div>
 
-<div class="row mt-3" class="container mt-4 mx-5">
-  <div class="card">
-    <div class="card-header">Orders Information</div>
-  </div>
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Sr#</th>
-            <th>Order Date</th>
-            <th>Quantity</th>
-            <th>Status</th>
-            <th>Equipment Details</th>
-            <th>Hospital</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <!-- <tbody *ngFor="let val of orderList">
-          <tr>
-            <td>{{ val.id }}</td>
-            <td>{{ val.orderDate | date : "dd-MMM-yyyy" }}</td>
-            <td>{{ val.quantity }}</td>
-            <td [ngStyle]="getStatusStyle(val.status)">{{ val.status }}</td>
-            <td>
-              <p>Id: {{ val.equipment.id }}</p>
-              <p>Name: {{ val.equipment.name }}</p>
-              <p>Description: {{ val.equipment.description }}</p>
-            </td>
-            <td>
-              <p>Id: {{ val.equipment.hospital.id }}</p>
-              <p>Name: {{ val.equipment.hospital.name }}</p>
-              <p>Location: {{ val.equipment.hospital.location }}</p>
-            </td>
-            <td>
-              <button
-                data-bs-toggle="modal"
-                (click)="edit(val)"
-                data-bs-target="#driverModal"
-                class="btn btn-warning"
-                [disabled]="val.status === 'Delivered'"
-              >
-                Update Status
-              </button>
-            </td>
-            <br />
-          </tr>
-        </tbody> -->
+<div class="container mt-4 mx-5">
+  <div class="card soft-card fade-in">
+    <div class="card-header fw-bold">Orders Information</div>
 
+    <div class="card-body">
+      <!-- Alerts -->
+      <div *ngIf="showError" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="showMessage" class="alert alert-success" role="alert">
+        {{ responseMessage }}
+      </div>
 
-        <tbody>
-          <tr *ngFor="let val of orderList" [hidden]="isOrderRejected(val.id)">
-            <td>{{ val.id }}</td>
-            <td>{{ val.orderDate | date : "dd-MMM-yyyy" }}</td>
-            <td>{{ val.quantity }}</td>
-            <td [ngStyle]="getStatusStyle(val.status)">{{ val.status }}</td>
+      <!-- Cards grid -->
+      <div class="order-grid" *ngIf="orderList.length > 0">
+        <article
+          class="order-card fade-in-up"
+          *ngFor="let val of orderList; let i = index; trackBy: trackByOrderId"
+          [hidden]="isOrderRejected(val.id)"
+          [ngClass]="[
+            cardToneClass(i),
+            isDelivered(val.status) ? 'is-delivered' : '',
+            isShaking(val.id) ? 'is-shaking' : ''
+          ]"
+          (click)="shakeCard(val.id)"
+          (touchstart)="shakeCard(val.id)"
+          (animationend)="onAnimationEnd(val.id, $event)"
+          tabindex="0"
+          aria-label="Order card"
+        >
+          <div class="card-accent"></div>
 
-            <td>
-              <p>Id: {{ val.equipment.id }}</p>
-              <p>Name: {{ val.equipment.name }}</p>
-              <p>Description: {{ val.equipment.description }}</p>
-            </td>
+          <!-- Corner ribbon for Delivered (contained) -->
+          <div class="corner-ribbon" *ngIf="isDelivered(val.status)" aria-hidden="true">
+            <span class="ribbon-chip">
+              <span class="ribbon-icon">✔</span>
+              Delivered
+            </span>
+          </div>
 
-            <td>
-              <p>Id: {{ val.equipment.hospital.id }}</p>
-              <p>Name: {{ val.equipment.hospital.name }}</p>
-              <p>Location: {{ val.equipment.hospital.location }}</p>
-            </td>
+          <!-- Header -->
+          <div class="order-card-header d-flex align-items-center justify-content-between">
+            <div class="order-id">#{{ val.id }}</div>
+            <span class="status-chip" [ngClass]="statusClass(val.status)">{{ val.status }}</span>
+          </div>
 
-            <!-- ✅ Request status -->
-            <!-- <td>
-              <strong>{{ val.requestStatus || 'PENDING' }}</strong>
-              <div *ngIf="(val.requestStatus || '').toUpperCase() === 'ACCEPTED'" class="text-muted">
-                by {{ val.assignedSupplierName || '-' }}
+          <!-- Meta -->
+          <div class="order-meta">
+            <div class="meta-item">
+              <span class="meta-label">Order Date</span>
+              <span class="meta-value">{{ val.orderDate | date: 'dd-MMM-yyyy' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Quantity</span>
+              <span class="meta-value">{{ val.quantity }}</span>
+            </div>
+          </div>
+
+          <!-- Equipment -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-eq"></span> Equipment
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ val.equipment?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment?.name }}</span></div>
+              <div class="info-row">
+                <span class="key">Description:</span>
+                <span class="val">{{ val.equipment?.description }}</span>
               </div>
-            </td> -->
+            </div>
+          </div>
 
-            <!-- ✅ Action column -->
-            <td>
-              <!-- 1) PENDING => Accept + Reject -->
-              <div *ngIf="(val.requestStatus || 'PENDING') === 'PENDING'">
-                <button class="btn btn-success btn-sm me-2" (click)="acceptOrder(val.id)">
-                  Accept
-                </button>
+          <!-- Hospital + Map -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-hosp"></span> Hospital
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ val.equipment?.hospital?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment?.hospital?.name }}</span></div>
+              <div class="info-row"><span class="key">Location:</span> <span class="val">{{ val.equipment?.hospital?.location }}</span></div>
 
-                <button class="btn btn-danger btn-sm" (click)="rejectOrderLocally(val.id)">
-                  Reject
-                </button>
-              </div>
-
-              <!-- 2) ACCEPTED by me => Update Status -->
-              <div *ngIf="canEditOrder(val)">
+              <!-- Map Actions -->
+              <div class="mt-2 d-flex gap-2">
                 <button
-                  data-bs-toggle="modal"
-                  (click)="edit(val)"
-                  data-bs-target="#driverModal"
-                  class="btn btn-warning btn-sm"
-                  [disabled]="val.status === 'Delivered'"
+                  class="btn btn-map btn-sm"
+                  type="button"
+                  (click)="toggleMap(val.id); $event.stopPropagation()"
+                  [disabled]="!hasHospitalInfo(val)"
+                  title="View Map"
                 >
-                  Update Status
+                  <span class="btn-icon">🗺️</span>
+                  {{ isMapOpen(val.id) ? 'Hide Map' : 'View Map' }}
                 </button>
               </div>
 
-              <!-- 3) ACCEPTED by others => show message -->
-              <div
-                *ngIf="(val.requestStatus || '').toUpperCase() === 'ACCEPTED' && !canEditOrder(val) && val.status !== 'Delivered'"
-                class="text-muted"
-              >
-                Assigned to {{ val.assignedSupplierName || 'Supplier' }}
+              <!-- Embedded Map -->
+              <div class="map-container fade-in" *ngIf="isMapOpen(val.id)">
+                <iframe
+                  [src]="getMapUrl(val)"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  allowfullscreen
+                  title="Hospital Location Map"
+                ></iframe>
               </div>
+            </div>
+          </div>
 
-              <!-- 4) Delivered => Completed -->
-              <div *ngIf="val.status === 'Delivered'" class="text-success fw-bold">
-                Completed
+          <!-- Accepted By -->
+          <div class="info-block" *ngIf="val.assignedSupplierName">
+            <div class="info-title">
+              <span class="dot dot-acc"></span> Accepted By
+            </div>
+            <div class="info-content">
+              <div class="info-row">
+                <span class="key">Supplier:</span>
+                <span class="val">{{ val.assignedSupplierName }}</span>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="order-actions">
+            <!-- 1) PENDING => Accept + Reject -->
+            <ng-container *ngIf="(val.requestStatus || 'PENDING') === 'PENDING' && !isDelivered(val.status)">
+              <button class="btn btn-accept btn-sm" type="button" (click)="acceptOrder(val.id); $event.stopPropagation()">
+                <span class="btn-icon">✅</span> Accept
+              </button>
+
+              <button class="btn btn-reject btn-sm" type="button" (click)="rejectOrderLocally(val.id); $event.stopPropagation()">
+                <span class="btn-icon">✖</span> Reject
+              </button>
+            </ng-container>
+
+            <!-- 2) ACCEPTED by me => Update Status -->
+            <ng-container *ngIf="canEditOrder(val)">
+              <button
+                class="btn btn-gradient btn-sm"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#driverModal"
+                (click)="edit(val); $event.stopPropagation()"
+                [disabled]="isDelivered(val.status)"
+              >
+                <span class="btn-icon">✏️</span> Update Status
+              </button>
+            </ng-container>
+
+            <!-- 3) Accepted by others -->
+            <div
+              *ngIf="(val.requestStatus || '').toUpperCase() === 'ACCEPTED' && !canEditOrder(val) && !isDelivered(val.status)"
+              class="text-muted"
+            >
+              Assigned to {{ val.assignedSupplierName || 'Supplier' }}
+            </div>
+
+            <!-- 4) Delivered -->
+            <div *ngIf="isDelivered(val.status)" class="completed-pill">Completed</div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Empty -->
+      <div *ngIf="orderList.length === 0 && !showError" class="alert alert-info" role="alert">
+        No orders found.
+      </div>
     </div>
   </div>
 </div>
 
+<!-- Modal (Update Status) -->
 <div
   class="modal fade"
   id="driverModal"
@@ -133,16 +184,18 @@
   aria-hidden="true"
 >
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content modal-soft">
       <div class="modal-header">
         <h5 class="modal-title" id="driverModalLabel">Update Status</h5>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
         <select
           [(ngModel)]="statusModel.newStatus"
           class="form-control"
-          name=""
           id="status"
+          aria-label="Choose Status"
         >
           <option value="null">Choose Status</option>
           <option value="In Transit">In Transit</option>
@@ -156,16 +209,11 @@
           {{ errorMessage }}
         </div>
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button type="button" class="btn btn-primary" (click)="update()">
-          Save
-        </button>
+        <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-gradient" (click)="update()">Save</button>
       </div>
     </div>
   </div>
 </div>
-
-<!-- mm -->

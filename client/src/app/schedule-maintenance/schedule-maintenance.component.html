@@ -1,204 +1,147 @@
-<div class="d-flex justify-content-between mt-4">
-  <h2 class="mb-0">Schedule Maintenance</h2>
+
+<div class="d-flex justify-content-between align-items-center mt-4 page-header">
+  <h2 class="mb-0 page-title">Schedule Maintenance</h2>
 </div>
-<div class="row mt-3" class="container mt-4 mx-5">
-  <div class="card">
-    <div class="card-header text-center">Schedule Maintenance of Equipment</div>
+
+<!-- Schedule Form Card -->
+<div class="container mt-4">
+  <div class="card soft-card fade-in">
+    <div class="card-header text-center fw-bold">Schedule Maintenance of Equipment</div>
+
     <div class="card-body">
-      <form class="mb-3 mt-md-4" [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-        <div class="row">
+      <!-- Alerts -->
+      <div *ngIf="showError" class="alert alert-danger" role="alert" aria-live="assertive">
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="showMessage" class="alert alert-success" role="alert" aria-live="polite">
+        {{ responseMessage }}
+      </div>
+
+      <form class="mb-3 mt-md-2" [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row gy-3">
+          <!-- Left Column -->
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="content" class="form-label">Hospital</label>
+              <label for="hospitalId" class="form-label fw-semibold">Hospital</label>
               <select
-                name="hospitalId"
-                class="form-control"
                 id="hospitalId"
+                class="form-control"
                 formControlName="hospitalId"
                 (change)="onHospitalSelect($event)"
+                aria-label="Select Hospital"
               >
-                <option value="null">Please Choose</option>
-                <option *ngFor="let hos of hospitalList" [value]="hos.id">
-                  {{ hos.name }}
-                </option>
+                <option value="">Please Choose</option>
+                <option *ngFor="let hos of hospitalList" [value]="hos.id">{{ hos.name }}</option>
               </select>
               <div
-                *ngIf="
-                  itemForm.controls['hospitalId'].invalid &&
-                  (itemForm.controls['hospitalId'].dirty ||
-                    itemForm.controls['hospitalId'].touched)
-                "
-                class="ng-dirty"
+                *ngIf="itemForm.controls['hospitalId'].invalid && (itemForm.controls['hospitalId'].dirty || itemForm.controls['hospitalId'].touched)"
+                class="text-danger mt-1"
               >
-                <span
-                  *ngIf="itemForm.controls['hospitalId'].errors"
-                  class="text-danger"
-                  >Please choose hospital.</span
-                >
+                Please choose hospital.
               </div>
             </div>
+
             <div class="mb-3">
-              <label for="content" class="form-label">Equipment</label>
+              <label for="equipmentId" class="form-label fw-semibold">Equipment</label>
               <select
-                name="equipmentId"
-                class="form-control"
                 id="equipmentId"
+                class="form-control"
                 formControlName="equipmentId"
+                aria-label="Select Equipment"
               >
-                <option value="null">Please Choose</option>
-                <option *ngFor="let eq of equipmentList" [value]="eq.id">
-                  {{ eq.name }}
-                </option>
+                <option value="">Please Choose</option>
+                <option *ngFor="let eq of equipmentList" [value]="eq.id">{{ eq.name }}</option>
               </select>
               <div
-                *ngIf="
-                  itemForm.controls['equipmentId'].invalid &&
-                  (itemForm.controls['equipmentId'].dirty ||
-                    itemForm.controls['equipmentId'].touched)
-                "
-                class="ng-dirty"
+                *ngIf="itemForm.controls['equipmentId'].invalid && (itemForm.controls['equipmentId'].dirty || itemForm.controls['equipmentId'].touched)"
+                class="text-danger mt-1"
               >
-                <span
-                  *ngIf="itemForm.controls['equipmentId'].errors"
-                  class="text-danger"
-                  >Please choose Equipment.</span
-                >
+                Please choose Equipment.
               </div>
             </div>
           </div>
+
+          <!-- Right Column -->
           <div class="col-md-6">
             <div class="row">
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label for="content" class="form-label">Scheduled Date</label>
+                  <label for="scheduledDate" class="form-label fw-semibold">Scheduled Date</label>
                   <input
                     type="date"
-                    name="scheduledDate"
-                    formControlName="scheduledDate"
-                    class="form-control"
                     id="scheduledDate"
+                    class="form-control"
+                    formControlName="scheduledDate"
                     placeholder="Scheduled Date"
                   />
                   <div
-                    *ngIf="
-                      itemForm.controls['scheduledDate'].invalid &&
-                      (itemForm.controls['scheduledDate'].dirty ||
-                        itemForm.controls['scheduledDate'].touched)
-                    "
-                    class="ng-dirty"
+                    *ngIf="itemForm.controls['scheduledDate'].invalid && (itemForm.controls['scheduledDate'].dirty || itemForm.controls['scheduledDate'].touched)"
+                    class="text-danger mt-1"
                   >
-                    <span
-                      *ngIf="itemForm.controls['scheduledDate'].errors"
-                      class="text-danger"
-                      >Please Enter Valid Scheduled Date.</span
-                    >
+                    Please enter a valid future Scheduled Date.
                   </div>
                 </div>
               </div>
+
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label for="completedDate" class="form-label">Deadline</label>
+                  <label for="completedDate" class="form-label fw-semibold">Deadline</label>
                   <input
                     type="date"
-                    name="completedDate"
-                    formControlName="completedDate"
-                    class="form-control"
                     id="completedDate"
+                    class="form-control"
+                    formControlName="completedDate"
                     placeholder="Completed Date"
                   />
                   <div
-                    *ngIf="
-                      itemForm.controls['completedDate'].invalid &&
-                      (itemForm.controls['completedDate'].dirty ||
-                        itemForm.controls['completedDate'].touched)
-                    "
-                    class="ng-dirty"
+                    *ngIf="itemForm.controls['completedDate'].invalid && (itemForm.controls['completedDate'].dirty || itemForm.controls['completedDate'].touched)"
+                    class="text-danger mt-1"
                   >
-                    <span
-                      *ngIf="itemForm.controls['completedDate'].errors"
-                      class="text-danger"
-                      >Please Enter Valid Completed Date.</span
-                    >
+                    Please enter a valid future Deadline.
                   </div>
                 </div>
               </div>
             </div>
+
             <div class="mb-3">
-              <label for="description" class="form-label">Description</label>
+              <label for="description" class="form-label fw-semibold">Description</label>
               <input
                 type="text"
-                name="description"
-                formControlName="description"
-                class="form-control"
                 id="description"
+                class="form-control"
+                formControlName="description"
                 placeholder="Description"
               />
               <div
-                *ngIf="
-                  itemForm.controls['description'].invalid &&
-                  (itemForm.controls['description'].dirty ||
-                    itemForm.controls['description'].touched)
-                "
-                class="ng-dirty"
+                *ngIf="itemForm.controls['description'].invalid && (itemForm.controls['description'].dirty || itemForm.controls['description'].touched)"
+                class="text-danger mt-1"
               >
-                <span
-                  *ngIf="itemForm.controls['description'].errors"
-                  class="text-danger"
-                  >Please Enter Description.</span
-                >
+                Please enter Description.
               </div>
             </div>
+
             <div class="mb-3">
-              <label for="status" class="form-label">Status</label>
-              <select
-                class="form-control"
-                name="status"
-                id="status"
-                formControlName="status"
-              >
+              <label for="status" class="form-label fw-semibold">Status</label>
+              <select id="status" class="form-control" formControlName="status" aria-label="Select Status">
                 <option value="">Choose Status</option>
                 <option value="Initiated">Initiated</option>
-                <!-- <option value="Complete">Complete</option> -->
               </select>
               <div
-                *ngIf="
-                  itemForm.controls['status'].invalid &&
-                  (itemForm.controls['status'].dirty ||
-                    itemForm.controls['status'].touched)
-                "
-                class="ng-dirty"
+                *ngIf="itemForm.controls['status'].invalid && (itemForm.controls['status'].dirty || itemForm.controls['status'].touched)"
+                class="text-danger mt-1"
               >
-                <span
-                  *ngIf="itemForm.controls['status'].errors"
-                  class="text-danger"
-                  >Please choose status.</span
-                >
+                Please choose status.
               </div>
             </div>
-            <div class="d-grid">
-              <button
-                class="btn btn-outline-dark mt-1"
-                type="submit"
-                [disabled]="itemForm.invalid"
-              >
-                Submit
+
+            <!-- Actions -->
+            <div class="d-flex gap-2 mt-2">
+              <button class="btn btn-gradient" type="submit" [disabled]="itemForm.invalid">
+                <span class="btn-icon">🗓️</span> Submit
               </button>
-            </div>
-            <div class="d-grid">
-              <button
-                class="btn btn-outline-dark mt-1"
-                type="button"
-                (click)="showSatus()"
-              >
-                Show Status
+              <button class="btn btn-ghost" type="button" (click)="showSatus()">
+                <span class="btn-icon">📋</span> {{ isClick ? 'Hide' : 'Show' }} Status
               </button>
-            </div>
-            <div
-              *ngIf="showMessage"
-              class="alert alert-success mt-4"
-              role="alert"
-            >
-              {{ responseMessage }}
             </div>
           </div>
         </div>
@@ -207,47 +150,83 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-between mt-4" *ngIf="isClick">
-  <h2 class="mb-1" class="text-center">Manage Maintenance</h2>
-</div>
-<div class="row mt-3" class="container mt-4 mx-5" *ngIf="isClick">
-  <div class="card">
-    <div class="card-header">Maintenance Information</div>
-  </div>
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Maintenance ID</th>
-            <th>Scheduled Date</th>
-            <th>Deadline</th>
-            <th>Status</th>
-            <th>Equipment</th>
-            <th>Hospital</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let Maintenancef of maintenanceList">
-            <td>{{ Maintenancef.id }}</td>
-            <td>{{ Maintenancef.scheduledDate | date : "dd-MMM-yyyy" }}</td>
-            <td>{{ Maintenancef.completedDate | date : "dd-MMM-yyyy" }}</td>
-            <td id="status" [ngStyle]="getStatusStyle(Maintenancef.status)">
-              <strong>{{ Maintenancef.status }}</strong>
-            </td>
-            <td>
-              <p>Id:{{ Maintenancef.equipment.id }}</p>
-              <p>Name:{{ Maintenancef.equipment.name }}</p>
-              <p>Description:{{ Maintenancef.equipment.description }}</p>
-            </td>
-            <td>
-              <p>Id:{{ Maintenancef.equipment.hospital.id }}</p>
-              <p>Name:{{ Maintenancef.equipment.hospital.name }}</p>
-              <p>Location:{{ Maintenancef.equipment.hospital.location }}</p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<!-- Manage Maintenance (Cards) -->
+<div class="container mt-4" *ngIf="isClick">
+  <div class="card soft-card fade-in">
+    <div class="card-header fw-bold">Maintenance Information</div>
+    <div class="card-body">
+      <div class="sched-grid">
+        <article
+          class="sched-card fade-in-up"
+          *ngFor="let m of maintenanceList; let i = index; trackBy: trackByMaintId"
+          [ngClass]="[
+            cardToneClass(i),
+            isServiced(m.status) ? 'is-serviced' : '',
+            isShaking(m.id) ? 'is-shaking' : ''
+          ]"
+          (click)="shakeCard(m.id)"
+          (touchstart)="shakeCard(m.id)"
+          (animationend)="onAnimationEnd(m.id, $event)"
+          tabindex="0"
+          aria-label="Schedule maintenance card"
+        >
+          <div class="card-accent"></div>
+
+          <!-- Pretty, compact corner ribbon for serviced -->
+          <div class="corner-ribbon" *ngIf="isServiced(m.status)" aria-hidden="true">
+            <span class="ribbon-chip">
+              <span class="ribbon-icon">✔</span>
+              Serviced
+            </span>
+          </div>
+
+          <div class="sched-card-header d-flex align-items-center justify-content-between">
+            <div class="sched-id">#{{ m.id }}</div>
+            <span class="status-chip" [ngClass]="statusClass(m.status)">{{ m.status }}</span>
+          </div>
+
+          <div class="sched-meta">
+            <div class="meta-item">
+              <span class="meta-label">Scheduled</span>
+              <span class="meta-value">{{ m.scheduledDate | date:'dd-MMM-yyyy' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Deadline</span>
+              <span class="meta-value">{{ m.completedDate | date:'dd-MMM-yyyy' }}</span>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-eq"></span> Equipment
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.name }}</span></div>
+              <div class="info-row"><span class="key">Description:</span> <span class="val">{{ m.equipment?.description }}</span></div>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-hosp"></span> Hospital
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.hospital?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.hospital?.name }}</span></div>
+              <div class="info-row"><span class="key">Location:</span> <span class="val">{{ m.equipment?.hospital?.location }}</span></div>
+            </div>
+          </div>
+
+          
+        </article>
+
+        <!-- Empty state -->
+        <div class="empty-state" *ngIf="!maintenanceList || maintenanceList.length === 0">
+          <div class="empty-illustration">🗂️</div>
+          <p class="empty-text">No scheduled maintenance to show.</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
