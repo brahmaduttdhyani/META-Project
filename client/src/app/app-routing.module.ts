@@ -16,6 +16,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { MaintenanceStatusComponent } from './maintenance-status/maintenance-status.component';
 import { OrderStatusComponent } from './order-status/order-status.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { ChatComponent } from './chatbot/chatbot.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'maintenance-status', component: MaintenanceStatusComponent },
   { path: 'requestequipment', component: RequestequipmentComponent },  
   { path: 'maintenance', component: MaintenanceComponent },  
+   { path: 'chat', component: ChatComponent },
   { path: 'orders', component: OrdersComponent },  
   { path: 'order-status', component: OrderStatusComponent },
   // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

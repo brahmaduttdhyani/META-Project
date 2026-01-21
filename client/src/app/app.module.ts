@@ -23,6 +23,7 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { OrdersComponent } from './orders/orders.component';
 import { MaintenanceStatusComponent } from './maintenance-status/maintenance-status.component';
 import { OrderStatusComponent } from './order-status/order-status.component';
+import { ChatComponent } from './chatbot/chatbot.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { OrderStatusComponent } from './order-status/order-status.component';
     LoginComponent,
       RegistrationComponent,
       DashbaordComponent,
+      ChatComponent,
   
       LandingPageComponent,
       FooterComponent,

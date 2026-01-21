@@ -151,6 +151,15 @@ cancelOrder(orderId: number): Observable<any> {
   );
 }
 
+// Chatbot
+sendMessage(message: string): Observable<any> {
+  return this.http.post(
+    this.serverName + '/api/chatbot/chat',
+    { message },
+    this.getRequestOptions()
+  );
+}
+
 cancelMaintenance(maintenanceId: number): Observable<any> {
   return this.http.put(
     `${this.serverName}/api/hospital/maintenance/cancel/${maintenanceId}`,
