@@ -31,7 +31,7 @@ import { ForgotPasswordComponent } from './forgotpassword/forgot-password.compon
     LoginComponent,
       RegistrationComponent,
       DashbaordComponent,
-      ChatComponent,
+      
   
       LandingPageComponent,
       FooterComponent,

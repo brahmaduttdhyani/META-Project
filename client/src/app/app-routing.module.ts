@@ -28,15 +28,13 @@ const routes: Routes = [
   { path: 'schedule-maintenance', component: ScheduleMaintenanceComponent },  
   { path: 'maintenance-status', component: MaintenanceStatusComponent },
   { path: 'requestequipment', component: RequestequipmentComponent },  
-<<<<<<< HEAD
+
   { path: 'maintenance', component: MaintenanceComponent },  
-   { path: 'chat', component: ChatComponent },
-=======
+  
+
   { path: 'order-status', component: OrderStatusComponent },
   // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   // { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
-<<<<<<< HEAD
-=======
 
    // ✅ Technician Maintenance page
   { path: 'maintenance/pending', component: MaintenanceComponent },
@@ -51,7 +49,6 @@ const routes: Routes = [
   { path: 'orders/in-transit', component: OrdersComponent },
   { path: 'orders/delivered', component: OrdersComponent },
   {path:'forgot-password',component:ForgotPasswordComponent},
->>>>>>> origin/Sibii
   { path: '**', redirectTo: '' },
 
 ];
