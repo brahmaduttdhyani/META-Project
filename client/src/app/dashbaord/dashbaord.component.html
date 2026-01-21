@@ -1,7 +1,7 @@
-
+<!-- 
 <section class="dashboard">
 
-  <!-- HERO -->
+  
   <div class="dashboard-hero">
     <h1>Welcome {{ username }}</h1>
     <p *ngIf="roleType === 'HOSPITAL'">Admin Dashboard</p>
@@ -9,7 +9,7 @@
     <p *ngIf="roleType === 'TECHNICIAN'">Technician Dashboard</p>
   </div>
 
-  <!-- HOSPITAL -->
+  
   <div class="dashboard-grid" *ngIf="roleType === 'HOSPITAL'">
 
     <div class="feature-card blue">
@@ -51,7 +51,7 @@
 
   </div>
 
-  <!-- SUPPLIER -->
+  
   <div class="dashboard-grid" *ngIf="roleType === 'SUPPLIER'">
     <div class="feature-card purple">
       <img src="assets/images/medical-login3.png" />
@@ -61,7 +61,7 @@
     </div>
   </div>
 
-  <!-- TECHNICIA N -->
+  
   <div class="dashboard-grid" *ngIf="roleType === 'TECHNICIAN'">
     <div class="feature-card red">
       <img src="assets/images/medical-login.png" />
@@ -70,5 +70,205 @@
       <a routerLink="/maintenance">View →</a>
     </div>
   </div>
+
+</section> -->
+
+
+
+<section class="dashboard-layout">
+
+  <!-- ================= HERO ================= -->
+  <div class="dashboard-main">
+
+    <!-- LEFT -->
+    <div class="dashboard-left">
+      <h1>Hello {{ username }} 👋</h1>
+
+      <p *ngIf="roleType === 'HOSPITAL'">
+        Manage hospitals, equipment, and maintenance operations efficiently
+        from one centralized dashboard.
+      </p>
+
+      <p *ngIf="roleType === 'SUPPLIER'">
+        Track equipment orders, delivery status, and hospital requests.
+      </p>
+
+      <p *ngIf="roleType === 'TECHNICIAN'">
+        View assigned maintenance tasks and update service progress.
+      </p>
+
+      <!-- ================= MINI CARDS ================= -->
+
+      <!-- HOSPITAL -->
+      <div class="mini-cards" *ngIf="roleType === 'HOSPITAL'">
+        <div class="mini-card">
+          <img src="assets/images/dashboard1.png" />
+          <h4>Create Hospital</h4>
+          <span>Register & manage hospitals</span>
+          <a routerLink="/createhospital">Open →</a>
+        </div>
+
+        <div class="mini-card">
+          <img src="assets/images/medical-login.png" />
+          <h4>Request Equipment</h4>
+          <span>Order medical equipment</span>
+          <a routerLink="/requestequipment">Request →</a>
+        </div>
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard2.png" />
+          <h4>Schedule Maintenance</h4>
+          <span>Assign maintenance tasks</span>
+          <a routerLink="/schedule-maintenance">Schedule →</a>
+        </div>
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard1.png" />
+          <h4>Maintenance Status</h4>
+          <span>View maintenance updates</span>
+          <a routerLink="/maintenance-status">View →</a>
+        </div>
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard.png" />
+          <h4>Order Status</h4>
+          <span>View order updates</span>
+          <a routerLink="/order-status">View →</a>
+        </div>
+      </div>
+
+      <!-- TECHNICIAN -->
+      <div class="mini-cards" *ngIf="roleType === 'TECHNICIAN'">
+
+        <!-- Pending -->
+        <div class="mini-card">
+          <img src="assets/images/dashboard2.png" />
+          <h4>Pending Requests</h4>
+          <span>Requests waiting for accept</span>
+          <a routerLink="/maintenance/pending">Open →</a>
+        </div>
+
+        <!-- In Progress -->
+        <div class="mini-card">
+          <img src="assets/images/dashboard1.png" />
+          <h4>In Progress</h4>
+          <span>Accepted & currently servicing</span>
+          <a routerLink="/maintenance/in-progress">Open →</a>
+        </div>
+
+        <!-- Serviced -->
+        <div class="mini-card">
+          <img src="assets/images/dashboard.png" />
+          <h4>Serviced History</h4>
+          <span>Completed maintenance records</span>
+          <a routerLink="/maintenance/serviced">Open →</a>
+        </div>
+
+      </div>
+
+      <!-- SUPPLIER -->
+      <!-- <div class="mini-cards" *ngIf="roleType === 'SUPPLIER'">
+        <div class="mini-card">
+          <img src="assets/images/dashboard.png" />
+          <h4>Order Requests</h4>
+          <span>Manage hospital orders</span>
+          <a routerLink="/orders">Open →</a>
+        </div>
+      </div> -->
+
+      <!-- SUPPLIER -->
+      <div class="mini-cards" *ngIf="roleType === 'SUPPLIER'">
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard.png" />
+          <h4>Pending Orders</h4>
+          <span>Orders waiting for acceptance</span>
+          <a routerLink="/orders/pending">Open →</a>
+        </div>
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard2.png" />
+          <h4>In Transit</h4>
+          <span>Orders you accepted & shipping</span>
+          <a routerLink="/orders/in-transit">Open →</a>
+        </div>
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard1.png" />
+          <h4>Delivered</h4>
+          <span>Completed delivery orders</span>
+          <a routerLink="/orders/delivered">Open →</a>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="dashboard-right">
+      <img src="assets/images/Rightdashboard.png" />
+    </div>
+
+  </div>
+
+  <!-- ================= INFO SECTION (HOSPITAL ONLY) ================= -->
+  <section class="info-sections" *ngIf="roleType === 'HOSPITAL'">
+
+    <div class="info-block image-left">
+      <div class="info-image">
+        <img src="assets/images/Hospital2.png" />
+      </div>
+      <div class="info-text">
+        <h2>Create Hospital</h2>
+        <p>
+          Register new hospitals and manage all their details from a single
+          centralized platform with full administrative control.
+        </p>
+        <ul>
+          <li>Centralized hospital registry</li>
+          <li>Easy profile management</li>
+          <li>Secure administrative access</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <div class="info-text">
+        <h2>Request Equipment</h2>
+        <p>
+          Order medical equipment effortlessly and track requests in real time
+          with complete transparency.
+        </p>
+        <ul>
+          <li>Real-time order tracking</li>
+          <li>Inventory visibility</li>
+          <li>Fast processing</li>
+        </ul>
+      </div>
+      <div class="info-image">
+        <img src="assets/images/Mri2.png" />
+      </div>
+    </div>
+
+    <div class="info-block image-left">
+      <div class="info-image">
+        <img src="assets/images/Xray2.png" />
+      </div>
+      <div class="info-text">
+        <h2>Schedule Maintenance</h2>
+        <p>
+          Assign maintenance tasks to technicians and reduce downtime through
+          proactive scheduling.
+        </p>
+        <ul>
+          <li>Task assignment</li>
+          <li>Preventive maintenance</li>
+          <li>Service history logs</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
 
 </section>

@@ -114,7 +114,7 @@
           </div>
 
           <!-- Accepted By -->
-          <div class="info-block" *ngIf="val.assignedSupplierName">
+          <!-- <div class="info-block" *ngIf="val.assignedSupplierName">
             <div class="info-title">
               <span class="dot dot-acc"></span> Accepted By
             </div>
@@ -124,7 +124,20 @@
                 <span class="val">{{ val.assignedSupplierName }}</span>
               </div>
             </div>
-          </div>
+          </div> -->
+          <!-- Requested By -->
+<div class="info-block">
+  <div class="info-title">
+    <span class="dot dot-acc"></span> Requested By
+  </div>
+  <div class="info-content">
+    <div class="info-row">
+      <span class="key">Admin:</span>
+      <span class="val">{{ val.requestedBy || '-' }}</span>
+    </div>
+  </div>
+</div>
+
 
           <!-- Actions -->
           <div class="order-actions">

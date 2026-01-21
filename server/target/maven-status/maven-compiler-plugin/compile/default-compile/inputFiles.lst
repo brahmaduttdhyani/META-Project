@@ -6,7 +6,10 @@
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/entitiy/Maintenance.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/config/Configurations.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/service/MaintenanceService.java
+/home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/dto/OtpRequest.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/jwt/JwtRequestFilter.java
+/home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/controller/ForgotPasswordController.java
+/home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/dto/EmailRequest.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/config/SecurityConfig.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/dto/LoginRequest.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/controller/RegisterAndLoginController.java
@@ -17,6 +20,7 @@
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/repository/UserRepository.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/service/EmailService.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/repository/OrderRepository.java
+/home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/dto/ResetPasswordRequest.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/service/HospitalService.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/jwt/JwtUtil.java
 /home/coder/app/server/src/main/java/com/edutech/medicalequipmentandtrackingsystem/controller/HospitalController.java

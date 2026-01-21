@@ -84,6 +84,7 @@ export class ScheduleMaintenanceComponent implements OnInit {
     const re = /^\d{4}-\d{2}-\d{2}$/;
     return re.test(val) ? null : { invalidDate: true };
   }
+  
 
   // must be >= today (ignore time)
   futureDate(control: AbstractControl): ValidationErrors | null {
@@ -186,6 +187,32 @@ export class ScheduleMaintenanceComponent implements OnInit {
     this.showMessage = false;
     this.isClick = !this.isClick;
   }
+
+   
+  onCancelMaintenance(id: number) {
+  this.httpService.cancelMaintenance(id).subscribe(
+    () => {
+      this.showMessage = true;
+      this.responseMessage = 'Maintenance cancelled successfully';
+      this.getMaintenance(); // Refresh list
+    },
+    (error) => {
+      this.showError = true;
+      this.errorMessage = 'Failed to cancel maintenance. Please try again later.';
+      console.error('cancelMaintenance error:', error);
+    }
+  );
+}
+isCancelable(status: string | null | undefined): boolean {
+  const s = (status || '').toLowerCase();
+
+  // hide cancel button once cancelled / in progress / serviced
+  if (s.includes('cancel') || s.includes('progress') || s.includes('serviced')) return false;
+
+  return true; // Initiated etc.
+}
+
+
 
   /* -------------------- Sorting -------------------- */
 

@@ -124,6 +124,84 @@ export class RequestequipmentComponent implements OnInit {
     );
   }
 
+  // ADD: helper to decide visibility — cancels allowed until "in transit"
+isCancelable(status: string | null | undefined): boolean {
+  const key = (status || '').toLowerCase();
+  // block when in transit or delivered or already cancelled
+  if (key.includes('transit') || key.includes('deliver') || key.includes('cancel')) {
+    return false;
+  }
+  return true;
+}
+ 
+// ADD: cancel handler
+// onCancel(order: Order) {
+//   if (!order?.id) { return; }
+ 
+//   // Optional guard for UX
+//   const ok = confirm(`Cancel order #${order.id}? This cannot be undone.`);
+//   if (!ok) { return; }
+ 
+//   this.showError = false;
+//   this.showMessage = false;
+ 
+//   this.httpService.cancelOrder(order.id).subscribe(
+//     () => {
+//       this.showMessage = true;
+//       this.responseMessage = `Order #${order.id} cancelled successfully.`;
+//       // Refresh list and collapse toggles for accuracy
+//       this.getOrders();
+//     },
+//     (error) => {
+//       this.showError = true;
+//       // Show server message if any, else fallback
+//       this.errorMessage = error?.error?.message
+//         || `Unable to cancel order #${order.id}. It may already be in transit.`;
+//       console.error('cancelOrder error:', error);
+//     }
+//   );
+// }
+
+onCancel(order: Order) {
+  if (!order?.id) return;
+
+  const ok = confirm(`Cancel order #${order.id}? This cannot be undone.`);
+  if (!ok) return;
+
+  this.showError = false;
+  this.showMessage = false;
+
+  this.httpService.cancelOrder(order.id).subscribe(
+    () => {
+      // ✅ 1) Immediately update UI so Cancel button disappears
+      const idx = this.orderList.findIndex(o => o.id === order.id);
+      if (idx !== -1) {
+        this.orderList[idx] = {
+          ...this.orderList[idx],
+          status: 'Cancelled',
+        };
+      }
+
+      // ✅ 2) Optional: collapse the card after cancelling
+      this.expanded.delete(order.id);
+
+      this.showMessage = true;
+      this.responseMessage = `Order #${order.id} cancelled successfully.`;
+
+      // ✅ 3) Refresh from server (keeps everything accurate)
+      this.getOrders();
+    },
+    (error) => {
+      this.showError = true;
+      this.errorMessage =
+        error?.error?.message ||
+        `Unable to cancel order #${order.id}. It may already be in transit.`;
+      console.error('cancelOrder error:', error);
+    }
+  );
+}
+
+
   getOrders() {
     this.orderList = [];
     this.httpService.getorderEquipment().subscribe(
@@ -247,4 +325,5 @@ export class RequestequipmentComponent implements OnInit {
     // Hook this to your tracking flow (route or modal)
     console.log('Track clicked for order:', order);
   }
+  
 }

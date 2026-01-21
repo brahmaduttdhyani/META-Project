@@ -1,38 +1,4 @@
 
-// /* ...keep all your existing styles from earlier... */
-
-// /* Map */
-// .map-container {
-//   margin-top: 10px;
-//   width: 100%;
-//   height: 220px;
-//   border-radius: 12px;
-//   overflow: hidden;
-//   border: 1px solid rgba(20, 184, 166, 0.18);
-//   box-shadow: 0 8px 18px rgba(20, 184, 166, 0.08);
-// }
-// .map-container iframe {
-//   width: 100%;
-//   height: 100%;
-//   border: 0;
-// }
-
-// /* Map button (teal/blue blend) */
-// .btn-map {
-//   color: #083344;
-//   background: linear-gradient(30deg, #ccfbf1, #dbeafe);
-//   border: 1px solid rgba(20, 184, 166, 0.25);
-//   box-shadow: 0 6px 14px rgba(20, 184, 166, 0.18);
-// }
-// .btn-map:hover {
-//   filter: brightness(1.03);
-//   transform: translateY(-1px);
-// }
-
-
-// ---------------------------
-
-
 /* Theme tokens */
 :root {
   --teal-800: #0c5f59;
@@ -97,8 +63,8 @@
   background: linear-gradient(90deg, #e6fffb, #f4fffd);
 }
 
-/* Grid */
-.order-grid {
+/* Grid (Maintenance) */
+.maint-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
@@ -107,8 +73,8 @@
   @media (min-width: 1200px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* Card */
-.order-card {
+/* Card (Maintenance) */
+.maint-card {
   position: relative;
   background: var(--surface);
   border-radius: 16px;
@@ -119,8 +85,8 @@
   outline: none;
   overflow: hidden; /* keep ribbon inside */
 }
-.order-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(20, 184, 166, 0.18); }
-.order-card:focus-visible { border-color: var(--teal-500); box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25); }
+.maint-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(20, 184, 166, 0.18); }
+.maint-card:focus-visible { border-color: var(--teal-500); box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25); }
 
 /* Shake on tap/click */
 .is-shaking {
@@ -151,8 +117,8 @@
 }
 
 /* Header */
-.order-card-header { margin-top: 0.25rem; margin-bottom: 0.5rem; }
-.order-id {
+.maint-card-header { margin-top: 0.25rem; margin-bottom: 0.5rem; }
+.maint-id {
   display: inline-block; font-size: 0.9rem; color: var(--teal-700);
   background: #e6fffb; padding: 0.25rem 0.6rem; border-radius: 999px; font-weight: 700;
 }
@@ -166,7 +132,7 @@
 .status-initiated { color: var(--blue-900); background: #eff6ff; border-color: #bfdbfe; }
 
 /* Meta strip */
-.order-meta {
+.maint-meta {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 0.25rem;
 }
 .meta-item { background: #f8fffe; border: 1px dashed rgba(20, 184, 166, 0.25); border-radius: 12px; padding: 0.5rem 0.75rem; }
@@ -183,12 +149,13 @@
 .dot.dot-eq  { background: var(--teal-500); }
 .dot.dot-hosp { background: var(--blue-500); }
 .dot.dot-acc { background: #8b5cf6; }
+.dot.dot-tech { background: #f59e0b; } /* Technician dot */
 .info-content .info-row { display: flex; gap: 6px; font-size: 0.95rem; }
 .info-content .key { min-width: 100px; color: var(--ink-600); }
 .info-content .val { color: var(--ink-800); font-weight: 600; }
 
 /* Actions */
-.order-actions { margin-top: 0.6rem; display: flex; gap: 0.5rem; justify-content: flex-end; flex-wrap: wrap; }
+.maint-actions { margin-top: 0.6rem; display: flex; gap: 0.5rem; justify-content: flex-end; flex-wrap: wrap; }
 .completed-pill {
   padding: 6px 12px; border-radius: 999px; font-weight: 800; color: #065f46;
   background: #ecfdf5; border: 1px solid #a7f3d0;
@@ -280,6 +247,10 @@
   box-shadow: 0 6px 14px rgba(20, 184, 166, 0.18);
 }
 .btn-map:hover { filter: brightness(1.03); transform: translateY(-1px); }
+
+/* Serviced calm state (use same look as Delivered calm state in orders) */
+.is-serviced { filter: saturate(0.95); opacity: 0.98; }
+.is-serviced:hover { transform: none; box-shadow: 0 8px 22px rgba(59, 130, 246, 0.12); }
 
 /* Simple fades */
 .fade-in { animation: fadeIn 0.5s ease both; }

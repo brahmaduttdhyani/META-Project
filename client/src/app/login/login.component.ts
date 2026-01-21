@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   formModel: any = {};
   showError: boolean = false;
   errorMessage: any;
+  showSuccess:boolean=false;
+  private successTimer: any;
   constructor(
     public router: Router,
     public httpService: HttpService,
@@ -44,11 +46,11 @@ export class LoginComponent implements OnInit {
             const payload = JSON.parse(atob(data.token.split('.')[1]));
             localStorage.setItem('userId', String(payload.userId));
 
-            this.router.navigateByUrl('/dashboard');
+            this.showSuccess=true;
 
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
+            this.successTimer=setTimeout(() => {
+              this.continueAfterSuccess();
+            }, 1200);
           }
            else {
             this.showError = true;
@@ -67,10 +69,33 @@ export class LoginComponent implements OnInit {
       this.itemForm.markAllAsTouched();
     }
   }
+  
+// ✅ ADD THIS METHOD
+continueAfterSuccess(): void {
+  // Clean up any timer if the user clicks early
+  if (this.successTimer) {
+    clearTimeout(this.successTimer);
+    this.successTimer = null;
+  }
+
+  this.showSuccess = false;
+
+  // Preserve your existing navigation + reload behavior
+  this.router.navigateByUrl('/dashboard');
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
+}
+
 //to route to the registration
   registration() {
     this.router.navigateByUrl('/registration');
   }
+
+  forgotPassword():void{
+    this.router.navigateByUrl('/forgot-password');
+  }
+
 }
 
 

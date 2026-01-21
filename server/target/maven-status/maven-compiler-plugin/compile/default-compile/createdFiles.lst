@@ -12,7 +12,6 @@ com/edutech/medicalequipmentandtrackingsystem/repository/OrderRepository.class
 com/edutech/medicalequipmentandtrackingsystem/controller/OtpController.class
 com/edutech/medicalequipmentandtrackingsystem/controller/HospitalController.class
 com/edutech/medicalequipmentandtrackingsystem/entitiy/Hospital.class
-application.properties
 com/edutech/medicalequipmentandtrackingsystem/controller/RegisterAndLoginController.class
 com/edutech/medicalequipmentandtrackingsystem/jwt/JwtUtil.class
 com/edutech/medicalequipmentandtrackingsystem/service/OrderService.class

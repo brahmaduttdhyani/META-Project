@@ -14,13 +14,21 @@ public class HospitalService {
 
     @Autowired
     private HospitalRepository hospitalRepository;
-    public Hospital createHospital(Hospital hospital) {
-        // create hospital
-        return hospitalRepository.save(hospital);
-    }
+    
  
     public List<Hospital> getAllHospitals() throws SQLException{
         // return  list of hospitals
         return hospitalRepository.findAll();
     }
+
+    public List<Hospital> getHospitalsByCreator(String username) {
+    return hospitalRepository.findByCreatedBy(username);
+}
+
+
+public Hospital createHospital(Hospital hospital, String username) {
+    hospital.setCreatedBy(username);
+    return hospitalRepository.save(hospital);
+}
+
 }

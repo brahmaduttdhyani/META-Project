@@ -15,6 +15,7 @@ public interface MaintenanceRepository extends JpaRepository<Maintenance,Long> {
     List<Hospital> findByEquipmentId(Long equipmentId); 
 
     // For only the technician to see
+    List<Maintenance> findByEquipment_Hospital_CreatedBy(String createdBy);
     List<Maintenance> findByRequestStatusIgnoreCase(String requestStatus);
     List<Maintenance> findByAssignedTechnicianId(Long technicianId);
 }
