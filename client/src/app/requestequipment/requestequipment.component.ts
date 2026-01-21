@@ -21,6 +21,7 @@ interface Equipment {
   name: string;
   description?: string;
   hospital?: Hospital;
+  //
 }
 interface Order {
   id: number;
