@@ -1,4 +1,6 @@
 /target/
 *.class
 
-/resources/application.properties
+server/src/main/resources/application.properties
+
+application.properties
