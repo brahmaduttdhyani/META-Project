@@ -87,4 +87,21 @@ export class AppComponent {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+
+  // Check if we're on the chat page (to hide the floating button)
+
+  isChatPage(): boolean {
+
+    return this.currentUrl === '/chat';
+
+  }
+ 
+  //  Navigate to chat page
+
+  openChat(): void {
+
+    this.router.navigate(['/chat']);
+
+  }
+ 
 }

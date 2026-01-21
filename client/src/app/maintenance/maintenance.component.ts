@@ -10,13 +10,13 @@ import {
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // 👈 add
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 interface Hospital {
   id: number;
   name: string;
-  location?: string | null;   // free-form address (e.g., "Apollo, Chennai")
-  lat?: number | null;        // optional precise coordinates
+  location?: string | null;
+  lat?: number | null;
   lng?: number | null;
 }
 interface Equipment {
@@ -24,17 +24,19 @@ interface Equipment {
   name: string;
   description?: string | null;
   hospital?: Hospital | null;
+  requestedBy?:string | null;
 }
 interface Maintenance {
   id: number;
   scheduledDate: string | Date;
   completedDate: string | Date;
-  status: string;                        // 'PENDING' | 'In Progress' | 'Serviced' ...
-  requestStatus?: string | null;         // 'PENDING' | 'ACCEPTED' | 'REJECTED' ...
+  status: string;                        // Initiated | In Progress | Serviced ...
+  requestStatus?: string | null;         // PENDING | ACCEPTED ...
   description?: string | null;
   equipment?: Equipment | null;
   assignedTechnicianId?: number | null;
   assignedTechnicianName?: string | null;
+  requestedBy?: string | null;
 }
 
 @Component({
@@ -61,15 +63,18 @@ export class MaintenanceComponent implements OnInit {
 
   // Shake + Map state
   private shaking = new Set<number>();
-  private openMaps = new Set<number>();                       // 👈 track which cards show map
-  private mapCache = new Map<number, SafeResourceUrl>();      // 👈 memoize sanitizer results
+  private openMaps = new Set<number>();
+  private mapCache = new Map<number, SafeResourceUrl>();
+
+  // page title (optional but nice)
+  pageTitle = 'Manage Maintenance';
 
   constructor(
     public router: Router,
     public httpService: HttpService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private sanitizer: DomSanitizer            // 👈 inject
+    private sanitizer: DomSanitizer
   ) {
     // Guard: only hospital/technician
     if (authService.getRole != 'HOSPITAL' && authService.getRole != 'TECHNICIAN') {
@@ -89,6 +94,7 @@ export class MaintenanceComponent implements OnInit {
     const rawId = localStorage.getItem('userId');
     this.currentTechId = rawId ? parseInt(rawId, 10) : 0;
 
+    this.setTitleByRoute();
     this.loadRejected();
     this.getMaintenance();
   }
@@ -103,6 +109,43 @@ export class MaintenanceComponent implements OnInit {
     return null;
   }
 
+  /* -------------------- Bucket helpers (PENDING / IN-PROGRESS / SERVICED) -------------------- */
+
+  private normalize(s: any): string {
+    return String(s || '').trim().toUpperCase();
+  }
+
+  // Pending page: waiting for accept
+  isPendingBucket(m: Maintenance): boolean {
+    return this.normalize(m.requestStatus || 'PENDING') === 'PENDING' && this.normalize(m.status) !== 'SERVICED';
+  }
+
+  // In-progress page: accepted by ME and not serviced yet (includes "Initiated" also)
+  isInProgressBucket(m: Maintenance): boolean {
+    return (
+      this.normalize(m.requestStatus) === 'ACCEPTED' &&
+      Number(m.assignedTechnicianId) === this.currentTechId &&
+      this.normalize(m.status) !== 'SERVICED'
+    );
+  }
+
+  // Serviced page: accepted by ME and serviced
+  isServicedBucket(m: Maintenance): boolean {
+    return (
+      this.normalize(m.requestStatus) === 'ACCEPTED' &&
+      Number(m.assignedTechnicianId) === this.currentTechId &&
+      this.normalize(m.status) === 'SERVICED'
+    );
+  }
+
+  private setTitleByRoute() {
+    const url = this.router.url;
+    if (url.includes('/maintenance/pending')) this.pageTitle = 'Pending Requests';
+    else if (url.includes('/maintenance/in-progress')) this.pageTitle = 'In Progress';
+    else if (url.includes('/maintenance/serviced')) this.pageTitle = 'Serviced History';
+    else this.pageTitle = 'Manage Maintenance';
+  }
+
   /* -------------------- Data -------------------- */
 
   getMaintenance() {
@@ -110,7 +153,21 @@ export class MaintenanceComponent implements OnInit {
     this.httpService.getMaintenance().subscribe(
       (data: Maintenance[]) => {
         const list = (data ?? []).slice();
-        this.maintenanceList = this.sortMaintenance(list); // serviced last
+        const url = this.router.url;
+
+        let filtered: Maintenance[] = [];
+
+        if (url.includes('/maintenance/pending')) {
+          filtered = list.filter((m) => this.isPendingBucket(m));
+        } else if (url.includes('/maintenance/in-progress')) {
+          filtered = list.filter((m) => this.isInProgressBucket(m));
+        } else if (url.includes('/maintenance/serviced')) {
+          filtered = list.filter((m) => this.isServicedBucket(m));
+        } else {
+          filtered = list;
+        }
+
+        this.maintenanceList = this.sortMaintenance(filtered);
       },
       (error) => {
         this.showError = true;
@@ -124,9 +181,9 @@ export class MaintenanceComponent implements OnInit {
   private sortMaintenance(list: Maintenance[]): Maintenance[] {
     const rank = (s = '') => {
       const v = s.toLowerCase();
-      if (v.includes('serviced') || v.includes('completed')) return 2; // last
-      if (v.includes('progress')) return 1; // middle
-      return 0; // first (initiated/pending)
+      if (v.includes('serviced') || v.includes('completed')) return 2;
+      if (v.includes('progress')) return 1;
+      return 0;
     };
 
     return list.sort((a, b) => {
@@ -177,11 +234,12 @@ export class MaintenanceComponent implements OnInit {
     }
   }
 
+  // Edit only if accepted by ME and not serviced
   canEdit(m: Maintenance): boolean {
     return (
-      (m.requestStatus?.toUpperCase() === 'ACCEPTED') &&
-      (Number(m.assignedTechnicianId) === this.currentTechId) &&
-      (m.status !== 'Serviced')
+      this.normalize(m.requestStatus) === 'ACCEPTED' &&
+      Number(m.assignedTechnicianId) === this.currentTechId &&
+      this.normalize(m.status) !== 'SERVICED'
     );
   }
 
@@ -222,16 +280,14 @@ export class MaintenanceComponent implements OnInit {
       );
   }
 
-  /* -------------------- Map integration (DomSanitizer) -------------------- */
+  /* -------------------- Map integration -------------------- */
 
-  /** Has minimum info to build a map (coords or a location string) */
   hasHospitalInfo(m: Maintenance): boolean {
     const hosp = m.equipment?.hospital;
     if (!hosp) return false;
     return (typeof hosp.lat === 'number' && typeof hosp.lng === 'number') || !!hosp.location;
   }
 
-  /** Toggle map display per card */
   toggleMap(id: number) {
     if (this.openMaps.has(id)) this.openMaps.delete(id);
     else this.openMaps.add(id);
@@ -241,11 +297,6 @@ export class MaintenanceComponent implements OnInit {
     return this.openMaps.has(id);
   }
 
-  /**
-   * Build a SafeResourceUrl for <iframe [src]> using DomSanitizer.
-   * - Uses lat/lng if present; otherwise falls back to a search query by hospital name/location.
-   * - Uses Google Maps embed (no API key required for simple embeds).
-   */
   getMapUrl(m: Maintenance): SafeResourceUrl {
     const cache = this.mapCache.get(m.id);
     if (cache) return cache;
@@ -254,10 +305,8 @@ export class MaintenanceComponent implements OnInit {
     let url = 'about:blank';
 
     if (hosp?.lat != null && hosp?.lng != null) {
-      // precise coordinates
       url = `https://www.google.com/maps?q=${hosp.lat},${hosp.lng}&z=14&output=embed`;
     } else {
-      // build a search query with the best available info
       const parts: string[] = [];
       if (hosp?.name) parts.push(hosp.name);
       if (hosp?.location) parts.push(hosp.location);
@@ -273,7 +322,6 @@ export class MaintenanceComponent implements OnInit {
   /* -------------------- Shake animation helpers -------------------- */
 
   shakeCard(id: number) {
-    // Restart animation on rapid taps
     if (this.shaking.has(id)) {
       this.shaking.delete(id);
       setTimeout(() => this.shaking.add(id), 0);
@@ -309,7 +357,6 @@ export class MaintenanceComponent implements OnInit {
     return 'status-initiated';
   }
 
-  // (Legacy helper if still needed somewhere)
   getStatusStyle(status: string) {
     if (status === 'Serviced') {
       return { color: 'green', 'font-weight': 'bold', 'font-size': '20px' };
@@ -321,7 +368,8 @@ export class MaintenanceComponent implements OnInit {
   }
 
   cardToneClass(index: number): string {
-    const tone = (index % 3) + 1; // 1..3
+    const tone = (index % 3) + 1;
     return `tone-${tone}`;
   }
+
 }

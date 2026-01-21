@@ -118,14 +118,43 @@ public class OrderService {
 }
 
 
+// public List<Order> getOrdersForSupplier(String username) {
+//     User supplier = userRepository.findByUsername(username)
+//             .orElseThrow(() -> new RuntimeException("User not found"));
+
+//     List<Order> pending = orderRepository.findByRequestStatusIgnoreCase("PENDING");
+//     List<Order> mine = orderRepository.findByAssignedSupplierId(supplier.getId());
+
+//     pending.addAll(mine);
+//     return pending;
+// }
+
+
 public List<Order> getOrdersForSupplier(String username) {
     User supplier = userRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
+    // 1) Pending orders (but not cancelled)
     List<Order> pending = orderRepository.findByRequestStatusIgnoreCase("PENDING");
+    pending.removeIf(o -> o.getStatus() != null && o.getStatus().equalsIgnoreCase("Cancelled"));
+
+    // 2) Orders accepted by THIS supplier (but not cancelled)
     List<Order> mine = orderRepository.findByAssignedSupplierId(supplier.getId());
+    mine.removeIf(o -> o.getStatus() != null && o.getStatus().equalsIgnoreCase("Cancelled"));
 
     pending.addAll(mine);
+
+    for (Order o : pending) {
+        String requestedBy = null;
+
+        if (o.getEquipment() != null
+                && o.getEquipment().getHospital() != null) {
+            requestedBy = o.getEquipment().getHospital().getCreatedBy();
+        }
+
+        o.setRequestedBy(requestedBy);
+    }
+
     return pending;
 }
 
@@ -142,6 +171,10 @@ public Order cancelOrder(Long orderId) {
     }
  
     existing.setStatus("Cancelled");
+
+    existing.setRequestStatus("PENDING");
+    existing.setAssignedSupplierId(null);
+    existing.setAssignedSupplierName(null);
     // requestStatus can remain as is; business rule can adjust if needed
     return orderRepository.save(existing);
 }

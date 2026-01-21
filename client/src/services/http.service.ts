@@ -188,4 +188,54 @@ cancelMaintenance(maintenanceId: number): Observable<any> {
     );
   }
 
+  sendOtp(data: { email: string }) {
+
+    return this.http.post(
+
+      this.serverName+'/api/password/send-otp',
+
+      data,{ responseType: 'text' }
+
+    );
+
+  }
+
+  verifyOtp(data: { email: string; otp: string }) {
+
+    return this.http.post(
+
+      this.serverName+'/api/password/verify-otp',
+
+      data,
+
+      { responseType: 'text' }
+
+    );
+
+  }
+ 
+  sendMessage(message: string): Observable<any> {
+  return this.http.post(
+    this.serverName + '/api/chatbot/chat',
+    { message },
+    this.getRequestOptions()
+  );
+}
+
+  resetPassword(data: { email: string; newPassword: string }) {
+
+    return this.http.post(
+
+      this.serverName+'/api/password/reset-password',
+
+      data,
+
+      { responseType: 'text' }
+
+    );
+
+  }
+
+ 
+
 }

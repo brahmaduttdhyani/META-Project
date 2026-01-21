@@ -18,6 +18,10 @@ public class Maintenance {
     @JoinColumn(name = "equipment_id") 
     private Equipment equipment;
 
+    @Transient
+    private String requestedBy;
+    
+
 
     // For showing the assigned TECHNICIAN
     private String assignedTechnicianName;
@@ -76,6 +80,13 @@ public class Maintenance {
     }
     public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
+    }
+    
+    public String getRequestedBy() {
+        return requestedBy;
+    }
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
     }  
 
     

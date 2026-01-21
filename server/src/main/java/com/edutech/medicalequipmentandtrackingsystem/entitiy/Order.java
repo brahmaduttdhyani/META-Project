@@ -17,6 +17,19 @@ public class Order {
     @JoinColumn(name = "equipment_id") 
     private Equipment equipment;
 
+
+    @Transient
+    private String requestedBy;
+
+    public String getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+    
+
     // For accepting and rejecting Order
     private String requestStatus; // PENDING, ACCEPTED
     private Long assignedSupplierId;
@@ -70,7 +83,8 @@ public class Order {
     }
     public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
-    } 
+    }
+    
 
     
 }

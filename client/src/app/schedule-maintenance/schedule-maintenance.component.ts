@@ -203,6 +203,15 @@ export class ScheduleMaintenanceComponent implements OnInit {
     }
   );
 }
+isCancelable(status: string | null | undefined): boolean {
+  const s = (status || '').toLowerCase();
+
+  // hide cancel button once cancelled / in progress / serviced
+  if (s.includes('cancel') || s.includes('progress') || s.includes('serviced')) return false;
+
+  return true; // Initiated etc.
+}
+
 
 
   /* -------------------- Sorting -------------------- */

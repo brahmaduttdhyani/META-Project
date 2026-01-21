@@ -218,12 +218,23 @@
             </div>
           </div>
     <!-- Cancel Button at Bottom -->
-<div class="sched-actions-bottom">
+<!-- <div class="sched-actions-bottom">
   <button
     class="btn btn-ghost"
     type="button"
     *ngIf="m.status !== 'In Progress'"
     (click)="onCancelMaintenance(m.id)"
+  >
+    ❌ Cancel
+  </button>
+</div> -->
+
+<div class="sched-actions-bottom">
+  <button
+    class="btn btn-ghost"
+    type="button"
+    *ngIf="isCancelable(m.status)"
+    (click)="onCancelMaintenance(m.id); $event.stopPropagation()"
   >
     ❌ Cancel
   </button>
