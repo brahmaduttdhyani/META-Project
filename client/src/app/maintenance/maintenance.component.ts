@@ -18,6 +18,7 @@ interface Hospital {
   location?: string | null;
   lat?: number | null;
   lng?: number | null;
+  //
 }
 interface Equipment {
   id: number;
