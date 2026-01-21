@@ -1,4 +1,4 @@
 
 # Build outputs
-**/target/
+**/target/*
 *.class
