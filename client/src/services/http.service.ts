@@ -151,15 +151,6 @@ cancelOrder(orderId: number): Observable<any> {
   );
 }
 
-// Chatbot
-sendMessage(message: string): Observable<any> {
-  return this.http.post(
-    this.serverName + '/api/chatbot/chat',
-    { message },
-    this.getRequestOptions()
-  );
-}
-
 cancelMaintenance(maintenanceId: number): Observable<any> {
   return this.http.put(
     `${this.serverName}/api/hospital/maintenance/cancel/${maintenanceId}`,
@@ -194,6 +185,29 @@ cancelMaintenance(maintenanceId: number): Observable<any> {
       this.serverName + '/api/user/register',
       details,
       this.getRequestOptions()
+    );
+  }
+
+  sendOtp(data: { email: string }) {
+    return this.http.post(
+      this.serverName+'/api/password/send-otp',
+      data,{ responseType: 'text' }
+    );
+  }
+  
+  verifyOtp(data: { email: string; otp: string }) {
+    return this.http.post(
+      this.serverName+'/api/password/verify-otp',
+      data,
+      { responseType: 'text' }
+    );
+  }
+  
+  resetPassword(data: { email: string; newPassword: string }) {
+    return this.http.post(
+      this.serverName+'/api/password/reset-password',
+      data,
+      { responseType: 'text' }
     );
   }
 

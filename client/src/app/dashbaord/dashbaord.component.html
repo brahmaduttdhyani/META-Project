@@ -139,23 +139,65 @@
 
       <!-- TECHNICIAN -->
       <div class="mini-cards" *ngIf="roleType === 'TECHNICIAN'">
+
+        <!-- Pending -->
         <div class="mini-card">
           <img src="assets/images/dashboard2.png" />
-          <h4>My Maintenance Tasks</h4>
-          <span>View & update assigned tasks</span>
-          <a routerLink="/maintenance">Open →</a>
+          <h4>Pending Requests</h4>
+          <span>Requests waiting for accept</span>
+          <a routerLink="/maintenance/pending">Open →</a>
         </div>
+
+        <!-- In Progress -->
+        <div class="mini-card">
+          <img src="assets/images/dashboard1.png" />
+          <h4>In Progress</h4>
+          <span>Accepted & currently servicing</span>
+          <a routerLink="/maintenance/in-progress">Open →</a>
+        </div>
+
+        <!-- Serviced -->
+        <div class="mini-card">
+          <img src="assets/images/dashboard.png" />
+          <h4>Serviced History</h4>
+          <span>Completed maintenance records</span>
+          <a routerLink="/maintenance/serviced">Open →</a>
+        </div>
+
       </div>
 
       <!-- SUPPLIER -->
-      <div class="mini-cards" *ngIf="roleType === 'SUPPLIER'">
+      <!-- <div class="mini-cards" *ngIf="roleType === 'SUPPLIER'">
         <div class="mini-card">
           <img src="assets/images/dashboard.png" />
           <h4>Order Requests</h4>
           <span>Manage hospital orders</span>
           <a routerLink="/orders">Open →</a>
         </div>
+      </div> -->
+
+      <!-- SUPPLIER -->
+      <div class="mini-cards" *ngIf="roleType === 'SUPPLIER'">
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard.png" />
+          <h4>Pending Orders</h4>
+          <span>Orders waiting for acceptance</span>
+          <img src="assets/images/dashboard2.png" />
+          <h4>In Transit</h4>
+          <span>Orders you accepted & shipping</span>
+          <a routerLink="/orders/in-transit">Open →</a>
+        </div>
+
+        <div class="mini-card">
+          <img src="assets/images/dashboard1.png" />
+          <h4>Delivered</h4>
+          <span>Completed delivery orders</span>
+          <a routerLink="/orders/delivered">Open →</a>
+        </div>
+
       </div>
+
 
     </div>
 
@@ -169,7 +211,6 @@
   <!-- ================= INFO SECTION (HOSPITAL ONLY) ================= -->
   <section class="info-sections" *ngIf="roleType === 'HOSPITAL'">
 
-    <div class="info-block image-left">
       <div class="info-image">
         <img src="assets/images/Hospital2.png" />
       </div>

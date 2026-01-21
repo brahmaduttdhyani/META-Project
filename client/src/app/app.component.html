@@ -1,5 +1,108 @@
+
+
+ <!-- <nav class="navbar navbar-expand-lg">
+  <a class="navbar-brand" href="#"><b>MediService</b></a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          *ngIf="roleName === 'HOSPITAL'"
+          [routerLink]="['/createhospital']"
+          >Create Hospital</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          *ngIf="roleName === 'HOSPITAL'"
+          [routerLink]="['/schedule-maintenance']"
+          >Schedule Maintenance</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          *ngIf="roleName === 'HOSPITAL'"
+          [routerLink]="['/requestequipment']"
+          >Request Equipment</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          *ngIf="roleName === 'TECHNICIAN'"
+          [routerLink]="['/maintenance']"
+          >Maintenance Report</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          *ngIf="roleName === 'SUPPLIER'"
+          [routerLink]="['/orders']"
+          >Order Requests</a
+        >
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li *ngIf="!IsLoggin">
+        <a class="nav-link" [routerLink]="['/meet-team']">About Us</a>
+      </li>
+      <li *ngIf="!IsLoggin">
+        <a class="nav-link" [routerLink]="['/team']">Meet The Partners</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ms-auto">
+      <li *ngIf="!IsLoggin" class="nav-items">
+        <a class="nav-link" class="btn btn-primary" [routerLink]="['/login']"
+          >Login</a
+        >
+      </li>
+      <li *ngIf="!IsLoggin" class="nav-item">
+        <a
+          class="nav-link"
+          class="btn btn-primary mx-2"
+          [routerLink]="['/registration']"
+          >Register</a
+        >
+      </li>
+      <li *ngIf="IsLoggin" class="nav-item me-2">
+        <a
+          class="nav-link"
+          class="btn btn-danger"
+          (click)="logout()"
+          [routerLink]="['/homepage']"
+          >Logout</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<body>
+  <div>
+    <router-outlet> </router-outlet>
+
+  </div>
+</body> -->
+
+
+
 <nav class="navbar navbar-expand-lg custom-navbar">
   <div class="container-fluid">
+
     <!-- BRAND -->
     <a class="navbar-brand" (click)="onBrandClick()">
       MediService
@@ -11,9 +114,12 @@
       data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
+
       <!-- LEFT MENU (ROLE BASED, ONLY WHEN LOGGED IN) -->
       <ul class="navbar-nav me-auto gap-2" *ngIf="isLoggedIn">
+
         <li class="nav-item" *ngIf="role === 'HOSPITAL'">
           <a class="nav-link" routerLink="/createhospital">
             Create Hospital
@@ -29,19 +135,43 @@
             Request Equipment
           </a>
         </li>
+
         <li class="nav-item" *ngIf="role === 'TECHNICIAN'">
-          <a class="nav-link" routerLink="/maintenance">
-            Maintenance
-          </a>
+          <a class="nav-link" [routerLink]="['/maintenance/pending']">Pending Requests</a>
         </li>
-        <li class="nav-item" *ngIf="role === 'SUPPLIER'">
+
+        <li class="nav-item" *ngIf="role === 'TECHNICIAN'">
+          <a class="nav-link" [routerLink]="['/maintenance/in-progress']">In Progress</a>
+        </li>
+
+        <li class="nav-item" *ngIf="role === 'TECHNICIAN'">
+          <a class="nav-link" [routerLink]="['/maintenance/serviced']">Serviced</a>
+        </li>
+
+
+        <!-- <li class="nav-item" *ngIf="role === 'SUPPLIER'">
           <a class="nav-link" routerLink="/orders">
             Orders
           </a>
+        </li> -->
+
+        <li class="nav-item" *ngIf="role === 'SUPPLIER'">
+          <a class="nav-link" [routerLink]="['/orders/pending']">Pending Orders</a>
         </li>
+
+        <li class="nav-item" *ngIf="role === 'SUPPLIER'">
+          <a class="nav-link" [routerLink]="['/orders/in-transit']">In Transit</a>
+        </li>
+
+        <li class="nav-item" *ngIf="role === 'SUPPLIER'">
+          <a class="nav-link" [routerLink]="['/orders/delivered']">Delivered</a>
+        </li>
+
       </ul>
+
       <!-- RIGHT MENU -->
       <ul class="navbar-nav ms-auto gap-2">
+
         <!-- NOT LOGGED IN -->
         <ng-container *ngIf="!isLoggedIn">
           <li class="nav-item">
@@ -55,6 +185,10 @@
             </a>
           </li>
         </ng-container>
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Sibii
         <!-- LOGGED IN -->
         <li class="nav-item" *ngIf="isLoggedIn">
           <button class="btn btn-danger" (click)="logout()">
@@ -68,9 +202,3 @@
 
 <router-outlet></router-outlet>
 <app-footer *ngIf="showFooter"></app-footer>
-
-<!--  FLOATING CHATBOT BUTTON -->
-<div class="floating-chat-button" *ngIf="!isChatPage()" (click)="openChat()">
-  <span class="chat-icon">🩻</span>
-  
-</div>

@@ -157,15 +157,41 @@ public class MaintenanceService {
 
     // For technician to see only their services
 
+//     public List<Maintenance> getMaintenanceForTechnician(String username) {
+//     User tech = userRepository.findByUsername(username)
+//             .orElseThrow(() -> new RuntimeException("User not found"));
+
+//     List<Maintenance> pending = maintenanceRepository.findByRequestStatusIgnoreCase("PENDING");
+//     List<Maintenance> mine = maintenanceRepository.findByAssignedTechnicianId(tech.getId());
+
+//     pending.addAll(mine);
+//     return pending;
+// }
+
     public List<Maintenance> getMaintenanceForTechnician(String username) {
-    User tech = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+        User tech = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    List<Maintenance> pending = maintenanceRepository.findByRequestStatusIgnoreCase("PENDING");
-    List<Maintenance> mine = maintenanceRepository.findByAssignedTechnicianId(tech.getId());
+        // 1) Pending maintenances (but not cancelled)
+        List<Maintenance> pending = maintenanceRepository.findByRequestStatusIgnoreCase("PENDING");
+        pending.removeIf(m -> m.getStatus() != null && m.getStatus().equalsIgnoreCase("Cancelled"));
 
-    pending.addAll(mine);
-    return pending;
-}
+        // 2) Maintenances accepted by THIS technician (but not cancelled)
+        List<Maintenance> mine = maintenanceRepository.findByAssignedTechnicianId(tech.getId());
+        mine.removeIf(m -> m.getStatus() != null && m.getStatus().equalsIgnoreCase("Cancelled"));
+
+        pending.addAll(mine);
+
+        pending.forEach(m -> {
+            try {
+                String createdBy = m.getEquipment().getHospital().getCreatedBy();
+                m.setRequestedBy(createdBy);
+            } catch (Exception e) {
+                m.setRequestedBy(null);
+            }
+        });
+        return pending;
+    }
+
 
 }

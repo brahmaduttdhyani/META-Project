@@ -1,6 +1,5 @@
-
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -22,12 +21,15 @@ interface Order {
   id: number;
   orderDate: string | Date;
   quantity: number;
-  status: string;                    // 'Initiated' | 'In Transit' | 'Delivered'...
-  requestStatus?: string | null;     // 'PENDING' | 'ACCEPTED' | 'REJECTED'
+  status: string;                    // Initiated | In Transit | Delivered
+  requestStatus?: string | null;     // PENDING | ACCEPTED
   equipment?: Equipment | null;
   assignedSupplierId?: number | null;
   assignedSupplierName?: string | null;
+  requestedBy?: string | null;
 }
+
+type OrdersTab = 'pending' | 'in-transit' | 'delivered';
 
 @Component({
   selector: 'app-orders',
@@ -41,12 +43,17 @@ export class OrdersComponent implements OnInit {
   showMessage = false;
   responseMessage: string | null = null;
 
+  // full list from API
+  private allOrders: Order[] = [];
+
+  // list shown on UI
   orderList: Order[] = [];
+
   statusModel: { newStatus: string | null; orderId?: number } = { newStatus: null };
 
   currentSupplierId = 0;
 
-  // Local reject storage
+  // Local reject storage (per supplier)
   rejectedOrderIds: number[] = [];
 
   // UI state: shake + map
@@ -54,8 +61,12 @@ export class OrdersComponent implements OnInit {
   private openMaps = new Set<number>();
   private mapCache = new Map<number, SafeResourceUrl>();
 
+  // which page tab we are on
+  currentTab: OrdersTab = 'pending';
+
   constructor(
     public router: Router,
+    private route: ActivatedRoute,
     public httpService: HttpService,
     public authService: AuthService,
     private sanitizer: DomSanitizer
@@ -70,32 +81,83 @@ export class OrdersComponent implements OnInit {
     this.currentSupplierId = rawId ? parseInt(rawId, 10) : 0;
 
     this.loadRejectedOrders();
+
+    // detect /orders/pending etc
+    this.route.url.subscribe(() => {
+      this.detectTabFromUrl();
+      this.applyFilter();
+    });
+
     this.getOrders();
+  }
+
+  /* -------------------- Tab detection -------------------- */
+
+  private detectTabFromUrl() {
+    const url = this.router.url.toLowerCase();
+
+    if (url.includes('/orders/in-transit')) this.currentTab = 'in-transit';
+    else if (url.includes('/orders/delivered')) this.currentTab = 'delivered';
+    else this.currentTab = 'pending'; // default
   }
 
   /* -------------------- Data -------------------- */
 
   getOrders() {
-    this.orderList = [];
+    this.showError = false;
+    this.errorMessage = null;
+
     this.httpService.getorders().subscribe(
       (data: Order[]) => {
-        const list = (data ?? []).slice();
-        this.orderList = this.sortOrders(list);  // Delivered last
+        this.allOrders = (data ?? []).slice();
+        this.applyFilter();
       },
-      (error) => {
+      () => {
         this.showError = true;
-        this.errorMessage = 'An error occurred while fetching list. Please try again later.';
+        this.errorMessage = 'An error occurred while fetching orders. Please try again later.';
       }
     );
+  }
+
+  private applyFilter() {
+    const list = (this.allOrders ?? []).slice();
+
+    const filtered = list.filter((o) => {
+      // hide locally rejected orders (only for this supplier)
+      if (this.isOrderRejected(o.id)) return false;
+
+      const req = (o.requestStatus || 'PENDING').toUpperCase();
+      const assigned = o.assignedSupplierId == null ? 0 : Number(o.assignedSupplierId);
+
+      if (this.currentTab === 'pending') {
+        // show only PENDING ones
+        return req === 'PENDING';
+      }
+
+      // for in-transit and delivered: show only orders accepted by ME
+      if (req !== 'ACCEPTED') return false;
+      if (assigned !== this.currentSupplierId) return false;
+
+      if (this.currentTab === 'in-transit') {
+        // ✅ FIX: Show ACCEPTED orders that are NOT delivered
+        // includes Initiated + In Transit
+        return !this.isDelivered(o.status);
+      }
+
+      // delivered tab
+      return this.isDelivered(o.status);
+    });
+
+    this.orderList = this.sortOrders(filtered);
   }
 
   /** Delivered last, In Transit middle, Initiated first; then by date asc; then id */
   private sortOrders(list: Order[]): Order[] {
     const rank = (s = '') => {
       const v = s.toLowerCase();
-      if (v.includes('delivered')) return 2;  // last
-      if (v.includes('transit'))   return 1;  // middle
-      return 0;                                // first
+      if (v.includes('delivered')) return 2;
+      if (v.includes('transit')) return 1;
+      return 0;
     };
 
     return list.sort((a, b) => {
@@ -116,31 +178,29 @@ export class OrdersComponent implements OnInit {
   edit(value: Order) {
     this.statusModel.orderId = value.id;
     this.showMessage = false;
+    this.responseMessage = null;
   }
 
   update() {
-    if (this.statusModel.newStatus && this.statusModel.orderId != null) {
-      this.httpService
-        .UpdateOrderStatus(this.statusModel.newStatus, this.statusModel.orderId)
-        .subscribe(
-          () => {
-            this.showMessage = true;
-            this.responseMessage = 'Status updated';
-            this.getOrders();
-          },
-          (error) => {
-            this.showError = true;
-            this.errorMessage = 'An error occurred while updating status. Please try again later.';
-          }
-        );
-    }
+    if (!this.statusModel.newStatus || this.statusModel.orderId == null) return;
+
+    this.httpService
+      .UpdateOrderStatus(this.statusModel.newStatus, this.statusModel.orderId)
+      .subscribe(
+        () => {
+          this.showMessage = true;
+          this.responseMessage = 'Status updated';
+          this.getOrders();
+        },
+        () => {
+          this.showError = true;
+          this.errorMessage = 'An error occurred while updating status. Please try again later.';
+        }
+      );
   }
 
   acceptOrder(orderId: number) {
-    this.showError = false;
-    this.showMessage = false;
-
-    // clear any local reject
+    // clear local reject if any
     this.rejectedOrderIds = this.rejectedOrderIds.filter(x => x !== orderId);
     localStorage.setItem(this.rejectedOrderKey(), JSON.stringify(this.rejectedOrderIds));
 
@@ -157,7 +217,16 @@ export class OrdersComponent implements OnInit {
     );
   }
 
-  /* -------------------- Local reject storage -------------------- */
+  canEditOrder(order: Order): boolean {
+    const req = (order.requestStatus || '').toString().trim().toUpperCase();
+    const assigned = order.assignedSupplierId == null ? 0 : Number(order.assignedSupplierId);
+
+    return req === 'ACCEPTED'
+      && assigned === this.currentSupplierId
+      && !this.isDelivered(order.status);
+  }
+
+  /* -------------------- Local reject -------------------- */
 
   private rejectedOrderKey(): string {
     const uname = (localStorage.getItem('username') || 'unknown').toLowerCase();
@@ -177,13 +246,8 @@ export class OrdersComponent implements OnInit {
     if (!this.rejectedOrderIds.includes(id)) {
       this.rejectedOrderIds.push(id);
       localStorage.setItem(this.rejectedOrderKey(), JSON.stringify(this.rejectedOrderIds));
+      this.applyFilter();
     }
-  }
-
-  canEditOrder(order: Order): boolean {
-    const req = (order.requestStatus || '').toString().trim().toUpperCase();
-    const assigned = order.assignedSupplierId == null ? 0 : Number(order.assignedSupplierId);
-    return req === 'ACCEPTED' && assigned === this.currentSupplierId && !this.isDelivered(order.status);
   }
 
   /* -------------------- Map (DomSanitizer) -------------------- */
@@ -242,19 +306,8 @@ export class OrdersComponent implements OnInit {
     return 'status-initiated';
   }
 
-  /* Legacy (if used elsewhere) */
-  getStatusStyle(status: string) {
-    if (status === 'Delivered') {
-      return { color: 'green', 'font-weight': 'bold', 'font-size': '20px' };
-    } else if (status === 'In Transit') {
-      return { color: '#FFC300 ', 'font-weight': 'bold', 'font-size': '20px' };
-    } else {
-      return { color: '#3371FF', 'font-weight': 'bold', 'font-size': '20px' };
-    }
-  }
-
   cardToneClass(index: number): string {
-    const tone = (index % 3) + 1; // 1..3
+    const tone = (index % 3) + 1;
     return `tone-${tone}`;
   }
 
@@ -278,3 +331,4 @@ export class OrdersComponent implements OnInit {
     return this.shaking.has(id);
   }
 }
+

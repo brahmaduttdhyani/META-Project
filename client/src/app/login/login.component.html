@@ -145,15 +145,55 @@
               {{ errorMessage }}
             </div>
 
+            <div class="register-text mt-3">
+            <span>Login incorrect?</span>
+            <a routerLink="/forgot-password" > Forgot Password</a>
+            </div>
+            
+
             <p class="register-text mt-3">
               Don’t have an account?
               <a routerLink="/registration">Register</a>
             </p>
           </form>
+          
+<!-- SUCCESS POPUP OVERLAY -->
+<div class="success-overlay" *ngIf="showSuccess">
+  <div class="success-card">
+    <div class="success-badge">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="11" fill="#38C793" opacity="0.18"></circle>
+        <path d="M7 12.5l3 3 7-7" stroke="#2EB67D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+    <h3 class="success-title">Login Successful!</h3>
+    <p class="success-subtitle">Redirecting to your dashboard...</p>
+    <button type="button" class="btn success-primary" (click)="continueAfterSuccess()">Continue</button>
+  </div>
+</div>
+
 
           
         </div>
       </div>
+
+      <!-- ✅ SUCCESS POPUP (ADD THIS) -->
+<!-- <div class="success-overlay" *ngIf="showSuccess" role="dialog" aria-modal="true" aria-labelledby="loginSuccessTitle" aria-describedby="loginSuccessDesc">
+  <div class="success-card">
+    <div class="success-badge" aria-hidden="true"> -->
+      <!-- Simple SVG check icon -->
+      <!-- <svg width="54" height="54" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="11" fill="#38C793" opacity="0.18"></circle>
+        <path d="M7 12.5l3 3 7-7" stroke="#2EB67D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div> -->
+
+    <!-- <h3 id="loginSuccessTitle" class="success-title">Login Successful!</h3>
+    <p id="loginSuccessDesc" class="success-subtitle">
+      You have signed in successfully.
+    </p>
+  </div>
+</div> -->
 
       <!-- RIGHT SIDE : ILLUSTRATION -->
       <div class="col-lg-6 d-none d-lg-flex p-0">
@@ -168,6 +208,7 @@
 
     </div>
   </div>
+
 </section>
 
 

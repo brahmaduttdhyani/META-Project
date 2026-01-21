@@ -21,6 +21,7 @@ interface Equipment {
   name: string;
   description?: string;
   hospital?: Hospital;
+  //
 }
 interface Order {
   id: number;
@@ -135,6 +136,7 @@ isCancelable(status: string | null | undefined): boolean {
 }
  
 // ADD: cancel handler
+<<<<<<< HEAD
 onCancel(order: Order) {
   if (!order?.id) { return; }
  
@@ -150,18 +152,84 @@ onCancel(order: Order) {
       this.showMessage = true;
       this.responseMessage = `Order #${order.id} cancelled successfully.`;
       // Refresh list and collapse toggles for accuracy
+=======
+// onCancel(order: Order) {
+//   if (!order?.id) { return; }
+ 
+//   // Optional guard for UX
+//   const ok = confirm(`Cancel order #${order.id}? This cannot be undone.`);
+//   if (!ok) { return; }
+ 
+//   this.showError = false;
+//   this.showMessage = false;
+ 
+//   this.httpService.cancelOrder(order.id).subscribe(
+//     () => {
+//       this.showMessage = true;
+//       this.responseMessage = `Order #${order.id} cancelled successfully.`;
+//       // Refresh list and collapse toggles for accuracy
+//       this.getOrders();
+//     },
+//     (error) => {
+//       this.showError = true;
+//       // Show server message if any, else fallback
+//       this.errorMessage = error?.error?.message
+//         || `Unable to cancel order #${order.id}. It may already be in transit.`;
+//       console.error('cancelOrder error:', error);
+//     }
+//   );
+// }
+
+onCancel(order: Order) {
+  if (!order?.id) return;
+
+  const ok = confirm(`Cancel order #${order.id}? This cannot be undone.`);
+  if (!ok) return;
+
+  this.showError = false;
+  this.showMessage = false;
+
+  this.httpService.cancelOrder(order.id).subscribe(
+    () => {
+      // ✅ 1) Immediately update UI so Cancel button disappears
+      const idx = this.orderList.findIndex(o => o.id === order.id);
+      if (idx !== -1) {
+        this.orderList[idx] = {
+          ...this.orderList[idx],
+          status: 'Cancelled',
+        };
+      }
+
+      // ✅ 2) Optional: collapse the card after cancelling
+      this.expanded.delete(order.id);
+
+      this.showMessage = true;
+      this.responseMessage = `Order #${order.id} cancelled successfully.`;
+
+      // ✅ 3) Refresh from server (keeps everything accurate)
+>>>>>>> origin/Sibii
       this.getOrders();
     },
     (error) => {
       this.showError = true;
+<<<<<<< HEAD
       // Show server message if any, else fallback
       this.errorMessage = error?.error?.message
         || `Unable to cancel order #${order.id}. It may already be in transit.`;
+=======
+      this.errorMessage =
+        error?.error?.message ||
+        `Unable to cancel order #${order.id}. It may already be in transit.`;
+>>>>>>> origin/Sibii
       console.error('cancelOrder error:', error);
     }
   );
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Sibii
   getOrders() {
     this.orderList = [];
     this.httpService.getorderEquipment().subscribe(
@@ -285,4 +353,5 @@ onCancel(order: Order) {
     // Hook this to your tracking flow (route or modal)
     console.log('Track clicked for order:', order);
   }
+  
 }

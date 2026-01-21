@@ -1,4 +1,24 @@
-/* ========== EXISTING NAVBAR STYLES ========== */
+
+// .btn {
+//   border-radius: 20px;
+// }
+// nav {
+//   background-color: teal;
+// }
+
+// //new
+// .nav-link {
+//   color: white;
+//   font-size: 16px;
+//   font-weight: bold;
+// }
+// .navbar-brand {
+//   padding-left: 5px;
+//   color: aliceblue;
+//   font-size: 18px;
+// }
+
+
 .custom-navbar {
   background: #bfe2fc;
   padding: 14px 24px;
@@ -17,76 +37,4 @@
 
 .nav-link:hover {
   text-decoration: underline;
-}
-
-/* ========== NEW FLOATING CHATBOT BUTTON STYLES ========== */
-.floating-chat-button {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #63868f, #419d95);
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(99, 134, 143, 0.4);
-  transition: all 0.3s ease;
-  z-index: 9999;
-  animation: pulse 2s infinite;
-
-  .chat-icon {
-    font-size: 28px;
-    margin-bottom: 2px;
-  }
-
-  .chat-text {
-    font-size: 10px;
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  &:hover {
-    transform: scale(1.1) translateY(-5px);
-    box-shadow: 0 8px 30px rgba(99, 134, 143, 0.6);
-    background: linear-gradient(135deg, #419d95, #63868f);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-}
-
-/* Pulse animation */
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 4px 20px rgba(99, 134, 143, 0.4);
-  }
-  50% {
-    box-shadow: 0 4px 30px rgba(99, 134, 143, 0.7),
-                0 0 0 10px rgba(99, 134, 143, 0.1);
-  }
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .floating-chat-button {
-    bottom: 20px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-
-    .chat-icon {
-      font-size: 24px;
-    }
-
-    .chat-text {
-      font-size: 9px;
-    }
-  }
 }

@@ -1,16 +1,50 @@
+// import { Component } from '@angular/core';
+// import { AuthService } from '../services/auth.service';
+// import { Router } from '@angular/router';
+
+// @Component({
+//   selector: 'app-root',
+//   templateUrl: './app.component.html',
+//   styleUrls: ['./app.component.scss']
+// })
+// export class AppComponent {
+//   IsLoggin:any=false;
+//   roleName: string | null;
+//   constructor(private authService: AuthService, private router:Router)
+//   {
+   
+//     this.IsLoggin=authService.getLoginStatus;
+//     this.roleName=authService.getRole;
+//     if(this.IsLoggin==false)
+//     {
+//       this.router.navigateByUrl('/login'); 
+    
+//     }
+//   }
+//   logout()
+// {
+//   this.authService.logout();
+//   window.location.reload();
+// }
+// }
+
+
+
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+
   currentUrl: string = '';
-  
+
   constructor(
     public authService: AuthService,
     public router: Router
@@ -50,19 +84,8 @@ export class AppComponent {
     );
   }
 
-  // 🔹 Logout
   logout() {
     this.authService.logout();
     this.router.navigate(['/']);
-  }
-
-  // Check if we're on the chat page (to hide the floating button)
-  isChatPage(): boolean {
-    return this.currentUrl === '/chat';
-  }
-
-  //  Navigate to chat page
-  openChat(): void {
-    this.router.navigate(['/chat']);
   }
 }

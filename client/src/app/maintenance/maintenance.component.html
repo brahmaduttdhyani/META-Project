@@ -1,6 +1,6 @@
 
 <div class="d-flex justify-content-between align-items-center mt-4 page-header">
-  <h2 class="mb-0 page-title">Manage Maintenance</h2>
+  <h2 class="mb-0 page-title">{{pageTitle}}</h2>
 </div>
 
 <div class="container mt-4 mx-5">
@@ -12,7 +12,7 @@
         {{ errorMessage }}
       </div>
 
-      <!-- Card grid -->
+      <!-- Card grid --> 
       <div class="maint-grid">
         <article
           class="maint-card fade-in-up"
@@ -58,7 +58,7 @@
           </div>
 
           <!-- Assigned To -->
-          <div class="info-block">
+          <!-- <div class="info-block">
             <div class="info-title">
               <span class="dot dot-tech"></span> Assigned To
             </div>
@@ -68,7 +68,21 @@
                 <span class="val">{{ m.assignedTechnicianName || '-' }}</span>
               </div>
             </div>
+          </div> -->
+
+          <!-- Requested By -->
+          <div class="info-block">
+            <div class="info-title">
+              <span class="dot dot-tech"></span> Requested By
+            </div>
+            <div class="info-content">
+              <div class="info-row">
+                <span class="key">Admin:</span>
+                <span class="val">{{ m.requestedBy || '-' }}</span>
+              </div>
+            </div>
           </div>
+
 
           <!-- Equipment -->
           <div class="info-block">
@@ -153,7 +167,7 @@
                 data-bs-target="#driverModal"
                 (click)="edit(m); $event.stopPropagation()"
               >
-                <span class="btn-icon">✏️</span> Edit
+                <span class="btn-icon">✏️</span> Update Status
               </button>
             </ng-container>
 
