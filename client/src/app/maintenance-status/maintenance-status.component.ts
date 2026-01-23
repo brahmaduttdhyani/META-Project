@@ -64,6 +64,7 @@ export class MaintenanceStatusComponent implements OnInit {
   private sortMaintenance(list: Maintenance[]): Maintenance[] {
     const rank = (s = '') => {
       const v = s.toLowerCase();
+      if (v.includes('cancel')) return 3;
       if (v.includes('serviced') || v.includes('completed')) return 2; // last
       if (v.includes('progress')) return 1; // middle
       return 0; // first (initiated/pending/scheduled)

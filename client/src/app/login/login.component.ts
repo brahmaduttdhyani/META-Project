@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
             this.successTimer=setTimeout(() => {
               this.continueAfterSuccess();
-            }, 1200);
+            }, 2000);
           }
            else {
             this.showError = true;
@@ -97,5 +97,4 @@ continueAfterSuccess(): void {
   }
 
 }
-
 

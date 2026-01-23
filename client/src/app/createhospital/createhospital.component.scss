@@ -1,117 +1,192 @@
 
-/* Theme Tokens */
+
+/* ===========================
+   Theme Tokens
+   =========================== */
 :root {
   --teal-700: #0f766e;
   --teal-600: #12877f;
   --teal-500: #14b8a6;
   --teal-300: #5eead4;
+
+  /* Royal accents */
+  --royal-indigo: #6366f1;
+  --royal-violet: #8b5cf6;
+  --royal-gold: #eab308;
+
   --mint-200: #ccfbf1;
   --ink-900: #0b1320;
   --ink-700: #243447;
   --ink-600: #2f3b4b;
+
   --surface: #ffffff;
   --soft-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-/* Toolbar */
+/* Dark mode palette */
+.theme-dark {
+  --surface: rgba(18, 24, 38, 0.6);
+  --ink-700: #c7d2fe;
+  --ink-600: #a5b4fc;
+  --soft-shadow: 0 14px 26px rgba(0,0,0,.35);
+  --teal-700: #22d3ee;
+  --teal-600: #2dd4bf;
+  --teal-500: #14b8a6;
+  --teal-300: #99f6e4;
+}
+
+/* ===========================
+   Toolbar
+   =========================== */
 .toolbar {
   background: linear-gradient(90deg, var(--teal-700), var(--teal-500));
   padding: 14px 0;
 }
-
+.toolbar-inner { display: flex; justify-content: center; }
+.search-group { max-width: 680px; width: 100%; }
 .search-group .form-control.search-input {
   border-radius: 14px 0 0 14px;
   padding: 0.8rem 1rem;
   border: none;
 }
+.search-group .btn { border-radius: 0; }
+.search-group .search-btn { border-radius: 0; }
+.search-group .clear-btn  { border-radius: 0 14px 14px 0; }
 
-.search-group .btn {
-  border-radius: 0 14px 14px 0;
-}
-
-/* Page Title */
+/* ===========================
+   Page Title
+   =========================== */
 .page-title {
   color: var(--teal-700);
   letter-spacing: 0.5px;
 }
 
-/* Soft Card */
+/* ===========================
+   Soft Card (form wrappers)
+   =========================== */
 .soft-card {
   border: none;
   border-radius: 16px;
   overflow: hidden;
+  background:
+    linear-gradient(0deg, rgba(255,255,255,.75), rgba(255,255,255,.75)) padding-box,
+    linear-gradient(90deg, rgba(20,184,166,.25), rgba(99,102,241,.25)) border-box;
+  border: 1px solid transparent;
+  box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(10px);
 }
-
 .card-header.fw-bold {
-  background: linear-gradient(90deg, #e6fffb, #f4fffd);
+  background: linear-gradient(90deg, rgb(199, 225, 250), rgb(199, 225, 250));
   color: var(--ink-700);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
+.card .card-body { padding: 28px; }
 
-/* Card Grid */
+/* Header underline when active */
+.header-with-icon .icon-hosp { margin-right: 8px; }
+.header-with-icon { position: relative; }
+.header-with-icon::after {
+  content: "";
+  position: absolute; left: 24px; right: 24px; bottom: -1px;
+  height: 0; border-bottom: 0 solid transparent;
+  transition: border-color 0.25s ease, border-bottom-width 0.25s ease;
+}
+.header-with-icon.header-active::after { border-bottom: 3px solid var(--teal-500); }
+
+/* ===========================
+   Grid
+   =========================== */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
 
-  @media (min-width: 576px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  @media (min-width: 992px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+  @media (min-width: 576px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 992px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* Hospital Card */
+/* ===========================
+   Hospital Card (Royal Glass)
+   =========================== */
 .hospital-card {
   position: relative;
-  background: var(--surface);
-  border-radius: 16px;
-  box-shadow: var(--soft-shadow);
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  will-change: transform;
-  border: 1px solid rgba(20, 184, 166, 0.15);
+  border-radius: 16px;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(20, 184, 166, 0.18);
-  }
+  /* inner glass + outer gradient border */
+  background:
+    linear-gradient(0deg, rgba(255,255,255,0.70), rgba(255,255,255,0.70)) padding-box,
+    linear-gradient(135deg, rgba(20,184,166,0.28), rgba(99,102,241,0.28)) border-box;
+  border: 1px solid transparent;
+  box-shadow: var(--soft-shadow);
+  isolation: isolate; /* proper stacking for z-index & auras */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease, filter .2s ease, outline-color .28s ease;
 }
 
 .card-accent {
   position: absolute;
-  inset: 0 auto auto 0;
-  height: 4px;
-  width: 100%;
+  left: 0; top: 0;
+  height: 4px; width: 100%;
   background: linear-gradient(90deg, var(--teal-600), var(--teal-300));
+  box-shadow: 0 0 10px rgba(94,234,212,.45);
 }
 
-.card-bodyy {
-  padding: 1.1rem 1.25rem 1.25rem 1.25rem;
+/* Aura halo on hover */
+.hospital-card::before {
+  content: "";
+  position: absolute; inset: -18px;
+  background: radial-gradient(40% 40% at 50% 50%, rgba(94,234,212,0.24), transparent 60%);
+  filter: blur(24px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity .25s ease;
 }
+.hospital-card:hover::before, .hospital-card:focus-within::before { opacity: 1; }
 
+.card-bodyy { padding: 1.75rem 1.75rem 1.5rem 1.75rem; }
+
+/* ID pill (glossy) */
 .badge-id {
   display: inline-block;
   font-size: 0.8rem;
   color: var(--teal-700);
-  background: #e6fffb;
+  background: linear-gradient(180deg, #e6fffb, #ccfbf1);
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   margin-bottom: 8px;
-  font-weight: 600;
+  font-weight: 700;
+  border: 1px solid rgba(20,184,166,.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 4px 12px rgba(20,184,166,.18);
 }
+.title-with-icon .icon-hosp { margin-right: 6px; }
+.loc-dot { color: var(--teal-500); margin-right: 6px; }
 
-.loc-dot {
-  color: var(--teal-500);
-  margin-right: 6px;
+/* Royal corner stamp */
+.corner-stamp {
+  position: absolute; top: 10px; right: 12px;
+  width: 34px; height: 34px; pointer-events: none;
+}
+.corner-stamp .ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 140deg, var(--royal-indigo), var(--royal-violet), var(--teal-500), var(--royal-indigo));
+  opacity: .75;
+  filter: blur(.2px);
+  mask: radial-gradient(circle at center, transparent 54%, black 55%);
+}
+.corner-stamp .dot {
+  position: absolute; inset: 8px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff7cc, #facc15 60%, #ca8a04 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 3px 8px rgba(234,179,8,.45);
+  opacity: .9;
 }
 
 /* Buttons */
 .btn-gradient {
   border: none;
   color: #fff;
-  background-image: linear-gradient(30deg, #0f766e, #5eead4);
+  background-image: linear-gradient(30deg, #94B6D3, #94B6D3);
   border-radius: 12px;
   background-size: 100% auto;
   font-family: inherit;
@@ -119,22 +194,19 @@
   font-size: 15px;
   padding: 0.6em 1.1em;
   transition: background-size 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 6px 16px rgba(20, 184, 166, 0.35);
+  box-shadow: 0 6px 16px rgb(148, 182, 211);
 
   &:hover {
     background-position: right center;
     background-size: 200% auto;
-    animation: pulseRing 1.2s ease-out;
     transform: translateY(-1px);
   }
-
   &:disabled {
     filter: grayscale(0.2);
     opacity: 0.8;
     cursor: not-allowed;
   }
 }
-
 .btn-ghost {
   background: rgba(20, 184, 166, 0.08);
   color: var(--teal-700);
@@ -149,7 +221,6 @@
     transform: translateY(-1px);
   }
 }
-
 .btn-outline-clear {
   color: #fff;
   background: transparent;
@@ -158,9 +229,7 @@
   padding: 0.6em 1.1em;
   transition: all 0.2s ease;
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.12);
-  }
+  &:hover { background: rgba(255, 255, 255, 0.12); }
 }
 
 /* Alerts */
@@ -169,7 +238,6 @@
   border-color: rgba(20, 184, 166, 0.35);
   color: var(--teal-700);
 }
-
 .alert-warning {
   background-color: #fff9e6;
   border-color: #ffe08a;
@@ -180,36 +248,176 @@
   border-radius: 16px;
   border: 1px solid rgba(20, 184, 166, 0.2);
   box-shadow: var(--soft-shadow);
+  background:
+    linear-gradient(0deg, rgba(255,255,255,.85), rgba(255,255,255,.85)) padding-box,
+    linear-gradient(135deg, rgba(20,184,166,.2), rgba(99,102,241,.2)) border-box;
+  border: 1px solid transparent;
 }
 .modal-soft .modal-header {
   background: linear-gradient(90deg, #e6fffb, #f4fffd);
 }
 
-/* Form Controls */
-.form-control {
-  border-radius: 12px;
+/* Form controls */
+.form-control { border-radius: 12px; }
+
+/* Soft divider */
+.soft-divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0), rgba(20, 184, 166, 0.25), rgba(20, 184, 166, 0));
+  margin: 10px 0 16px 0;
 }
 
-/* Fixes from original */
-#headerr {
-  color: var(--teal-700);
-}
-
+/* Error banner fix */
+#headerr { color: var(--teal-700); }
 #errorSeach {
   background-color: #fff;
   color: #b91c1c;
   font-weight: 600;
 }
 
-/* Animations */
-@keyframes pulseRing {
-  0% {
-    box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.45);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(20, 184, 166, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(20, 184, 166, 0);
+/* Fade-ins */
+.fade-in   { animation: fadeIn .5s ease both; }
+.fade-in-up{ animation: fadeInUp .6s ease both; }
+@keyframes fadeIn { from {opacity:0} to {opacity:1} }
+@keyframes fadeInUp { from {opacity:0; transform:translateY(8px)} to {opacity:1; transform:translateY(0)} }
+
+/* Shake on tap/click */
+.is-shaking {
+  animation: shakeCard 480ms cubic-bezier(.36,.07,.19,.97);
+  box-shadow: 0 14px 34px rgba(20, 184, 166, 0.22), 0 0 0 3px rgba(20, 184, 166, 0.1);
+}
+@keyframes shakeCard {
+  0% { transform: translateX(0) }
+  12% { transform: translateX(-4px) rotate(-0.25deg) }
+  24% { transform: translateX(4px) rotate(.25deg) }
+  36% { transform: translateX(-4px) rotate(-.25deg) }
+  48% { transform: translateX(4px) rotate(.25deg) }
+  60% { transform: translateX(-3px) }
+  72% { transform: translateX(3px) }
+  100% { transform: translateX(0) }
+}
+
+/* ---------------------------------------
+   SLIDE HOVER ANIMATIONS (Sheen kept)
+   --------------------------------------- */
+.slide-card {
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+  will-change: transform, box-shadow;
+}
+.slide-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 42px rgba(20,184,166,.22);
+}
+
+/* Sheen sweep (kept, refined) */
+.slide-card .slide-sheen {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255,255,255,.35) 8%,
+    rgba(255,255,255,.65) 12%,
+    rgba(255,255,255,.35) 16%,
+    transparent 24%
+  );
+  transform: translateX(-120%);
+  transition: transform .6s ease;
+}
+.slide-card:hover .slide-sheen { transform: translateX(120%); }
+
+/* Slide-up content + slide-in actions */
+.slide-card .slide-content {
+  transform: translateY(0);
+  transition: transform .35s cubic-bezier(.22,.61,.36,1);
+}
+.slide-card:hover .slide-content { transform: translateY(-2px); }
+.slide-card .slide-actions {
+  transform: translateX(-8px);
+  opacity: .94;
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), opacity .25s ease;
+}
+.slide-card:hover .slide-actions { transform: translateX(0); opacity: 1; }
+
+/* ---------------------------------------
+   OUTLINE-ON-HOVER (refined)
+   --------------------------------------- */
+.hospital-card.outline-hover {
+  position: relative;
+  outline: 2px solid transparent;
+  outline-offset: 4px;
+  transition:
+    outline-color .28s ease,
+    outline-offset .28s ease,
+    box-shadow .28s ease,
+    transform .28s ease;
+}
+.hospital-card.outline-hover::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(20, 184, 166, 0), 0 10px 26px rgba(20, 184, 166, 0);
+  opacity: 0;
+  transition: opacity .35s ease, box-shadow .35s ease;
+}
+.hospital-card.outline-hover:hover,
+.hospital-card.outline-hover:focus-within {
+  outline-color: var(--teal-500);
+  outline-offset: 6px;
+  box-shadow: 0 14px 30px rgba(20, 184, 166, 0.18);
+  transform: translateY(-6px);
+}
+.hospital-card.outline-hover:hover::after,
+.hospital-card.outline-hover:focus-within::after {
+  opacity: 1;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25), 0 14px 36px rgba(20, 184, 166, 0.22);
+}
+
+/* Optional rotating corner sweep (disabled by default; enable if you like) */
+/*
+.hospital-card.outline-hover::before {
+  content: "";
+  position: absolute; inset: -2px; border-radius: 18px;
+  background:
+    conic-gradient(
+      from 180deg,
+      rgba(20,184,166,0) 0deg,
+      rgba(20,184,166,0) 200deg,
+      rgba(20,184,166,.55) 260deg,
+      rgba(20,184,166,0) 320deg,
+      rgba(20,184,166,0) 360deg
+    );
+  filter: blur(0.6px); opacity: 0; transition: opacity .35s ease; pointer-events: none;
+}
+.hospital-card.outline-hover:hover::before,
+.hospital-card.outline-hover:focus-within::before {
+  opacity: .9; animation: outlineSweep 1.6s linear infinite;
+}
+@keyframes outlineSweep { 0% { transform: rotate(0deg)} 100% { transform: rotate(360deg)} }
+*/
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide-card,
+  .slide-card .slide-sheen,
+  .slide-card .slide-content,
+  .slide-card .slide-actions,
+  .hospital-card.outline-hover,
+  .hospital-card.outline-hover::after {
+    transition: none !important;
+    animation: none !important;
   }
 }
+
+/* Empty state */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--ink-600);
+}
+
+

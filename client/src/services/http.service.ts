@@ -11,9 +11,11 @@ import { TitleStrategy } from '@angular/router';
 export class HttpService {
   public serverName = environment.apiUrl; // To get serv er name
   private headers: HttpHeaders;
+  
   constructor(private http: HttpClient, private authService: AuthService) {
     this.headers = this.createHeaders();
   }
+
   private createHeaders(): HttpHeaders {
     const authToken = this.authService.getToken();
     let headers = new HttpHeaders();
@@ -210,5 +212,14 @@ cancelMaintenance(maintenanceId: number): Observable<any> {
       { responseType: 'text' }
     );
   }
+
+  // Chatbot
+sendMessage(message: string): Observable<any> {
+  return this.http.post(
+    this.serverName + '/api/chatbot/chat',
+    { message },
+    this.getRequestOptions()
+  );
+}
 
 }

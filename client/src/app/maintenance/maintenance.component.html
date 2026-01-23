@@ -42,7 +42,7 @@
           <!-- Summary header -->
           <div class="maint-card-header d-flex align-items-center justify-content-between">
             <div class="maint-id">#{{ m.id }}</div>
-            <span class="status-chip" [ngClass]="statusClass(m.status)">{{ m.status }}</span>
+            <span *ngIf="m.status !== 'Serviced'" class="status-chip" [ngClass]="statusClass(m.status)">{{ m.status }}</span>
           </div>
 
           <!-- Meta -->

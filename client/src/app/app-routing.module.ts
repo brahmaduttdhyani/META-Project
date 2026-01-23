@@ -18,6 +18,7 @@ import { MaintenanceStatusComponent } from './maintenance-status/maintenance-sta
 import { OrderStatusComponent } from './order-status/order-status.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ForgotPasswordComponent } from './forgotpassword/forgot-password.component';
+import { ChatComponent } from './chatbot/chatbot.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -28,6 +29,8 @@ const routes: Routes = [
   { path: 'schedule-maintenance', component: ScheduleMaintenanceComponent },  
   { path: 'maintenance-status', component: MaintenanceStatusComponent },
   { path: 'requestequipment', component: RequestequipmentComponent },  
+   
+  { path:'chat',component:ChatComponent},
 
   { path: 'maintenance', component: MaintenanceComponent },  
   

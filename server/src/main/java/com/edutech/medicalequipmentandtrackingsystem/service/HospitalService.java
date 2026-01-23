@@ -1,34 +1,11 @@
 package com.edutech.medicalequipmentandtrackingsystem.service;
 
+import com.edutech.medicalequipmentandtrackingsystem.entitiy.Hospital;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.edutech.medicalequipmentandtrackingsystem.entitiy.Hospital;
-import com.edutech.medicalequipmentandtrackingsystem.repository.HospitalRepository;
-
-@Service
-public class HospitalService {
-
-    @Autowired
-    private HospitalRepository hospitalRepository;
-    
- 
-    public List<Hospital> getAllHospitals() throws SQLException{
-        // return  list of hospitals
-        return hospitalRepository.findAll();
-    }
-
-    public List<Hospital> getHospitalsByCreator(String username) {
-    return hospitalRepository.findByCreatedBy(username);
-}
-
-
-public Hospital createHospital(Hospital hospital, String username) {
-    hospital.setCreatedBy(username);
-    return hospitalRepository.save(hospital);
-}
-
+public interface HospitalService {
+    List<Hospital> getAllHospitals() throws SQLException;
+    List<Hospital> getHospitalsByCreator(String username);
+    Hospital createHospital(Hospital hospital, String username);
 }

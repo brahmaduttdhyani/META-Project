@@ -63,6 +63,7 @@ export class OrderStatusComponent implements OnInit {
   private sortOrders(list: Order[]): Order[] {
     const rank = (s = '') => {
       const v = s.toLowerCase();
+      if (v.includes('cancel')) return 3;
       if (v.includes('delivered')) return 2;  // last
       if (v.includes('transit')) return 1;    // middle
       return 0;                               // first (initiated/others)

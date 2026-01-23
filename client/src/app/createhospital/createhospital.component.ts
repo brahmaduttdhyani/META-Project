@@ -231,3 +231,4 @@ export class CreatehospitalComponent implements OnInit, OnDestroy {
     console.log('Hospital details:', h);
   }
 }
+

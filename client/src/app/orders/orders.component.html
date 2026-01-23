@@ -46,7 +46,7 @@
           <!-- Header -->
           <div class="order-card-header d-flex align-items-center justify-content-between">
             <div class="order-id">#{{ val.id }}</div>
-            <span class="status-chip" [ngClass]="statusClass(val.status)">{{ val.status }}</span>
+            <span class="status-chip" *ngIf="val.status !== 'Delivered'" [ngClass]="statusClass(val.status)">{{ val.status }}</span>
           </div>
 
           <!-- Meta -->

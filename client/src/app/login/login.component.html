@@ -125,16 +125,20 @@
                 formControlName="password"
                 placeholder="Enter password"
               />
+              
               <div
                   *ngIf="
                     itemForm.get('password')?.invalid &&
                     (itemForm.get('password')?.dirty ||
                       itemForm.get('password')?.touched)
                   "
-                  class="ng-dirty"
+                  class="ng-dirty py-2"
                 >
                   <span class="text-danger">Password Invalid.</span>
                 </div>
+                <div class="register-text mt-3 d-flex justify-content-end ">
+            <a routerLink="/forgot-password" > Forgot Password?</a>
+            </div>
             </div>
 
             <button type="submit" class="btn login-btn w-100">
@@ -145,10 +149,7 @@
               {{ errorMessage }}
             </div>
 
-            <div class="register-text mt-3">
-            <span>Login incorrect?</span>
-            <a routerLink="/forgot-password" > Forgot Password</a>
-            </div>
+            
             
 
             <p class="register-text mt-3">
@@ -168,7 +169,7 @@
     </div>
     <h3 class="success-title">Login Successful!</h3>
     <p class="success-subtitle">Redirecting to your dashboard...</p>
-    <button type="button" class="btn success-primary" (click)="continueAfterSuccess()">Continue</button>
+    <!-- <button type="button" class="btn success-primary" (click)="continueAfterSuccess()">Continue</button> -->
   </div>
 </div>
 
@@ -210,7 +211,5 @@
   </div>
 
 </section>
-
-
 
 

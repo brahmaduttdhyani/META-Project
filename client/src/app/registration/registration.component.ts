@@ -13,7 +13,7 @@ import { OtpService } from '../../services/otp.service';
 export class RegistrationComponent implements OnInit {
 
   passwordStrength: string = '';
-  passwordMessage: string = '';
+  passwordMessages: string[] = [];
   showOtpSection = false;
   emailVerified = false;
   isSubmitting = false;
@@ -28,12 +28,13 @@ export class RegistrationComponent implements OnInit {
   }
 
   // Password guidance (unchanged)
-  pMessage =
-    "1) At least one lowercase alphabet i.e. [a-z]\n" +
-    "2) At least one uppercase alphabet i.e. [A-Z]\n" +
-    "3) At least one Numeric digit i.e. [0-9]\n" +
-    "4) At least one special character i.e. ['@', '$', '.', '#', '!', '%', '*', '?', '&', '^']\n" +
-    "5) The total length must be minimum of 8\n";
+  pMessages: string[] = [
+    'At least one lowercase letter (a–z)',
+    'At least one uppercase letter (A–Z)',
+    'At least one numeric digit (0–9)',
+    'At least one special character (@ $ . # ! % * ? & ^)',
+    'Minimum length of 8 characters'
+  ];
 
   strengthColors: { [key: string]: string } = {
     'Password is Required.': 'red',
@@ -44,7 +45,7 @@ export class RegistrationComponent implements OnInit {
 
   itemForm: FormGroup;
 
-  // Keep UI model but start  empty
+  // Keep UI model but start empty
   formModel: any = { role: '', email: '', password: '', username: '' };
 
   // Confirm password is handled as a separate control (not part of itemForm)
@@ -54,11 +55,28 @@ export class RegistrationComponent implements OnInit {
   showError: boolean = false;
   responseMessage: any;
 
+  // NEW: state for the success popup
+  showRegSuccess = false;
+  regSuccessMessage = '';
+  showEmailPopup = false;
+  showOtpPopup = false;
+  otpError: string = '';
+
+  // ✅ Password live-checklist state (NEW)
+  passwordValue = '';
+  showChecklist = false;
+  hasMinLength = false;
+  hasLowerCase = false;
+  hasUpperCase = false;
+  hasDigit = false;
+  hasSpecialChar = false;
+  allValid = false;
+
   constructor(
     public router: Router,
     private bookService: HttpService,
     private formBuilder: FormBuilder,
-    private otpService:OtpService
+    private otpService: OtpService
   ) {
     // Strong password: at least one lower, upper, digit, one special char, 8-20 chars, no spaces
     const passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@.$#!%*?&^])[^\\s]{8,20}$';
@@ -69,110 +87,171 @@ export class RegistrationComponent implements OnInit {
       email: [this.formModel.email, [Validators.required, this.emailValidator.bind(this)]],
       password: [this.formModel.password, [Validators.required, Validators.pattern(passwordPattern)]],
       role: [this.formModel.role, Validators.required],
-      otp:['']
+      otp: ['']
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // ✅ Live checklist evaluation (no regex in template)
+    this.itemForm.get('password')?.valueChanges.subscribe((value: string) => {
+      const password = value || '';
+      this.passwordValue = password;
+
+      this.hasMinLength   = password.length >= 8;
+      this.hasLowerCase   = /[a-z]/.test(password);
+      this.hasUpperCase   = /[A-Z]/.test(password);
+      this.hasDigit       = /\d/.test(password);
+      this.hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+      this.allValid =
+        this.hasMinLength &&
+        this.hasLowerCase &&
+        this.hasUpperCase &&
+        this.hasDigit &&
+        this.hasSpecialChar;
+    });
+  }
 
   onRegister() {
-    // Preserve functionality: block submit if confirm password mismatches
+    // Block if confirm password mismatch
     const password = this.itemForm.get('password')?.value || '';
     const confirmPassword = this.confirmPasswordCtrl.value || '';
 
     if (!confirmPassword || password !== confirmPassword) {
       this.showError = true;
       this.showMessage = false;
+      this.showRegSuccess = false;
       this.responseMessage = 'Password do not match.';
-      // Also mark as touched to show inline error
       this.confirmPasswordCtrl.markAsTouched();
       return;
     }
 
-    if(this.isSubmitting)return;
-    this.isSubmitting=true;
-    if (this.itemForm.valid) {
-      const snapshot=this.itemForm.getRawValue();
-      const snapUsername=snapshot.username;
-      const snapRole=snapshot.role;
-      this.bookService.registerUser({ ...this.itemForm.value }).subscribe(
-        (response: any) => {
-          this.showMessage = true;
-          this.showError = false;
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
 
-          if (response == null) {
+    // Use getRawValue so we include disabled email after verification
+    const payload = this.itemForm.getRawValue();
+
+    if (this.itemForm.valid) {
+      this.bookService.registerUser(payload).subscribe({
+        next: (response: any) => {
+          this.isSubmitting = false;
+
+          // Treat null/409-like outcomes as failure (no success popup)
+          if (!response) {
+            this.showError = true;
+            this.showMessage = false;
+            this.showRegSuccess = false;
             this.responseMessage = 'User Already Exist';
-          } else {
-            if (snapRole === 'HOSPITAL') {
-              this.responseMessage = `Welcome ${snapUsername} to our page!!. You are an Admin now`;
-            } else {
-              this.responseMessage = `Welcome ${snapUsername} to our page!!. You are an ${snapRole} now`;
-            }
-            this.itemForm.reset();
-            this.confirmPasswordCtrl.reset();
+            return;
           }
+
+          // Build success message (same logic you had), and move it INTO the popup
+          const snap = this.itemForm.getRawValue();
+          const snapUsername = snap.username;
+          const snapRole = snap.role;
+
+          if (snapRole === 'HOSPITAL') {
+            this.regSuccessMessage = `Welcome ${snapUsername} to our page! You are an Admin now.`;
+          } else {
+            this.regSuccessMessage = `Welcome ${snapUsername} to our page! You are a ${snapRole} now.`;
+          }
+
+          // Hide inline banners; show popup instead
+          this.showMessage = false;
+          this.showError = false;
+          this.responseMessage = this.regSuccessMessage;
+
+          // ✅ Show success popup; do NOT auto-navigate
+          this.showRegSuccess = true;
+
+          // Optional: reset form after success
+          this.itemForm.reset();
+          this.confirmPasswordCtrl.reset();
+          this.emailVerified = false;
+          this.showOtpSection = false;
         },
-        (error: any) => {
+        error: (error: any) => {
+          this.isSubmitting = false;
           this.showError = true;
           this.showMessage = false;
-          if(error?.status == 409){
-            this.responseMessage=error?.error?.message || 'User already exists';
-          }else{
+          this.showRegSuccess = false;
+
+          if (error?.status === 409) {
+            this.responseMessage = error?.error?.message || 'User already exists';
+          } else {
             this.responseMessage = 'An error occurred while registering.';
-        } 
-      }    
-      );
+          }
+        }
+      });
     } else {
+      this.isSubmitting = false;
       this.itemForm.markAllAsTouched();
     }
-
-    console.log(this.itemForm.value);
   }
 
   checkPasswordStrength(): void {
     const password = this.itemForm.get('password')?.value;
-
     if (!password) {
       this.passwordStrength = '';
-      this.passwordMessage = '';
+      this.passwordMessages = [];
     } else if (password.length < 8) {
       this.passwordStrength = 'Weak';
-      this.passwordMessage = this.pMessage;
+      this.passwordMessages = [...this.pMessages];
     } else if (this.itemForm.get('password')?.hasError('pattern')) {
       this.passwordStrength = 'Medium';
-      this.passwordMessage = this.pMessage;
+      this.passwordMessages = [...this.pMessages];
     } else {
       this.passwordStrength = 'Strong';
-      this.passwordMessage = '';
+      this.passwordMessages = [];
     }
   }
-  onVerifyEmail(): void {
-  const email = this.itemForm.get('email')?.value;
 
-  if (!email) {
-    alert('Please enter email');
-    return;
+  continueToLogin(): void {
+    this.showRegSuccess = false;
+    this.router.navigateByUrl('/login');
   }
-  this.otpService.sendOtp(email).subscribe({
-    next: () => {
-      this.showOtpSection = true;
-      alert('OTP sent to your email');
-    },
-    error: () => alert('Failed to send OTP')
-  });
-}
-verifyOtp(): void {
-  const email = this.itemForm.get('email')?.value;
-  const otp = this.itemForm.get('otp')?.value;
 
-  this.otpService.verifyOtp(email, otp.trim()).subscribe({
-    next: () => {
-      this.emailVerified = true;
-      this.showOtpSection = false;
-      // this.itemForm.get('email')?.disable(); // optional UX improvement
-      alert('Email verified successfully');
-    },
-    error: () => alert('Invalid OTP')
-  });
+  closeEmailPopup(): void {
+    this.showEmailPopup = false;
+  }
+
+  closeOtpPopup(): void {
+    this.showOtpPopup = false;
+  }
+
+  onVerifyEmail(): void {
+    const email = this.itemForm.get('email')?.value;
+    if (!email) {
+      return;
+    }
+    this.otpService.sendOtp(email).subscribe({
+      next: () => {
+        this.showOtpSection = true;
+        this.showEmailPopup = true;
+      },
+      error: () => {
+        this.responseMessage = 'Failed to send OTP';
+        this.showError = true;
+      }
+    });
+  }
+
+  verifyOtp(): void {
+    const email = this.itemForm.get('email')?.value;
+    const otp = this.itemForm.get('otp')?.value;
+
+    this.otpService.verifyOtp(email, (otp || '').trim()).subscribe({
+      next: () => {
+        this.emailVerified = true;
+        this.showOtpSection = false;
+        this.otpError = '';
+        this.showOtpPopup = true;
+      },
+      error: () => {
+        this.otpError = 'Invalid OTP. Please try again.';
+      }
+    });
+  }
 }
-}
+

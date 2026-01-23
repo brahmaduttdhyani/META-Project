@@ -1,16 +1,16 @@
 
-<div class="d-flex justify-content-between align-items-center mt-4 page-header">
+<!-- <div class="d-flex justify-content-between align-items-center mt-4 page-header">
   <h2 class="mb-0 page-title">Schedule Maintenance</h2>
-</div>
+</div> -->
 
 <!-- Schedule Form Card -->
-<div class="container mt-4">
+<!-- <div class="container mt-4">
   <div class="card soft-card fade-in">
-    <div class="card-header text-center fw-bold">Schedule Maintenance of Equipment</div>
+    <div class="card-header fw-bold">Schedule Maintenance of Equipment</div>
 
-    <div class="card-body">
+    <div class="card-body"> -->
       <!-- Alerts -->
-      <div *ngIf="showError" class="alert alert-danger" role="alert" aria-live="assertive">
+      <!-- <div *ngIf="showError" class="alert alert-danger" role="alert" aria-live="assertive">
         {{ errorMessage }}
       </div>
       <div *ngIf="showMessage" class="alert alert-success" role="alert" aria-live="polite">
@@ -18,9 +18,9 @@
       </div>
 
       <form class="mb-3 mt-md-2" [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
-        <div class="row gy-3">
+        <div class="row gy-3"> -->
           <!-- Left Column -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <div class="mb-3">
               <label for="hospitalId" class="form-label fw-semibold">Hospital</label>
               <select
@@ -59,10 +59,10 @@
                 Please choose Equipment.
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- Right Column -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <div class="row">
               <div class="col-md-6">
                 <div class="mb-3">
@@ -99,6 +99,16 @@
                   >
                     Please enter a valid future Deadline.
                   </div>
+                  
+                  <div
+                    *ngIf="
+                      itemForm.hasError('dateRange') &&
+                      (itemForm.controls['completedDate'].dirty || itemForm.controls['completedDate'].touched)
+                    "
+                    class="text-danger mt-1"
+                  >
+                    Deadline cannot be before Scheduled Date.
+                  </div>
                 </div>
               </div>
             </div>
@@ -132,10 +142,10 @@
               >
                 Please choose status.
               </div>
-            </div>
+            </div> -->
 
             <!-- Actions -->
-            <div class="d-flex gap-2 mt-2">
+            <!-- <div class="d-flex gap-2 mt-2">
               <button class="btn btn-gradient" type="submit" [disabled]="itemForm.invalid">
                 <span class="btn-icon">🗓️</span> Submit
               </button>
@@ -148,10 +158,10 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Manage Maintenance (Cards) -->
-<div class="container mt-4" *ngIf="isClick">
+<!-- <div class="container mt-4" *ngIf="isClick">
   <div class="card soft-card fade-in">
     <div class="card-header fw-bold">Maintenance Information</div>
     <div class="card-body">
@@ -170,10 +180,10 @@
           tabindex="0"
           aria-label="Schedule maintenance card"
         >
-          <div class="card-accent"></div>
+          <div class="card-accent"></div> -->
 
           <!-- Pretty, compact corner ribbon for serviced -->
-          <div class="corner-ribbon" *ngIf="isServiced(m.status)" aria-hidden="true">
+          <!-- <div class="corner-ribbon" *ngIf="isServiced(m.status)" aria-hidden="true">
             <span class="ribbon-chip">
               <span class="ribbon-icon">✔</span>
               Serviced
@@ -217,17 +227,6 @@
               <div class="info-row"><span class="key">Location:</span> <span class="val">{{ m.equipment.hospital?.location }}</span></div>
             </div>
           </div>
-    <!-- Cancel Button at Bottom -->
-<!-- <div class="sched-actions-bottom">
-  <button
-    class="btn btn-ghost"
-    type="button"
-    *ngIf="m.status !== 'In Progress'"
-    (click)="onCancelMaintenance(m.id)"
-  >
-    ❌ Cancel
-  </button>
-</div> -->
 
 <div class="sched-actions-bottom">
   <button
@@ -240,6 +239,316 @@
   </button>
 </div>
           
+        </article> -->
+
+        <!-- Empty state -->
+        <!-- <div class="empty-state" *ngIf="!maintenanceList || maintenanceList.length === 0">
+          <div class="empty-illustration">🗂️</div>
+          <p class="empty-text">No scheduled maintenance to show.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="d-flex justify-content-between align-items-center mt-4 page-header">
+  <h2 class="mb-0 page-title">Schedule Maintenance</h2>
+</div>
+
+<!-- Schedule Form Card -->
+<div class="container mt-4">
+  <div class="card soft-card fade-in">
+    <div class="card-header text-center fw-bold nav-shade-header">
+      Schedule Maintenance of Equipment
+    </div>
+
+    <div class="card-body">
+      <!-- Alerts -->
+      <div *ngIf="showError" class="alert alert-danger" role="alert" aria-live="assertive">
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="showMessage" class="alert alert-success" role="alert" aria-live="polite">
+        {{ responseMessage }}
+      </div>
+
+      <form class="mb-3 mt-md-2" [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row gy-3">
+          <!-- Left Column -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="hospitalId" class="form-label fw-semibold">Hospital</label>
+              <select
+                id="hospitalId"
+                class="form-control"
+                formControlName="hospitalId"
+                (change)="onHospitalSelect($event)"
+                aria-label="Select Hospital"
+              >
+                <option value="">Please Choose</option>
+                <option *ngFor="let hos of hospitalList; trackBy: trackByHospitalId" [value]="hos.id">
+                  {{ hos.name }}
+                </option>
+              </select>
+
+              <div
+                *ngIf="itemForm.controls['hospitalId'].invalid && (itemForm.controls['hospitalId'].dirty || itemForm.controls['hospitalId'].touched)"
+                class="text-danger mt-1"
+              >
+                Please choose hospital.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="equipmentId" class="form-label fw-semibold">Equipment</label>
+              <select
+                id="equipmentId"
+                class="form-control"
+                formControlName="equipmentId"
+                aria-label="Select Equipment"
+              >
+                <option value="">Please Choose</option>
+                <option *ngFor="let eq of equipmentList; trackBy: trackByEquipmentId" [value]="eq.id">
+                  {{ eq.name }}
+                </option>
+              </select>
+
+              <div
+                *ngIf="itemForm.controls['equipmentId'].invalid && (itemForm.controls['equipmentId'].dirty || itemForm.controls['equipmentId'].touched)"
+                class="text-danger mt-1"
+              >
+                Please choose Equipment.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="scheduledDate" class="form-label fw-semibold">Scheduled Date</label>
+                  <input
+                    type="date"
+                    id="scheduledDate"
+                    class="form-control"
+                    formControlName="scheduledDate"
+                    placeholder="Scheduled Date"
+                  />
+
+                  <div
+                    *ngIf="itemForm.controls['scheduledDate'].invalid && (itemForm.controls['scheduledDate'].dirty || itemForm.controls['scheduledDate'].touched)"
+                    class="text-danger mt-1"
+                  >
+                    Please enter a valid future Scheduled Date.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="completedDate" class="form-label fw-semibold">Deadline</label>
+                  <input
+                    type="date"
+                    id="completedDate"
+                    class="form-control"
+                    formControlName="completedDate"
+                    placeholder="Completed Date"
+                  />
+
+                  <div
+                    *ngIf="itemForm.controls['completedDate'].invalid && (itemForm.controls['completedDate'].dirty || itemForm.controls['completedDate'].touched)"
+                    class="text-danger mt-1"
+                  >
+                    Please enter a valid future Deadline.
+                  </div>
+                   <div *ngIf="itemForm.errors?.['deadlineBeforeScheduled']" class="text-danger mt-2">
+              Deadline must be on or after Scheduled Date.
+            </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label fw-semibold">Description</label>
+              <input
+                type="text"
+                id="description"
+                class="form-control"
+                formControlName="description"
+                placeholder="Description"
+              />
+
+              <div
+                *ngIf="itemForm.controls['description'].invalid && (itemForm.controls['description'].dirty || itemForm.controls['description'].touched)"
+                class="text-danger mt-1"
+              >
+                Please enter Description.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="status" class="form-label fw-semibold">Status</label>
+              <select id="status" class="form-control" formControlName="status" aria-label="Select Status">
+                <option value="">Choose Status</option>
+                <option value="Initiated">Initiated</option>
+                <!-- <option value="In Progress">In Progress</option>
+                <option value="Serviced">Serviced</option> -->
+              </select>
+
+              <div
+                *ngIf="itemForm.controls['status'].invalid && (itemForm.controls['status'].dirty || itemForm.controls['status'].touched)"
+                class="text-danger mt-1"
+              >
+                Please choose status.
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex gap-2 mt-2">
+              <!-- ✅ Submit uses navbar-blue -->
+              <button class="btn btn-gradient" type="submit" [disabled]="itemForm.invalid">
+                <span class="btn-icon">🗓️</span> Submit
+              </button>
+
+              <!-- ✅ Show/Hide uses navbar-blue -->
+              <button class="btn btn-gradient" type="button" (click)="showSatus()">
+                <span class="btn-icon">📋</span> {{ isClick ? 'Hide Status' : 'Show Status' }}
+              </button>
+            </div>
+
+            <!-- ✅ Form-level validation message -->
+           
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Maintenance (Cards) -->
+<div class="container mt-4" *ngIf="isClick">
+  <div class="card soft-card fade-in">
+    <div class="card-header fw-bold nav-shade-header">Maintenance Information</div>
+
+    <div class="card-body">
+      <div class="sched-grid">
+        <article
+          class="sched-card slide-card outline-hover fade-in-up"
+          *ngFor="let m of maintenanceList; let i = index; trackBy: trackByMaintId"
+          [ngClass]="[
+            'tone-' + ((i % 3) + 1),
+            borderClass(m.status),
+            isServiced(m.status) ? 'is-serviced' : '',
+            isShaking(m.id) ? 'is-shaking' : ''
+          ]"
+          (click)="shakeCard(m.id)"
+          (touchstart)="shakeCard(m.id)"
+          (animationend)="onAnimationEnd(m.id, $event)"
+          tabindex="0"
+          aria-label="Schedule maintenance card"
+        >
+          <!-- Accent & sheen -->
+          <div class="card-accent"></div>
+          <span class="slide-sheen" aria-hidden="true"></span>
+          <div class="corner-stamp" aria-hidden="true">
+            <span class="ring"></span><span class="dot"></span>
+          </div>
+
+          <!-- Serviced ribbon ONLY -->
+          <div class="corner-ribbon" *ngIf="isServiced(m.status)" aria-hidden="true">
+            <span class="ribbon-chip">
+              <span class="ribbon-icon">✔</span>
+              Serviced
+            </span>
+          </div>
+
+          <!-- Header: ring + id + deadline + status -->
+          <div class="sched-card-header d-flex align-items-center justify-content-between slide-content">
+            <div class="left d-flex align-items-center gap-2">
+              <!-- ✅ Progress ring (per card / per id offset) -->
+              <svg class="progress-ring" viewBox="0 0 36 36" aria-hidden="true">
+                <circle class="bg" cx="18" cy="18" r="16"></circle>
+                <circle
+                  class="fg"
+                  cx="18"
+                  cy="18"
+                  r="16"
+                  pathLength="100"
+                  [attr.stroke-dasharray]="'100 100'"
+                  [attr.stroke-dashoffset]="getRingOffset(m)"
+                ></circle>
+              </svg>
+
+              <div class="sched-id">#{{ m.id }}</div>
+            </div>
+
+            <div class="right d-flex align-items-center gap-2">
+              <span class="deadline-chip" [ngClass]="deadlineToneClass(m.completedDate)">
+                {{ deadlineLabel(m.completedDate) }}
+              </span>
+
+              <!-- ✅ Show status chip for ALL except serviced -->
+              <span
+                class="status-chip"
+                *ngIf="!isServiced(m.status)"
+                [ngClass]="statusClass(m.status)"
+              >
+                <span class="chip-icon" aria-hidden="true">{{ statusIcon(m.status) }}</span>
+                {{ m.status }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Meta -->
+          <div class="sched-meta slide-content">
+            <div class="meta-item">
+              <span class="meta-label">Scheduled</span>
+              <span class="meta-value">{{ m.scheduledDate | date:'dd-MMM-yyyy' }}</span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">Deadline</span>
+              <span class="meta-value">{{ m.completedDate | date:'dd-MMM-yyyy' }}</span>
+            </div>
+          </div>
+
+          <!-- Equipment -->
+          <div class="info-block slide-content">
+            <div class="info-title">
+              <span class="dot dot-eq"></span> Equipment
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.name }}</span></div>
+              <div class="info-row"><span class="key">Description:</span> <span class="val">{{ m.equipment?.description }}</span></div>
+            </div>
+          </div>
+
+          <!-- Hospital -->
+          <div class="info-block slide-content">
+            <div class="info-title">
+              <span class="dot dot-hosp"></span> Hospital
+            </div>
+            <div class="info-content">
+              <div class="info-row"><span class="key">Id:</span> <span class="val">{{ m.equipment?.hospital?.id }}</span></div>
+              <div class="info-row"><span class="key">Name:</span> <span class="val">{{ m.equipment?.hospital?.name }}</span></div>
+              <div class="info-row"><span class="key">Location:</span> <span class="val">{{ m.equipment?.hospital?.location }}</span></div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="sched-actions-bottom slide-actions">
+            <button
+              class="btn btn-cancel"
+              type="button"
+              *ngIf="isCancelable(m.status)"
+              (click)="onCancelMaintenance(m.id); $event.stopPropagation()"
+              (touchstart)="$event.stopPropagation()"
+            >
+              ❌ Cancel
+            </button>
+          </div>
         </article>
 
         <!-- Empty state -->
@@ -251,3 +560,4 @@
     </div>
   </div>
 </div>
+

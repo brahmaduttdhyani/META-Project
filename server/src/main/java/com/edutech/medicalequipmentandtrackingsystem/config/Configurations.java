@@ -26,4 +26,6 @@ public class Configurations {
             }
         };
     }
+
+    // register is for seting  the cors 
 }

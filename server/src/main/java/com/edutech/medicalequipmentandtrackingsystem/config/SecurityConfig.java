@@ -44,6 +44,7 @@ public class SecurityConfig {
             .antMatchers("/api/password/send-otp").permitAll()
             .antMatchers("/api/password/verify-otp").permitAll()
             .antMatchers("/api/password/reset-password").permitAll()
+            .antMatchers("/api/chatbot/**").permitAll()
             .antMatchers(HttpMethod.POST,"/api/hospital/create").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.POST,"/api/hospital/equipment").hasAuthority("HOSPITAL")
             .antMatchers(HttpMethod.POST,"/api/hospital/maintenance/schedule").hasAuthority("HOSPITAL")

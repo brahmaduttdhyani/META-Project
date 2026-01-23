@@ -1,40 +1,9 @@
-// import { Component } from '@angular/core';
-// import { AuthService } from '../services/auth.service';
-// import { Router } from '@angular/router';
-
-// @Component({
-//   selector: 'app-root',
-//   templateUrl: './app.component.html',
-//   styleUrls: ['./app.component.scss']
-// })
-// export class AppComponent {
-//   IsLoggin:any=false;
-//   roleName: string | null;
-//   constructor(private authService: AuthService, private router:Router)
-//   {
-   
-//     this.IsLoggin=authService.getLoginStatus;
-//     this.roleName=authService.getRole;
-//     if(this.IsLoggin==false)
-//     {
-//       this.router.navigateByUrl('/login'); 
-    
-//     }
-//   }
-//   logout()
-// {
-//   this.authService.logout();
-//   window.location.reload();
-// }
-// }
 
 
-
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
 
 @Component({
   selector: 'app-root',
@@ -44,6 +13,7 @@ import { filter } from 'rxjs/operators';
 export class AppComponent {
 
   currentUrl: string = '';
+  showLogoutPopup = false;
 
   constructor(
     public authService: AuthService,
@@ -57,6 +27,20 @@ export class AppComponent {
       });
   }
 
+  /* ============================= */
+  /* STICKY NAVBAR SCROLL EFFECT */
+  /* ============================= */
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const navbar = document.querySelector('.custom-navbar');
+
+    if (window.scrollY > 20) {
+      navbar?.classList.add('scrolled');
+    } else {
+      navbar?.classList.remove('scrolled');
+    }
+  }
+
   // 🔹 Login state
   get isLoggedIn(): boolean {
     return this.authService.getLoginStatus;
@@ -67,7 +51,7 @@ export class AppComponent {
     return this.authService.getRole;
   }
 
-  // 🔹 MediService click logic
+  // 🔹 Brand click logic
   onBrandClick() {
     if (this.isLoggedIn) {
       this.router.navigate(['/dashboard']);
@@ -85,7 +69,37 @@ export class AppComponent {
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/']);
+
+    this.showLogoutPopup = true;
+
   }
+ 
+  
+
+confirmLogout() {
+
+    this.showLogoutPopup = false;
+
+    this.authService.logout();
+
+    this.router.navigate(['/']);
+
+  }
+ 
+  cancelLogout() {
+
+    this.showLogoutPopup = false;
+
+  }
+  
+  isChatPage(): boolean {
+  return this.currentUrl === '/chat';
 }
+ 
+// 🤖 Navigate to chat page
+openChat(): void {
+  this.router.navigate(['/chat']);
+}
+ 
+}
+

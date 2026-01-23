@@ -105,8 +105,9 @@
 
     <!-- BRAND -->
     <a class="navbar-brand" (click)="onBrandClick()">
-      MediService
-    </a>
+  <i class="fa-solid fa-heart-pulse brand-icon"></i>
+  <span>EquiCare</span>
+</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -133,6 +134,16 @@
         <li class="nav-item" *ngIf="role === 'HOSPITAL'">
           <a class="nav-link" routerLink="/requestequipment">
             Request Equipment
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="role === 'HOSPITAL'">
+          <a class="nav-link" routerLink="/maintenance-status">
+            Maintenance Status
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="role === 'HOSPITAL'">
+          <a class="nav-link" routerLink="/order-status">
+            Order Status
           </a>
         </li>
 
@@ -175,12 +186,12 @@
         <!-- NOT LOGGED IN -->
         <ng-container *ngIf="!isLoggedIn">
           <li class="nav-item">
-            <a class="btn btn-outline-light" routerLink="/login">
+            <a class="btn btn-outline-light loginBtn" routerLink="/login">
               Login
             </a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-light" routerLink="/registration">
+            <a class="btn btn-light registerBtn" routerLink="/registration">
               Register
             </a>
           </li>
@@ -196,5 +207,34 @@
   </div>
 </nav>
 
+
+<!-- ✅ LOGOUT CONFIRMATION POPUP -->
+<div class="logout-overlay" *ngIf="showLogoutPopup">
+<div class="logout-card">
+<div class="logout-badge">
+<svg class="warning-icon" viewBox="0 0 52 52">
+<circle cx="26" cy="26" r="23"></circle>
+<path d="M26 16 L26 32 M26 36 L26 38"></path>
+</svg>
+</div>
+ 
+    <h3 class="logout-title">Are you sure you want to logout?</h3>
+<p class="logout-subtitle">Thank you for using EquiTech. We hope to see you again soon!</p>
+ 
+    <div class="logout-actions">
+<button type="button" class="btn confirm-btn" (click)="confirmLogout()">Confirm</button>
+<button type="button" class="btn cancel-btn" (click)="cancelLogout()">Cancel</button>
+</div>
+</div>
+</div>
+
+ 
+
 <router-outlet></router-outlet>
 <app-footer *ngIf="showFooter"></app-footer>
+<div class="floating-chat-button" *ngIf="!isChatPage()" (click)="openChat()">
+<span class="chat-icon">🤖</span>
+<span class="chat-text">AI Help</span>
+</div>
+
+

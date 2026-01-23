@@ -1,4 +1,4 @@
-<section class="login-page">
+<section class="login-page mt-10">
   <div class="container">
     <div class="login-card row g-0">
 
@@ -29,23 +29,9 @@
             </div>
 
             <!-- Email -->
-            <!-- <div class="form-group mb-3">
-              <label>Email Address</label>
-              <input
-                type="email"
-                class="form-control"
-                formControlName="email"
-                placeholder="Enter email"
-              />
-              <small class="text-danger"
-                *ngIf="itemForm.get('email')?.touched && itemForm.get('email')?.invalid">
-                Enter a valid email
-              </small>
-            </div> -->
-
             <div class="form-group mb-3">
-            <label>Email address</label>
-            <input
+              <label>Email address</label>
+              <input
                 type="email"
                 class="form-control"
                 formControlName="email"
@@ -57,37 +43,41 @@
                 Enter a valid email
               </small>
             </div>
-              <!-- Verify Email Button -->
+
+            <!-- Verify Email Button -->
             <div>
               <button
-                  type="button"
-                  class="btn login-btn w-100"
-                  *ngIf="!showOtpSection"
-                  (click)="onVerifyEmail()"
-                  [disabled]="itemForm.get('email')?.invalid"
+                type="button"
+                class="btn login-btn w-100"
+                *ngIf="!showOtpSection"
+                (click)="onVerifyEmail()
+                "
+                [disabled]="itemForm.get('email')?.invalid"
               >
-                  Verify Email
+                Verify Email
               </button>
             </div>
-            
-            
+
             <!-- OTP SECTION -->
             <div class="form-group mb-3" *ngIf="showOtpSection && !emailVerified">
-            <div>
-            <label>Enter OTP</label>
-            <input
-                type="text"
-                class="form-control"
-                placeholder="Enter OTP"
-                formControlName="otp"
-                name="otp"
-              />
+              <div>
+                <label>Enter OTP</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter OTP"
+                  formControlName="otp"
+                  name="otp"
+                />
               </div>
               <div>
-              <button type="button" class="btn login-btn w-100" (click)="verifyOtp()">
-                Verify OTP
-            </button>
-            </div>
+                <small class="text-danger" *ngIf="otpError">{{ otpError }}</small>
+                <div class="mt-2">
+                  <button type="button" class="btn login-btn w-100" (click)="verifyOtp()">
+                    Verify OTP
+                  </button>
+                </div>
+              </div>
             </div>
 
             <p class="success-msg" *ngIf="emailVerified">
@@ -103,12 +93,38 @@
                 formControlName="password"
                 placeholder="Enter password"
                 (input)="checkPasswordStrength()"
+                (focus)="showChecklist = true"
+                (blur)="showChecklist = false"
               />
-              <small class="fw-bold"
-                [style.color]="strengthColors[passwordStrength]">
+              <small class="fw-bold" [style.color]="strengthColors[passwordStrength]">
                 {{ passwordStrength }}
               </small>
-              <div class="text-danger">{{ passwordMessage }}</div>
+
+              <!-- ✅ Live validation checklist (NEW) -->
+              <div class="password-checklist" *ngIf="showChecklist && !allValid">
+                <p [class.valid]="hasMinLength">
+                  <span>{{ hasMinLength ? '✅' : '❌' }}</span> Minimum 8 characters
+                </p>
+                <p [class.valid]="hasLowerCase">
+                  <span>{{ hasLowerCase ? '✅' : '❌' }}</span> At least one lowercase letter
+                </p>
+                <p [class.valid]="hasUpperCase">
+                  <span>{{ hasUpperCase ? '✅' : '❌' }}</span> At least one uppercase letter
+                </p>
+                <p [class.valid]="hasDigit">
+                  <span>{{ hasDigit ? '✅' : '❌' }}</span> At least one digit
+                </p>
+                <p [class.valid]="hasSpecialChar">
+                  <span>{{ hasSpecialChar ? '✅' : '❌' }}</span> At least one special character
+                </p>
+              </div>
+
+              <!-- (kept) your existing guidance list -->
+              <!-- <ul class="text-danger mt-1" *ngIf="passwordMessages.length">
+                <li *ngFor="let msg of passwordMessages">
+                  {{ msg }}
+                </li>
+              </ul> -->
             </div>
 
             <!-- Confirm Password -->
@@ -146,10 +162,10 @@
               type="submit"
               class="btn login-btn w-100"
               (click)="onRegister()"
-             >
+            >
               Register
             </button>
-            
+
             <!-- Status messages -->
             <div *ngIf="showError" class="alert alert-danger mt-2">{{ responseMessage }}</div>
             <div *ngIf="showMessage" class="alert alert-success mt-2">{{ responseMessage }}</div>
@@ -160,10 +176,62 @@
             </p>
           </form>
 
+          <!-- ✅ SUCCESS POPUP OVERLAY (Registration) -->
+          <div class="success-overlay" *ngIf="showRegSuccess">
+            <div class="success-card">
+              <div class="success-badge">
+                <svg class="checkmark" viewBox="0 0 52 52" aria-hidden="true">
+                  <circle cx="26" cy="26" r="23"></circle>
+                  <path d="M16 27 L22 33 L36 19"></path>
+                </svg>
+              </div>
+
+              <h3 class="success-title">Registration Successful!</h3>
+              <!-- Uses the same message you build in TS; falls back to generic if blank -->
+              <p class="success-subtitle">
+                {{ regSuccessMessage || responseMessage || 'Your account has been created successfully.' }}
+              </p>
+
+              <button type="button" class="btn success-primary" (click)="continueToLogin()">
+                Continue to Login
+              </button>
+            </div>
+          </div>
+
+          <!-- ✅ EMAIL VERIFICATION POPUP -->
+          <div class="success-overlay" *ngIf="showEmailPopup">
+            <div class="success-card">
+              <div class="success-badge">
+                <svg class="checkmark" viewBox="0 0 52 52">
+                  <circle cx="26" cy="26" r="23"></circle>
+                  <path d="M16 27 L22 33 L36 19"></path>
+                </svg>
+              </div>
+              <h3 class="success-title">OTP Sent!</h3>
+              <p class="success-subtitle">An OTP has been sent to your email address.</p>
+              <button type="button" class="btn success-primary" (click)="closeEmailPopup()">OK</button>
+            </div>
+          </div>
+
+          <!-- ✅ OTP VERIFIED POPUP -->
+          <div class="success-overlay" *ngIf="showOtpPopup">
+            <div class="success-card">
+              <div class="success-badge">
+                <svg class="checkmark" viewBox="0 0 52 52">
+                  <circle cx="26" cy="26" r="23"></circle>
+                  <path d="M16 27 L22 33 L36 19"></path>
+                </svg>
+              </div>
+              <h3 class="success-title">Email Verified!</h3>
+              <p class="success-subtitle">Your email has been successfully verified.</p>
+              <button type="button" class="btn success-primary" (click)="closeOtpPopup()">OK</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- RIGHT SIDE : ILLU STRATION -->
+      <!-- RIGHT SIDE : ILLUSTRATION -->
       <div class="col-lg-6 d-none d-lg-flex p-0">
         <div class="illustration-section">
           <img

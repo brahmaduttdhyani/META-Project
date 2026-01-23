@@ -1,9 +1,15 @@
+<!-- <div class="d-flex justify-content-between align-items-center mt-4 page-header">
+  <h2 class="mb-0 page-title">Request Equipments</h2> -->
 
-<div class="d-flex justify-content-between align-items-center mt-4 page-header">
-  <h2 class="mb-0 page-title">Request Equipments</h2>
+    <!-- <div class="header-actions d-none d-md-flex gap-2">
+<button class="btn btn-ghost" type="button" (click)="showStatus()">
+<span class="btn-icon">📦</span> {{ isClick ? 'Hide' : 'Show' }} Orders
+</button>
+</div> -->
+<!-- </div> -->
 
 <!-- Request Form Card -->
-<div class="container mt-4">
+<!-- <div class="container mt-4">
   <div class="card soft-card fade-in">
     <div class="card-header fw-bold">Order Equipments</div>
     <div class="card-body">
@@ -105,18 +111,18 @@
             </div>
           </div>
 
-          <!-- Form Alerts -->
-          <div class="col-12">
+          <Form Alerts!--  -->
+          <!-- <div class="col-12">
             <div *ngIf="showMessage" class="alert alert-success mt-2" role="alert" aria-live="polite">
               {{ responseMessage }}
             </div>
             <div *ngIf="showError" class="alert alert-danger mt-2" role="alert" aria-live="assertive">
               {{ errorMessage }}
             </div>
-          </div>
+          </div>  -->
 
           <!-- Actions -->
-          <div class="col-12 d-flex gap-2 mt-2">
+          <!-- <div class="col-12 d-flex gap-2 mt-2">
             <button class="btn btn-gradient" type="submit" [disabled]="itemForm.invalid">
               <span class="btn-icon">✅</span> Submit Order
             </button>
@@ -128,10 +134,10 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Orders as Collapsible Animated Cards -->
-<div class="container mt-4" *ngIf="isClick">
+<!-- <div class="container mt-4" *ngIf="isClick">
   <div class="card soft-card fade-in">
     <div class="card-header fw-bold">Orders Information</div>
     <div class="card-body">
@@ -147,10 +153,10 @@
           (keydown.enter)="toggleExpand(val.id)"
           (keydown.space)="toggleExpand(val.id)"
         >
-          <div class="card-accent"></div>
+          <div class="card-accent"></div> -->
 
           <!-- Collapsed summary row -->
-          <div class="order-card-header d-flex align-items-center justify-content-between">
+          <!-- <div class="order-card-header d-flex align-items-center justify-content-between">
             <div class="order-id">#{{ val.id }}</div>
             <span class="status-chip" [ngClass]="statusClass(val.status)">{{ val.status }}</span>
           </div>
@@ -164,10 +170,10 @@
               <span class="meta-label">Quantity</span>
               <span class="meta-value">{{ val.quantity }}</span>
             </div>
-          </div>
+          </div> -->
 
           <!-- Expand/Collapse handle -->
-          <div class="expand-handle">
+          <!-- <div class="expand-handle">
             <span class="chip" (click)="toggleExpand(val.id); $event.stopPropagation()">
               <span class="chev" [class.up]="isExpanded(val.id)">▾</span>
               <span class="label">{{ isExpanded(val.id) ? 'Hide details' : 'Details' }}</span>
@@ -182,17 +188,17 @@
 <span class="btn-icon">🛑</span> Cancel Order
 </button>
 </div>
-          </div>
+          </div> -->
 
           <!-- EXPANDED CONTENT (revealed on click) -->
-          <section
+          <!-- <section
             class="expand-wrapper"
             [class.open]="isExpanded(val.id)"
             [style.--expand-height.px]="getCardExpandHeight(val)"
             (click)="$event.stopPropagation()"
           >
             <div class="expand-inner">
-              <div class="info-block">
+              <div class="info-block"> -->
                 <!-- <div class="order-actions">
 <button
                 class="btn btn-ghost btn-sm"
@@ -203,7 +209,7 @@
 <span class="btn-icon">🛑</span> Cancel Order
 </button>
 </div> -->
-                <div class="info-title">
+                <!-- <div class="info-title">
                   <span class="dot dot-eq"></span> Equipment
                 </div>
                 <div class="info-content">
@@ -236,14 +242,311 @@
               
             </div>
           </section>
-        </article>
+        </article> -->
 
         <!-- Empty state -->
-        <div class="empty-state" *ngIf="!orderList || orderList.length === 0">
+        <!-- <div class="empty-state" *ngIf="!orderList || orderList.length === 0">
           <div class="empty-illustration">🗂️</div>
           <p class="empty-text">No orders yet. Create your first order above.</p>
         </div>
       </div>
     </div>
   </div>
+</div> -->
+
+
+
+<div class="d-flex justify-content-between align-items-center mt-4 page-header">
+  <h2 class="mb-0 page-title">Request Equipments</h2>
 </div>
+
+<!-- Request Form Card -->
+<div class="container mt-4">
+  <div class="card soft-card fade-in">
+    <div class="card-header text-center fw-bold">Order Equipments</div>
+
+    <div class="card-body">
+      <!-- Alerts -->
+      <div *ngIf="showError" class="alert alert-danger" role="alert" aria-live="assertive">
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="showMessage" class="alert alert-success" role="alert" aria-live="polite">
+        {{ responseMessage }}
+      </div>
+
+      <form class="mb-3 mt-md-2" [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row gy-3">
+          <!-- Left column -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="hospitalId" class="form-label fw-semibold">Hospital</label>
+              <select
+                id="hospitalId"
+                class="form-control"
+                formControlName="hospitalId"
+                (change)="onHospitalSelect($event)"
+                aria-label="Select Hospital"
+              >
+                <option value="">Please Choose</option>
+                <option *ngFor="let hos of hospitalList" [value]="hos.id">
+                  {{ hos.name }}
+                </option>
+              </select>
+
+              <div
+                *ngIf="itemForm.controls['hospitalId'].invalid && (itemForm.controls['hospitalId'].dirty || itemForm.controls['hospitalId'].touched)"
+                class="text-danger mt-1"
+                role="alert"
+              >
+                Please choose a hospital.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="equipmentId" class="form-label fw-semibold">Equipment</label>
+              <select
+                id="equipmentId"
+                class="form-control"
+                formControlName="equipmentId"
+                aria-label="Select Equipment"
+              >
+                <option value="">Please Choose</option>
+                <option *ngFor="let eq of equipmentList" [value]="eq.id">
+                  {{ eq.name }}
+                </option>
+              </select>
+
+              <div
+                *ngIf="itemForm.controls['equipmentId'].invalid && (itemForm.controls['equipmentId'].dirty || itemForm.controls['equipmentId'].touched)"
+                class="text-danger mt-1"
+                role="alert"
+              >
+                Please choose an equipment.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="orderDate" class="form-label fw-semibold">Order Date</label>
+              <input type="date" id="orderDate" class="form-control" formControlName="orderDate" />
+
+              <div
+                *ngIf="itemForm.controls['orderDate'].invalid && (itemForm.controls['orderDate'].dirty || itemForm.controls['orderDate'].touched)"
+                class="text-danger mt-1"
+                role="alert"
+              >
+                Please select today's date ({{ todayLabel }}).
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="quantity" class="form-label fw-semibold">Quantity</label>
+              <input
+                type="number"
+                id="quantity"
+                class="form-control"
+                formControlName="quantity"
+                min="1"
+                placeholder="Quantity"
+              />
+
+              <div
+                *ngIf="itemForm.controls['quantity'].invalid && (itemForm.controls['quantity'].dirty || itemForm.controls['quantity'].touched)"
+                class="text-danger mt-1"
+                role="alert"
+              >
+                Quantity must be at least 1.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="status" class="form-label fw-semibold">Status</label>
+              <select id="status" class="form-control" formControlName="status" aria-label="Select Status">
+                <option value="">Choose Status</option>
+                <option value="Initiated">Initiated</option>
+              </select>
+
+              <div
+                *ngIf="itemForm.controls['status'].invalid && (itemForm.controls['status'].dirty || itemForm.controls['status'].touched)"
+                class="text-danger mt-1"
+                role="alert"
+              >
+                Please choose status.
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex gap-2 mt-2">
+              <button class="btn btn-gradient" type="submit" [disabled]="itemForm.invalid">
+                <span class="btn-icon">✅</span> Submit Order
+              </button>
+              <button class="btn btn-gradient" type="button" (click)="showStatus()">
+                <span class="btn-icon">📦</span> {{ isClick ? 'Hide' : 'Show' }} Orders
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Orders as Elevation (Glass) Cards -->
+<div class="container mt-4" *ngIf="isClick">
+  <div class="card soft-card fade-in">
+    <div class="card-header fw-bold">Orders Information</div>
+    <div class="card-body">
+      <div class="order-grid">
+        <article
+          class="order-card hover-lift fade-in-up"
+          *ngFor="let val of orderList; let i = index; trackBy: trackByOrderId"
+          [ngClass]="[
+            cardToneClass(i),
+            borderClass(val.status),
+            isFinal(val.status) ? 'is-final' : ''
+          ]"
+          [class.is-serviced]="isServiced(val.status)"
+          (click)="toggleExpand(val.id)"
+          role="button"
+          tabindex="0"
+          [attr.aria-expanded]="isExpanded(val.id)"
+          (keydown.enter)="toggleExpand(val.id)"
+          (keydown.space)="toggleExpand(val.id)"
+          [appTilt]="6"
+        >
+          <div class="card-accent"></div>
+
+          <!-- Corner ribbon for final states (Delivered/Cancelled/Serviced) -->
+          <div
+            class="corner-ribbon"
+            *ngIf="isDelivered(val.status) || isCancelled(val.status) || isServiced(val.status)"
+            aria-hidden="true"
+          >
+            <span
+              class="ribbon-chip"
+              [class.ribbon-delivered]="isDelivered(val.status)"
+              [class.ribbon-cancelled]="isCancelled(val.status)"
+              [class.ribbon-serviced]="isServiced(val.status)"
+            >
+              <span class="ribbon-icon">
+                {{ isDelivered(val.status) ? '✔' : isCancelled(val.status) ? '⛔' : '🛠' }}
+              </span>
+              {{ isDelivered(val.status) ? 'Delivered' : isCancelled(val.status) ? 'Cancelled' : 'Serviced' }}
+            </span>
+          </div>
+
+          <!-- Summary header -->
+          <div class="order-card-header d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+              <!-- Progress ring -->
+              <svg class="progress-ring" viewBox="0 0 36 36" aria-hidden="true">
+                <circle class="bg" cx="18" cy="18" r="16"></circle>
+                <circle
+                  class="fg"
+                  cx="18"
+                  cy="18"
+                  r="16"
+                  [attr.stroke-dasharray]="circumference"
+                  [attr.stroke-dashoffset]="progressDashOffset(val.status)"
+                ></circle>
+              </svg>
+
+              <div class="order-id">#{{ val.id }}</div>
+            </div>
+
+            <!-- Show inside chip ONLY for non-final states -->
+            <span class="status-chip" *ngIf="!isFinal(val.status)" [ngClass]="statusClass(val.status)">
+              <span class="chip-icon" aria-hidden="true">{{ statusIcon(val.status) }}</span>
+              <span class="chip-text">{{ val.status }}</span>
+            </span>
+          </div>
+
+          <!-- Meta -->
+          <div class="order-meta">
+            <div class="meta-item">
+              <span class="meta-label">Order Date</span>
+              <span class="meta-value">{{ val.orderDate | date: 'dd-MMM-yyyy' }}</span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">Quantity</span>
+              <span class="meta-value">
+                <span class="countup" [appCountUp]="val.quantity" [animate]="true" [duration]="800"></span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Expand/Collapse & Actions -->
+          <div class="expand-handle" (click)="$event.stopPropagation()">
+            <span class="chip" (click)="toggleExpand(val.id)">
+              <span class="chev" [class.up]="isExpanded(val.id)">▾</span>
+              <span class="label">{{ isExpanded(val.id) ? 'Hide details' : 'Details' }}</span>
+            </span>
+
+            <div class="order-actions">
+              <button
+                class="btn btn-glass btn-sm"
+                type="button"
+                *ngIf="isCancelable(val.status)"
+                (click)="onCancel(val)"
+              >
+                <span class="btn-icon">🛑</span> Cancel Order
+              </button>
+            </div>
+          </div>
+
+          <!-- Expanded content -->
+          <section
+            class="expand-wrapper"
+            [class.open]="isExpanded(val.id)"
+            [style.--expand-height.px]="getCardExpandHeight(val)"
+            (click)="$event.stopPropagation()"
+          >
+            <div class="expand-inner">
+              <div class="info-block">
+                <div class="info-title">
+                  <span class="dot dot-eq"></span> Equipment
+                </div>
+                <div class="info-content">
+                  <div class="info-row">
+                    <span class="key">Id:</span>
+                    <span class="val">
+                      <span class="countup" [appCountUp]="val.equipment.id" [animate]="isExpanded(val.id)"></span>
+                    </span>
+                  </div>
+                  <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment.name }}</span></div>
+                  <div class="info-row"><span class="key">Description:</span> <span class="val">{{ val.equipment.description }}</span></div>
+                </div>
+              </div>
+
+              <div class="info-block">
+                <div class="info-title">
+                  <span class="dot dot-hosp"></span> Hospital
+                </div>
+                <div class="info-content">
+                  <div class="info-row">
+                    <span class="key">Id:</span>
+                    <span class="val">
+                      <span class="countup" [appCountUp]="val.equipment.hospital?.id || 0" [animate]="isExpanded(val.id)"></span>
+                    </span>
+                  </div>
+                  <div class="info-row"><span class="key">Name:</span> <span class="val">{{ val.equipment.hospital?.name }}</span></div>
+                  <div class="info-row"><span class="key">Location:</span> <span class="val">{{ val.equipment.hospital?.location }}</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </article>
+
+        <!-- Empty -->
+        <div class="empty-state" *ngIf="!orderList || orderList.length === 0">
+          <div class="empty-illustration" aria-hidden="true"></div>
+          <p class="empty-text">No orders yet. Create your first order above.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
